@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class User {
+public class Users {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="user")
 	@SequenceGenerator(name="user", sequenceName="seq_user_idx", allocationSize=1)

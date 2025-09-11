@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>ETCATPEDIA 로그인</title>
+  <style>
+    body {
+      background-color: #f9f9f9;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .popup {
+      background: #fff;
+      padding: 30px 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      text-align: center;
+      width: 280px; /* 얄쌍하게 */
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #e6004c;
+      margin-bottom: 18px;
+    }
+    .logo span {
+      color: #000;
+      font-size: 20px;
+      margin-left: 4px;
+    }
+    input[type="email"], input[type="password"] {
+      width: 92%;
+      padding: 10px;
+      margin: 6px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 13px;
+    }
+    .login-btn {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      background-color: #ff2f6e;
+      border: none;
+      color: #fff;
+      font-size: 14px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .login-btn:hover {
+      background-color: #e6004c;
+    }
+    .link {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #666;
+    }
+    .link a {
+      color: #ff2f6e;
+      text-decoration: none;
+    }
+    .or {
+      margin: 12px 0;
+      font-size: 12px;
+      color: #999;
+    }
+    .social-login {
+      display: flex;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .kakao-btn {
+      width: 100%;
+      padding: 10px;
+      background-color: #FFE812;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+    }
+    .kakao-btn img {
+      width: 20px;
+      height: 20px;
+    }
+  </style>
+</head>
+<body>
+	<div class="popup">
+  		<div class="logo">ETCHA<span>PEDIA</span></div>
+	    <form th:action="@{/user/login}" th:method="post">
+			<h5 th:if="${param.error}">ID 또는 비밀번호를 확인해 주세요.</h5>
+			<input type="email" placeholder="이메일" name="email">
+			<input type="password" placeholder="비밀번호" name="pw">
+			<button type="submit" class="login-btn">로그인</button>
+	    </form>
+	    <div class="link"><a href="#">비밀번호를 잊어버리셨나요?</a></div>
+	    <div class="link">계정이 없으신가요? <a href="#">회원가입</a></div>
+	    <div class="or">OR</div>
+	    <div class="social-login">
+	    	<button class="kakao-btn">
+	        	<img src="https://cdn-icons-png.flaticon.com/512/3669/3669976.png" alt="KakaoTalk"> 카카오톡 로그인
+	      	</button>
+	    </div>
+	</div>
+</body>
+</html>
