@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UsersService {
 	@Autowired
-	private UserRepository uRepo;
+	private UsersRepository uRepo;
 	@Autowired
 	private PasswordEncoder pwEncoder;
 	

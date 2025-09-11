@@ -1,4 +1,4 @@
-package com.etchapedia.home;
+package com.etchapedia.comment;
 
 import com.etchapedia.user.Users;
 
@@ -15,22 +15,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Rate {
-	@ManyToOne
-	@JoinColumn(name="book_idx")
-	private Book book;
+public class Comments {
+	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="comments")
+	@SequenceGenerator(name="comments", sequenceName="seq_comment_idx", allocationSize=1)
+	private Integer commentIdx;
 	
 	@ManyToOne
 	@JoinColumn(name="user_idx")
 	private Users user;
 	
-	private Integer rate;
-	
-	
-	
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="rate")
-	@SequenceGenerator(name="rate", sequenceName="seq_rate_idx", allocationSize=1)
-	private Integer rateIdx;
+	private String content;
 }
