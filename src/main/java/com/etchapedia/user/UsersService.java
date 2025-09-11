@@ -1,0 +1,31 @@
+package com.etchapedia.user;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UsersService {
+	@Autowired
+	private UserRepository uRepo;
+	@Autowired
+	private PasswordEncoder pwEncoder;
+	
+	// 회원가입.
+	public Users create(String name, String email, String pw) {
+		Users u = new Users();
+		u.setName(name);
+		u.setEmail(email);
+		u.setPassword(pwEncoder.encode(pw));
+		uRepo.save(u);
+		return u;
+	}
+	
+	// 중복여부 체크.
+	public boolean isDuplicated(String email) {
+		Optional<Users> ou = uRepo.findByEmail(email);
+		return ou.isPresent();
+	}
+}
