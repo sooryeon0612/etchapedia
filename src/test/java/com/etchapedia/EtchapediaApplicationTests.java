@@ -40,7 +40,6 @@ class EtchapediaApplicationTests {
 		uRepo.save(users);
 		
 		Optional<Users> ou = uRepo.findByEmail("1234@1234");
-//		Optional<Users> ou = uRepo.findById(1);
 		assertTrue(ou.isPresent());
 		Users u = ou.get();
 		System.out.println(u.getEmail() + " / " + u.getPassword());
