@@ -52,7 +52,7 @@ class EtchapediaApplicationTests {
 	
 	@Test
 	void testGetRawData() throws JsonMappingException, JsonProcessingException {
-		System.out.println(aSvc.saveBooks(1, 2));
+		aSvc.saveBooks(1, 20);
 	}
 
 
