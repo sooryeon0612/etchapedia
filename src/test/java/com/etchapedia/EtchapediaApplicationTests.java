@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.etchapedia.api.BookApiService;
 import com.etchapedia.user.Users;
 import com.etchapedia.user.UsersRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 @SpringBootTest
 class EtchapediaApplicationTests {
@@ -18,6 +21,8 @@ class EtchapediaApplicationTests {
 	private UsersRepository uRepo;
 	@Autowired
 	private PasswordEncoder pwEncoder;
+	@Autowired
+	private BookApiService aSvc;
 
 	@Test
 	void testInsertDummy() {
@@ -43,6 +48,11 @@ class EtchapediaApplicationTests {
 		assertTrue(ou.isPresent());
 		Users u = ou.get();
 		System.out.println(u.getEmail() + " / " + u.getPassword());
+	}
+	
+	@Test
+	void testGetRawData() throws JsonMappingException, JsonProcessingException {
+		System.out.println(aSvc.saveBooks(1, 2));
 	}
 
 
