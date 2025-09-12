@@ -1,3 +1,4 @@
+
 package com.etchapedia.home;
 
 import jakarta.persistence.Column;
@@ -20,6 +21,8 @@ public class Book {
 	
 	private String title;
 	private String author;
+	
+	@Column(length=4000)
 	private String description;
 	
 	@Column(length=2000)

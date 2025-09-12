@@ -21,6 +21,9 @@ public class Users {
 	private String name;
 	private String password;
 	private String profile;
+<<<<<<< HEAD
 	private String code;
+=======
+>>>>>>> refs/heads/testSR
 
 }
