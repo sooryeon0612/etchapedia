@@ -1,6 +1,5 @@
 package com.etchapedia.user;
 
-<<<<<<< HEAD
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +28,4 @@ public class UsersService {
 		Optional<Users> ou = uRepo.findByEmail(email);
 		return ou.isPresent();
 	}
-=======
-import org.springframework.stereotype.Service;
-
-@Service
-public class UsersService {
-	
->>>>>>> refs/heads/testSR
 }
