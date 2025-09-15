@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout1}"> 
+<head>
+	<link rel="stylesheet" th:href="@{/home.css}">
+    <title>소식(알림화면)</title>
+</head>
+<body>
+    <div layout:fragment="content">
+		<header class="header">
+	        <div class="header-content">
+	            <h1 class="logo">
+	                <span class="watcha">ETCHA</span><span class="pedia">PEDIA</span>
+	            </h1>
+	            <div class="search-bar">
+	                <input type="text" placeholder="검색">
+	            </div>
+	            <div class="user-menu">
+					<a th:href="@{#}">소식</a>
+	                <a th:href="@{/user/login_form}">로그인</a>
+	                <a th:href="@{/user/signup}">회원가입</a>
+	            </div>
+	        </div>
+	    </header>
+	    <div class="main-container">
+	        <h1 class="page-title">소식</h1>
+	        <div class="news-content">
+	            <div class="no-news-box">
+	                <div class="no-news-icon">
+	                    <img src="https://via.placeholder.com/60x60?text=💬" alt="No news icon">
+	                </div>
+	                <p>소식이 없습니다</p>
+	            </div>
+        </div>
+    </div>
+</body>
+</html>

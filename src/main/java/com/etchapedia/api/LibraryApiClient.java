@@ -3,7 +3,7 @@ package com.etchapedia.api;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-@Service
+@Service 
 public class LibraryApiClient {
 	private WebClient webClient;
 	private String certKey = "d88072d3bf902e24b4198873b217d47d308076cc2d08fd3977859a952bf461ec";

@@ -36,7 +36,7 @@ public class MyUserDetailsService implements UserDetailsService {
 //			authorities.add(new SimpleGrantedAuthority(MemberRole.ADMIN.getValue()));
 //		else
 			
-		authorities.add(new SimpleGrantedAuthority(MemberRole.USER.getValue()));
+		authorities.add(new SimpleGrantedAuthority(UsersRole.USER.getValue()));
 		
 		return new User(m.getEmail(), m.getPassword(), authorities);
 	}
