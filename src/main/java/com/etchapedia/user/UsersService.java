@@ -28,4 +28,17 @@ public class UsersService {
 		Optional<Users> ou = uRepo.findByEmail(email);
 		return ou.isPresent();
 	}
+	
+	// 사용자 찾기
+	public boolean authenticate(String email, String pw) {
+		Optional<Users> userOpt = uRepo.findByEmail(email);
+		
+		if(userOpt.isPresent()) {
+			Users user = userOpt.get();
+			if(user.getPassword().equals(pw)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
