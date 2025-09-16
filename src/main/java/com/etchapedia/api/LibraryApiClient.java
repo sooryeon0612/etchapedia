@@ -42,5 +42,19 @@ public class LibraryApiClient {
                 .block();
     }
     
+    public String callSrchDtlListApi(String isbn) {
+    	return webClient.get()
+    			.uri(uriBuilder -> uriBuilder
+    					.path("/api/srchDtlList")
+                        .queryParam("authKey", key)
+                        .queryParam("isbn13", isbn)
+                        .queryParam("loaninfoYN", "Y")
+                        .queryParam("format", "json")
+                        .build())
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
+    
 
 }

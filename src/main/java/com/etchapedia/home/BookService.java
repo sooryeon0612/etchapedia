@@ -1,6 +1,8 @@
 package com.etchapedia.home;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,10 +24,11 @@ public class BookService {
     BookService(PasswordEncoder pwEncoder) {
         this.pwEncoder = pwEncoder;
     }
+    
+    private static String[] bad = {":", "=", "/"};
 	
 	public void saveBooks(int pageNo, int pageSize) throws JsonMappingException, JsonProcessingException {
 		List<Book> bookList = util.loadBookFromApi(pageNo, pageSize);
-		String[] bad = {":", "=", "/"};
 		int save = 0;
 		
 		for(Book b : bookList) {
@@ -43,6 +46,41 @@ public class BookService {
 		System.out.println("saved : " + save);
 	}
 	
+	public List<Book> getHotTrendBookList(String searchDt) throws JsonMappingException, JsonProcessingException {
+		List<Book> rawList = util.loadHotTrendBookList(searchDt);
+		List<Book> retList = new ArrayList<>();
+		int save = 0;
+		
+		for(Book b : rawList) {
+			Optional<Book> om = bRepo.findByIsbn(b.getIsbn());
+			if(om.isPresent()) continue;
+			
+			String title = b.getTitle();
+			for(int i=0; i<bad.length; i++) {
+				int cut = title.indexOf(bad[i]);
+				if(cut != -1) {
+					title = title.substring(0, title.indexOf(bad[i]));
+					b.setTitle(title);
+				}
+			}
+			bRepo.save(b);
+			save++;
+		}
+		System.out.println("saved : " + save);
+		
+		for(Book b : rawList) {
+			boolean exist = false;
+			for(Book saved : retList) {
+				if(b.getIsbn().equals(saved.getIsbn())) {
+					exist = true;
+					break;
+				}
+			}
+			if(!exist) retList.add(b);
+		}
+		
+		return retList;
+ 	}
 	
 	
 

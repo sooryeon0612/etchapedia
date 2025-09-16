@@ -2,6 +2,7 @@ package com.etchapedia;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.etchapedia.api.LibraryApiClient;
+import com.etchapedia.api.BookApiUtil;
+import com.etchapedia.home.Book;
 import com.etchapedia.home.BookService;
 import com.etchapedia.user.Users;
 import com.etchapedia.user.UsersRepository;
@@ -25,7 +27,8 @@ class EtchapediaApplicationTests {
 	@Autowired
 	private BookService bSvc;
 	@Autowired
-	private LibraryApiClient lib;
+	private BookApiUtil util;
+	
 
 	@Test
 	void testInsertDummy() {
@@ -63,8 +66,17 @@ class EtchapediaApplicationTests {
 	}
 	
 	@Test
-	void testCallApi() {
-		System.out.println(lib.callLibraryApi(1, 1));
+	void testHotTrendBookList() throws JsonMappingException, JsonProcessingException {
+		List<Book> list = bSvc.getHotTrendBookList("2025-09-15");
+		for(Book b : list) System.out.println(b.getTitle());
+	}
+	
+	@Test
+	void testGetLoanByIsbn() throws JsonMappingException, JsonProcessingException {
+		Book b = new Book();
+		b.setIsbn("9788954646079");
+		util.getLoanByIsbn(b);
+		System.out.println(b.getLoan());
 	}
 
 

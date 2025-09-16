@@ -94,18 +94,38 @@ public class BookApiUtil {
 		JsonNode root = mapper.readTree(books);
 		JsonNode results = root.path("response").path("results");
 		for(JsonNode result : results) {
-			JsonNode docs = result.path("docs");
+			JsonNode docs = result.path("result").path("docs");
 			for(JsonNode doc : docs) {
+				doc = doc.path("doc");
 				String title = doc.path("bookname").asText();
-				System.out.println(title);
-				Book book = new Book();
-				book.setTitle(title);
-				bookList.add(book);
+				String author = doc.path("authors").asText();
+				String isbn = doc.path("isbn13").asText();
+				
+				if(isbn.equals("")) continue;
+				
+				Book b = new Book();
+				b.setTitle(title);
+				b.setAuthor(author);
+				b.setIsbn(isbn);
+				
+				b = naverBook(b);
+				b = getLoanByIsbn(b);
+				
+				// 네이버 api 에서 정보가 없을 경우 isbn을 -1로 바꿈 
+				if(b.getIsbn().equals("-1")) continue;
+				bookList.add(b);
 			}
 		}
-		
 		return bookList;
-		
+	}
+	
+	public Book getLoanByIsbn(Book book) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		String rawInfo = lib.callSrchDtlListApi(book.getIsbn());
+		JsonNode root = mapper.readTree(rawInfo);
+		String loanStr = root.path("response").path("loanInfo").path(0).path("Total").path("loanCnt").asText();
+		book.setLoan(Integer.parseInt(loanStr.equals("") ? "0" : loanStr));
+		return book;
 	}
 	
 	
