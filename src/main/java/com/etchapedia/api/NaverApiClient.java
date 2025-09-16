@@ -1,9 +1,9 @@
 package com.etchapedia.api;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-@Service
+@Component
 public class NaverApiClient {
 	private WebClient webClient;
 	private String clientId = "JuMYHP4w2burQTipw_YW";
@@ -11,7 +11,7 @@ public class NaverApiClient {
 	
 	public NaverApiClient(WebClient.Builder builder) {
 		this.webClient = builder
-		    .baseUrl("https://openapi.naver.com") // 기본 도메인
+		    .baseUrl("https://openapi.naver.com")
 		    .defaultHeader("X-Naver-Client-Id", clientId)
             .defaultHeader("X-Naver-Client-Secret", clientSecret)
 		    .build();

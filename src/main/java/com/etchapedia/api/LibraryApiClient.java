@@ -1,9 +1,9 @@
 package com.etchapedia.api;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-@Service 
+@Component
 public class LibraryApiClient {
 	private WebClient webClient;
 	private String key = "933007855a408647352fc853a7bc2fc40ee299bf420d1a503775bfcecc7ef159";
@@ -23,6 +23,19 @@ public class LibraryApiClient {
                         .queryParam("format", "json")
                         .queryParam("pageNo", pageNo)
                         .queryParam("pageSize", pageSize)
+                        .build())
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
+    
+    public String callHotTrendApi(String searchDt) {
+    	return webClient.get()
+    			.uri(uriBuilder -> uriBuilder
+    					.path("/api/hotTrend")
+                        .queryParam("authKey", key)
+                        .queryParam("searchDt", searchDt)
+                        .queryParam("format", "json")
                         .build())
                 .retrieve()
                 .bodyToMono(String.class)

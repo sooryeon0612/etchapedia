@@ -1,9 +1,11 @@
 package com.etchapedia.api;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.etchapedia.home.Book;
 import com.etchapedia.home.BookRepository;
@@ -12,8 +14,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Service
-public class BookApiService {
+@Component
+public class BookApiUtil {
 	@Autowired
 	private LibraryApiClient lib;
 	@Autowired
@@ -21,24 +23,18 @@ public class BookApiService {
 	@Autowired
 	private BookRepository bRepo;
 
-	public void saveBooks(int pageNo, int pageSize) throws JsonMappingException, JsonProcessingException {
+	// 정보나루 인기대출도서 api 호출 후 book 객체 리턴 
+	public List<Book> loadBookFromApi(int pageNo, int pageSize) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
+		List<Book> bookList = new ArrayList<>();
 		String rawBooks = lib.callLibraryApi(pageNo, pageSize);
 		
 		JsonNode root = mapper.readTree(rawBooks);
 		JsonNode docs = root.path("response").path("docs");
-		
 		int save = 0;
 		for(JsonNode item : docs) {
 			JsonNode book = item.path("doc");
 			String title = book.path("bookname").asText();
-			
-			String[] bad = {":", "=", "/"};
-			for(int i=0; i<bad.length; i++) {
-				int cut = title.indexOf(bad[i]);
-				if(cut != -1) title = title.substring(0, title.indexOf(bad[i]));
-			}
-			
 			String author = book.path("authors").asText();
 			String isbn = book.path("isbn13").asText();
 			int loan = Integer.parseInt(book.path("loan_count").asText());
@@ -55,13 +51,14 @@ public class BookApiService {
 			
 			b = naverBook(b);
 			
+			// 네이버 api 에서 정보가 없을 경우 isbn을 -1로 바꿈 
 			if(b.getIsbn().equals("-1")) continue;
-			bRepo.save(b);
-			save++;
+			bookList.add(b);
 		}
-		System.out.println("saved : " + save);
+		return bookList;
     }
 	
+	// 네이버 api 호출 후 필요한 정보만 채운 뒤 book객체 리턴 
 	public Book naverBook(Book book) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -87,5 +84,30 @@ public class BookApiService {
 			return book;
 		}
 	}
+	
+	// 정보나루 대출 급상승 도서 api 호출
+	public List<Book> loadHotTrendBookList(String searchDt) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		List<Book> bookList = new ArrayList<>();
+		String books = lib.callHotTrendApi(searchDt);
+		
+		JsonNode root = mapper.readTree(books);
+		JsonNode results = root.path("response").path("results");
+		for(JsonNode result : results) {
+			JsonNode docs = result.path("docs");
+			for(JsonNode doc : docs) {
+				String title = doc.path("bookname").asText();
+				System.out.println(title);
+				Book book = new Book();
+				book.setTitle(title);
+				bookList.add(book);
+			}
+		}
+		
+		return bookList;
+		
+	}
+	
+	
 	
 }
