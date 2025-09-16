@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,14 +23,14 @@ public class Book {
 	private String title;
 	private String author;
 	
-	@Column(length=4000)
+	@Lob
+    @Column(columnDefinition = "CLOB")
 	private String description;
 	
-	@Column(length=2000)
+	@Column(length=4000)
 	private String pic;
 	
-	private Double rate;
-	private Integer viewCount;
+	private Integer loan;
 	private Integer price;
 	private String isbn;
 }
