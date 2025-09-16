@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.etchapedia.api.BookApiService;
+import com.etchapedia.api.LibraryApiClient;
 import com.etchapedia.user.Users;
 import com.etchapedia.user.UsersRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -23,6 +24,8 @@ class EtchapediaApplicationTests {
 	private PasswordEncoder pwEncoder;
 	@Autowired
 	private BookApiService aSvc;
+	@Autowired
+	private LibraryApiClient lib;
 
 	@Test
 	void testInsertDummy() {
@@ -51,8 +54,17 @@ class EtchapediaApplicationTests {
 	}
 	
 	@Test
-	void testGetRawData() throws JsonMappingException, JsonProcessingException {
-		aSvc.saveBooks(1, 20);
+	void testSaveBooks() throws JsonMappingException, JsonProcessingException {
+//		aSvc.saveBooks(1, 10);
+//		aSvc.saveBooks(2, 10);
+//		aSvc.saveBooks(3, 10);
+//		aSvc.saveBooks(4, 10);
+		aSvc.saveBooks(5, 10);
+	}
+	
+	@Test
+	void testCallApi() {
+		System.out.println(lib.callLibraryApi(1, 1));
 	}
 
 
