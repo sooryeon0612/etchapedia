@@ -117,7 +117,7 @@ body {
 
 .book-cover {
     width: 100%;
-    height: auto;
+    height: 350px;
     border-radius: 4px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

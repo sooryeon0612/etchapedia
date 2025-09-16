@@ -2,6 +2,7 @@ package com.etchapedia;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,6 +78,25 @@ class EtchapediaApplicationTests {
 		b.setIsbn("9788954646079");
 		util.getLoanByIsbn(b);
 		System.out.println(b.getLoan());
+	}
+	
+	@Test
+	void testGetPopularBooks() {
+		for(Book b : bSvc.getPopularBooks()) {
+			System.out.println(b.getTitle());
+		}
+	}
+	
+	@Test
+	void testGetToayDate() {
+		System.out.println(LocalDate.now().minusDays(1));
+	}
+	
+	@Test
+	void testGetHotTrend() throws JsonMappingException, JsonProcessingException {
+		for(Book b : bSvc.getHotTrendBookList(LocalDate.now().minusDays(1).toString())) {
+			System.out.println(b.getTitle());
+		}
 	}
 
 

@@ -1,14 +1,27 @@
 package com.etchapedia;
 
+import java.time.LocalDate;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import com.etchapedia.home.BookService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 @Controller
 public class PageController {
+	@Autowired
+	private BookService bSvc;
 
     // 홈 화면 (home.html)
     @GetMapping("/home")
-    public String home() {
+    public String home(Model model) throws JsonMappingException, JsonProcessingException {
+    	LocalDate yesterday = LocalDate.now().minusDays(1);
+    	model.addAttribute("popular", bSvc.getPopularBooks());
+    	model.addAttribute("hotTrend", bSvc.getHotTrendBookList(yesterday.toString()));
         return "home";
     }
     

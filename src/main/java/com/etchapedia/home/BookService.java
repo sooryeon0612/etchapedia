@@ -49,24 +49,6 @@ public class BookService {
 	public List<Book> getHotTrendBookList(String searchDt) throws JsonMappingException, JsonProcessingException {
 		List<Book> rawList = util.loadHotTrendBookList(searchDt);
 		List<Book> retList = new ArrayList<>();
-		int save = 0;
-		
-		for(Book b : rawList) {
-			Optional<Book> om = bRepo.findByIsbn(b.getIsbn());
-			if(om.isPresent()) continue;
-			
-			String title = b.getTitle();
-			for(int i=0; i<bad.length; i++) {
-				int cut = title.indexOf(bad[i]);
-				if(cut != -1) {
-					title = title.substring(0, title.indexOf(bad[i]));
-					b.setTitle(title);
-				}
-			}
-			bRepo.save(b);
-			save++;
-		}
-		System.out.println("saved : " + save);
 		
 		for(Book b : rawList) {
 			boolean exist = false;
@@ -76,11 +58,28 @@ public class BookService {
 					break;
 				}
 			}
-			if(!exist) retList.add(b);
+			if(!exist) {
+				Optional<Book> om = bRepo.findByIsbn(b.getIsbn());
+				
+				String title = b.getTitle();
+				for(int i = 0; i < bad.length; i++) {
+					int cut = title.indexOf(bad[i]);
+					if(cut != -1) {
+						title = title.substring(0, title.indexOf(bad[i]));
+						b.setTitle(title);
+					}
+				}
+				if(om.isEmpty()) bRepo.save(b);
+				retList.add(b);
+			}
 		}
 		
 		return retList;
  	}
+	
+	public List<Book> getPopularBooks() {
+		return bRepo.findTop10ByOrderByLoanDesc();
+	}
 	
 	
 
