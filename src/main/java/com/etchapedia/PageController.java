@@ -48,7 +48,7 @@ public class PageController {
     	return "cart";
     }
     
-    // test 장바구니
+    // test 장바구니 (cart2.html) css 수정중
     @GetMapping("/cart2")
     public String cart2() {
     	return "cart2";
