@@ -21,10 +21,14 @@ public class BookApiUtil {
 	@Autowired
 	private NaverApiClient naver;
 	@Autowired
+	private ChatGptApiClient gpt;
+	
+	@Autowired
 	private BookRepository bRepo;
 
+	
 	// 정보나루 인기대출도서 api 호출 후 book 객체 리턴 
-	public List<Book> loadBookFromApi(int pageNo, int pageSize) throws JsonMappingException, JsonProcessingException {
+	public List<Book> loadBooksFromLibrary(int pageNo, int pageSize) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		List<Book> bookList = new ArrayList<>();
 		String rawBooks = lib.callLibraryApi(pageNo, pageSize);
@@ -48,23 +52,20 @@ public class BookApiUtil {
 			b.setAuthor(author);
 			b.setIsbn(isbn);
 			b.setLoan(loan);
-			
-			b = naverBook(b);
-			
-			// 네이버 api 에서 정보가 없을 경우 isbn을 -1로 바꿈 
-			if(b.getIsbn().equals("-1")) continue;
+
 			bookList.add(b);
 		}
 		return bookList;
     }
 	
 	// 네이버 api 호출 후 필요한 정보만 채운 뒤 book객체 리턴 
-	public Book naverBook(Book book) throws JsonMappingException, JsonProcessingException {
+	public Book getBookInfoFromNaver(Book book) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		
-		String info = naver.callNaverApi(book.getIsbn());
+		String info = naver.callNaverApiByIsbn(book.getIsbn());
 		JsonNode root = mapper.readTree(info);
 		
+		// 조회한 정보가 없거나 설명, 가격이 없다면 isbn을 -1로 바꿈 
 		if(root.path("items").size() == 0) {
 			book.setIsbn("-1");
 			return book;
@@ -108,17 +109,13 @@ public class BookApiUtil {
 				b.setAuthor(author);
 				b.setIsbn(isbn);
 				
-				b = naverBook(b);
-				b = getLoanByIsbn(b);
-				
-				// 네이버 api 에서 정보가 없을 경우 isbn을 -1로 바꿈 
-				if(b.getIsbn().equals("-1")) continue;
 				bookList.add(b);
 			}
 		}
 		return bookList;
 	}
 	
+	// 대출수 채운 뒤 book 객체 리턴 
 	public Book getLoanByIsbn(Book book) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		String rawInfo = lib.callSrchDtlListApi(book.getIsbn());
@@ -126,6 +123,53 @@ public class BookApiUtil {
 		String loanStr = root.path("response").path("loanInfo").path(0).path("Total").path("loanCnt").asText();
 		book.setLoan(Integer.parseInt(loanStr.equals("") ? "0" : loanStr));
 		return book;
+	}
+	
+	// gpt 추천 책 가져오기 
+	public List<Book> getGptRecommendBooks(List<Book> list) throws JsonMappingException, JsonProcessingException {
+		List<Book> retList = new ArrayList<>();
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode root = mapper.readTree(gpt.callGptApi(list));
+		String content = root.path("choices").path(0).path("message").path("content").asText();
+		JsonNode recommendations = mapper.readTree(content).path("recommendations");
+		for(JsonNode book : recommendations) {
+			Book b = new Book();
+			b.setTitle(book.path("title").asText());
+			retList.add(b);
+		}
+		return retList;
+	}
+	
+	// 제목으로 네이버에서 책 검색 
+	public Book findBookByTitleFromNaver(Book book) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		String info = naver.callNaverApiByTitle(book.getTitle());
+		JsonNode root = mapper.readTree(info);
+		
+		if(root.path("items").size() == 0) {
+			book.setIsbn("-1");
+			return book;
+		} else {
+			JsonNode item = root.path("items").path(0);
+			String description = item.path("description").asText();	
+			String pic = item.path("image").asText();
+			String price = item.path("discount").asText();
+			String author = item.path("author").asText();
+			String isbn = item.path("isbn").asText();
+			String title = item.path("title").asText();
+
+			if(!title.contains(book.getTitle()) || description.equals("") || price.equals("")) {
+				book.setIsbn("-1");
+				return book; 
+			}
+			book.setDescription(description);
+			book.setPic(pic);
+			book.setPrice(Integer.parseInt(price));
+			book.setAuthor(author);
+			book.setIsbn(isbn);
+			return book;
+		}
 	}
 	
 	

@@ -1,12 +1,15 @@
 package com.etchapedia.api;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
 public class LibraryApiClient {
 	private WebClient webClient;
-	private String key = "933007855a408647352fc853a7bc2fc40ee299bf420d1a503775bfcecc7ef159";
+	
+	@Value("${library.api-key}")
+	private String key;
 	
 	public LibraryApiClient(WebClient.Builder builder) {
 		this.webClient = builder

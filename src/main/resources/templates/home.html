@@ -55,94 +55,12 @@
 			<section class="rank-section">
 	            <h2 class="section-title">AI추천 도서</h2>
 	            <div class="rank-list">
-	                <div class="rank-item">
-	                    <div class="rank-number">1</div>
-	                    <img src="https://shopping-phinf.pstatic.net/main_5548208/55482085131.20250626092419.jpg?type=w300" alt="책 표지" class="book-cover">
+	                <div class="rank-item" th:each="book, stat : ${ai}">
+	                    <div class="rank-number">[[${stat.count}]]</div>
+	                    <img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
 	                    <div class="book-info">
-	                        <h3 class="book-title">다정한 비명</h3>
-	                        <div class="author">최인아</div>
-	                        <div class="rating">평점 ★ 3.5</div>
-	                    </div>
-	                </div>
-	                <div class="rank-item">
-	                    <div class="rank-number">2</div>
-	                    <img src="https://via.placeholder.com/180x250.png?text=Placeholder+Image" alt="책 표지" class="book-cover">
-	                    <div class="book-info">
-	                        <h3 class="book-title">고래와 달</h3>
-	                        <div class="author">작가 이름</div>
-	                        <div class="rating">평점 ★ 3.5</div>
-	                    </div>
-	                </div>
-	                <div class="rank-item">
-	                    <div class="rank-number">3</div>
-	                    <img src="https://via.placeholder.com/180x250.png?text=Placeholder+Image" alt="책 표지" class="book-cover">
-	                    <div class="book-info">
-	                        <h3 class="book-title">Let Them</h3>
-	                        <div class="author">작가 이름</div>
-	                        <div class="rating">평점 ★ 3.5</div>
-	                    </div>
-	                </div>
-	                <div class="rank-item">
-	                    <div class="rank-number">4</div>
-	                    <img src="https://via.placeholder.com/180x250.png?text=Placeholder+Image" alt="책 표지" class="book-cover">
-	                    <div class="book-info">
-	                        <h3 class="book-title">서정의 한국사</h3>
-	                        <div class="author">작가 이름</div>
-	                        <div class="rating">평점 ★ 3.5</div>
-	                    </div>
-	                </div>
-	                <div class="rank-item">
-	                    <div class="rank-number">5</div>
-	                    <img src="https://via.placeholder.com/180x250.png?text=Placeholder+Image" alt="책 표지" class="book-cover">
-	                    <div class="book-info">
-	                        <h3 class="book-title">고술회전 28</h3>
-	                        <div class="author">아쿠타미 게게</div>
-	                        <div class="rating">평점 ★ 3.5</div>
-	                    </div>
-	                </div>
-	                <div class="rank-item">
-	                    <div class="rank-number">6</div>
-	                    <img src="https://via.placeholder.com/180x250.png?text=Placeholder+Image" alt="책 표지" class="book-cover">
-	                    <div class="book-info">
-	                        <h3 class="book-title">새로운 제목 1</h3>
-	                        <div class="author">새로운 작가 1</div>
-	                        <div class="rating">평점 ★ 4.0</div>
-	                    </div>
-	                </div>
-	                <div class="rank-item">
-	                    <div class="rank-number">7</div>
-	                    <img src="https://via.placeholder.com/180x250.png?text=Placeholder+Image" alt="책 표지" class="book-cover">
-	                    <div class="book-info">
-	                        <h3 class="book-title">새로운 제목 2</h3>
-	                        <div class="author">새로운 작가 2</div>
-	                        <div class="rating">평점 ★ 4.2</div>
-	                    </div>
-	                </div>
-	                <div class="rank-item">
-	                    <div class="rank-number">8</div>
-	                    <img src="https://via.placeholder.com/180x250.png?text=Placeholder+Image" alt="책 표지" class="book-cover">
-	                    <div class="book-info">
-	                        <h3 class="book-title">새로운 제목 3</h3>
-	                        <div class="author">새로운 작가 3</div>
-	                        <div class="rating">평점 ★ 3.8</div>
-	                    </div>
-	                </div>
-	                <div class="rank-item">
-	                    <div class="rank-number">9</div>
-	                    <img src="https://via.placeholder.com/180x250.png?text=Placeholder+Image" alt="책 표지" class="book-cover">
-	                    <div class="book-info">
-	                        <h3 class="book-title">새로운 제목 4</h3>
-	                        <div class="author">새로운 작가 4</div>
-	                        <div class="rating">평점 ★ 4.5</div>
-	                    </div>
-	                </div>
-	                <div class="rank-item">
-	                    <div class="rank-number">10</div>
-	                    <img src="https://via.placeholder.com/180x250.png?text=Placeholder+Image" alt="책 표지" class="book-cover">
-	                    <div class="book-info">
-	                        <h3 class="book-title">새로운 제목 5</h3>
-	                        <div class="author">새로운 작가 5</div>
-	                        <div class="rating">평점 ★ 4.1</div>
+	                        <h3 class="book-title">[[${book.title}]]</h3>
+	                        <div class="author">[[${book.author}]]</div>
 	                    </div>
 	                </div>
 	            </div>
