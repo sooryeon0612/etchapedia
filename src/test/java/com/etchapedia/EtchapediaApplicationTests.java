@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.etchapedia.api.BookApiUtil;
 import com.etchapedia.api.NaverApiClient;
+import com.etchapedia.book.GptRecommendationsService;
+import com.etchapedia.book.HotTrendService;
 import com.etchapedia.home.Book;
 import com.etchapedia.home.BookRepository;
 import com.etchapedia.home.BookService;
@@ -38,19 +40,50 @@ class EtchapediaApplicationTests {
 	@Autowired
 	private BookService bSvc;
 	@Autowired
+	private GptRecommendationsService gSvc;
+	@Autowired
+	private HotTrendService hSvc;
+	@Autowired
 	private BookApiUtil util;
 	
 	@Autowired
 	private NaverApiClient naver;
 	
 	@Test
-	void testINSERTDUMMY() {
-		Users users = new Users();
-		users.setEmail("1234@1234");
-		users.setName("test");
-		users.setPassword(pwEncoder.encode("1234"));
-		users.setProfile(null);
-		uRepo.save(users);
+	void testINSERTDUMMY() throws JsonMappingException, JsonProcessingException {
+		// test 유저 저장 
+//		Users users = new Users();
+//		users.setEmail("1234@1234");
+//		users.setName("test");
+//		users.setPassword(pwEncoder.encode("1234"));
+//		users.setProfile(null);
+//		uRepo.save(users);
+//		
+//		// 베이스 책들 저장 
+//		bSvc.saveBooks(1, 10);
+//		bSvc.saveBooks(2, 10);
+//		bSvc.saveBooks(3, 10);
+//		bSvc.saveBooks(4, 10);
+//		bSvc.saveBooks(5, 10);
+//		
+//		// 클릭한 책 저장 
+//		Click c = new Click();
+//		c.setBook(bRepo.findById(1).get());
+//		c.setUser(uRepo.findById(1).get());
+//		cRepo.save(c);
+//		Click c2 = new Click();
+//		c2.setBook(bRepo.findById(2).get());
+//		c2.setUser(uRepo.findById(1).get());
+//		cRepo.save(c2);
+		
+		// 지피티 추천 받기
+		List<Book> recommedList = gSvc.getGptRecommendBooks(1);
+		gSvc.logRecommendation(recommedList, 1);
+		
+		// 인기 급상승 받기
+		List<Book> trendList = hSvc.loadHotTrendBooks(LocalDate.now().minusDays(1).toString());
+		hSvc.logHotTrend(trendList);
+		
 	}
 
 	@Test
@@ -80,11 +113,13 @@ class EtchapediaApplicationTests {
 	
 	@Test
 	void testSaveBooks() throws JsonMappingException, JsonProcessingException {
-		bSvc.saveBooks(6, 10);
-//		aSvc.saveBooks(2, 10);
-//		aSvc.saveBooks(3, 10);
-//		aSvc.saveBooks(4, 10);
-//		aSvc.saveBooks(5, 10);
+		
+		bSvc.saveBooks(1, 10);
+		bSvc.saveBooks(2, 10);
+		bSvc.saveBooks(3, 10);
+		bSvc.saveBooks(4, 10);
+		bSvc.saveBooks(5, 10);
+//		bSvc.saveBooks(6, 10);
 	}
 	
 	@Test

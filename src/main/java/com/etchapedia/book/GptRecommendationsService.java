@@ -75,9 +75,23 @@ public class GptRecommendationsService {
 			Optional<Book> ob = bRepo.findByIsbn(b.getIsbn());
 			if(ob.isEmpty()) {
 				b = util.getLoanByIsbn(b);
+				bRepo.save(b);
 				retList.add(b);
 			} else {
 				retList.add(ob.get());
+			}
+		}
+		return retList;
+	}
+	
+	// 가장 최근에 저장됐던 gpt추천 책 10권 
+	public List<Book> getRecommendedBooks(Integer userIdx) {
+		List<Book> retList = new ArrayList<>();
+		List<GptRecommendations> recommendedList = gRepo.findAllByUser_UserIdxOrderByRecommendIdx(userIdx);
+		for(GptRecommendations g : recommendedList) {
+			for(DisplayContents d : dRepo.findAllByGpt_RecommendIdx(g.getRecommendIdx())) {
+				retList.add(d.getBook());
+				if(retList.size() == 10) return retList;
 			}
 		}
 		return retList;

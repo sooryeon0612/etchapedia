@@ -30,15 +30,19 @@ public class PageController {
     @GetMapping("/home")
     public String home(Model model, HttpSession session) throws JsonMappingException, JsonProcessingException {
     	LocalDate today = LocalDate.now();
-    	LocalDate yesterday = today.minusDays(1);
+    	LocalDate lastTrend = hSvc.getLastUpdateDate();
     	LocalDate lastUpdate = gSvc.getLastUpdateDate(1);
     	if(lastUpdate != today) {
     		List<Book> recommedList = gSvc.getGptRecommendBooks(1);
     		gSvc.logRecommendation(recommedList, 1);
     	}
+    	if(lastTrend != today) {
+    		List<Book> trendList = hSvc.loadHotTrendBooks(today.minusDays(1).toString());
+    		hSvc.logHotTrend(trendList);
+    	}
     	model.addAttribute("popular", bSvc.getPopularBooks());
-    	model.addAttribute("hotTrend", hSvc.getHotTrendBookList(yesterday.toString()));
-    	model.addAttribute("ai", bSvc.getRecommendedBooks(1));
+    	model.addAttribute("trend", hSvc.getHotTrendBooks());
+    	model.addAttribute("recommend", gSvc.getRecommendedBooks(1));
         return "home";
     }
     

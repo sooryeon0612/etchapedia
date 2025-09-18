@@ -1,18 +1,12 @@
 package com.etchapedia.home;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.etchapedia.api.BookApiUtil;
-import com.etchapedia.book.DisplayContents;
-import com.etchapedia.book.DisplayContentsRepository;
-import com.etchapedia.book.GptRecommendations;
-import com.etchapedia.book.GptRecommendationsRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
@@ -24,10 +18,6 @@ public class BookService {
 	private BookApiUtil util;
 	@Autowired
 	private BookRepository bRepo;
-	@Autowired
-	private GptRecommendationsRepository gRepo;
-	@Autowired
-	private DisplayContentsRepository dRepo;
 
     BookService(PasswordEncoder pwEncoder) {
         this.pwEncoder = pwEncoder;
@@ -57,23 +47,11 @@ public class BookService {
 		System.out.println("saved : " + save);
 	}
 	
-	
-	
 	public List<Book> getPopularBooks() {
 		return bRepo.findTop10ByOrderByLoanDesc();
 	}
 	
-	public List<Book> getRecommendedBooks(Integer userIdx) {
-		List<Book> retList = new ArrayList<>();
-		List<GptRecommendations> recommendedList = gRepo.findAllByUser_UserIdxOrderByRecommendIdx(userIdx);
-		for(GptRecommendations g : recommendedList) {
-			for(DisplayContents d : dRepo.findAllByGpt_RecommendIdx(g.getRecommendIdx())) {
-				retList.add(d.getBook());
-				if(retList.size() == 10) return retList;
-			}
-		}
-		return retList;
-	}
+	
 	
 	
 

@@ -41,7 +41,7 @@
 	        <section class="rank-section">
 	            <h2 class="section-title">인기 급상승</h2>
 	            <div class="rank-list">
-	                <div class="rank-item" th:each="book, stat : ${hotTrend}">
+	                <div class="rank-item" th:each="book, stat : ${trend}">
 	                    <div class="rank-number">[[${stat.count}]]</div>
 	                    <img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
 	                    <div class="book-info">
@@ -55,7 +55,7 @@
 			<section class="rank-section">
 	            <h2 class="section-title">AI추천 도서</h2>
 	            <div class="rank-list">
-	                <div class="rank-item" th:each="book, stat : ${ai}">
+	                <div class="rank-item" th:each="book, stat : ${recommend}">
 	                    <div class="rank-number">[[${stat.count}]]</div>
 	                    <img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
 	                    <div class="book-info">

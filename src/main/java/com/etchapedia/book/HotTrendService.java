@@ -43,7 +43,7 @@ public class HotTrendService {
 	}
 	
 	// 인기 급상승 도서 가져오고 없으면 데베에 저장
-	public List<Book> getHotTrendBookList(String searchDt) throws JsonMappingException, JsonProcessingException {
+	public List<Book> loadHotTrendBooks(String searchDt) throws JsonMappingException, JsonProcessingException {
 		List<Book> rawList = util.loadHotTrendBookList(searchDt);
 		List<Book> retList = new ArrayList<>();
 		
@@ -80,4 +80,18 @@ public class HotTrendService {
 		}
 		return retList;
  	}
+	
+	// 가장 최근에 저장된 인기 급상승 10권 
+	public List<Book> getHotTrendBooks() {
+		List<Book> retList = new ArrayList<>();
+		for(DisplayContents d : dRepo.findTop10ByOrderByTrend_TrendIdxDesc()) {
+			retList.add(d.getBook());
+		}
+		return retList;
+	}
+	
+	// 마지막 업데이트 날짜 
+	public LocalDate getLastUpdateDate() {
+		return hRepo.findTop1ByOrderByTrendIdxDesc().getUpdateDate();
+	}
 }
