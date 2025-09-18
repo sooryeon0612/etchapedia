@@ -1,13 +1,15 @@
 package com.etchapedia.api;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
 public class LibraryApiClient {
 	private WebClient webClient;
-	// LibraryApiClient (com.etchapedia.api)
-	private String key = "뭘까뭘까뭘까?";
+
+	@Value("${library.api-key}")
+	private String key;
 	
 	public LibraryApiClient(WebClient.Builder builder) {
 		this.webClient = builder

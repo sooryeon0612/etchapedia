@@ -41,4 +41,7 @@ src/main/resources/application.properties
 
 ## etc
 .DS_Store
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/remotes/origin/GPT_API

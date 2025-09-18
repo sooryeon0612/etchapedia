@@ -1,4 +1,6 @@
-package com.etchapedia.home;
+package com.etchapedia.book;
+
+import java.time.LocalDate;
 
 import com.etchapedia.user.Users;
 
@@ -15,22 +17,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Rate {
-	@ManyToOne
-	@JoinColumn(name="book_idx")
-	private Book book;
+public class GptRecommendations {
+	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="GptRecommendations")
+	@SequenceGenerator(name="GptRecommendations", sequenceName="seq_recommend_idx", allocationSize=1)
+	private Integer recommendIdx;
 	
 	@ManyToOne
 	@JoinColumn(name="user_idx")
 	private Users user;
 	
-	private Integer rate;
+	private LocalDate updateDate;
+
 	
-	
-	
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="rate")
-	@SequenceGenerator(name="rate", sequenceName="seq_rate_idx", allocationSize=1)
-	private Integer rateIdx;
 }
