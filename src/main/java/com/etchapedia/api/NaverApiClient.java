@@ -6,8 +6,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Component
 public class NaverApiClient {
 	private WebClient webClient;
-	private String clientId = "JuMYHP4w2burQTipw_YW";
-	private String clientSecret = "mXsX4ikakY";
+	// NaverAPiClient
+	private String clientId = "___";
+	private String clientSecret = "___";
 	
 	public NaverApiClient(WebClient.Builder builder) {
 		this.webClient = builder
