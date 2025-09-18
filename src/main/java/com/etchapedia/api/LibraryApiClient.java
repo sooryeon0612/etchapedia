@@ -6,7 +6,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Component
 public class LibraryApiClient {
 	private WebClient webClient;
-	private String key = "933007855a408647352fc853a7bc2fc40ee299bf420d1a503775bfcecc7ef159";
+	// LibraryApiClient (com.etchapedia.api)
+	private String key = "뭘까뭘까뭘까?";
 	
 	public LibraryApiClient(WebClient.Builder builder) {
 		this.webClient = builder
