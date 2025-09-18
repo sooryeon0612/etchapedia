@@ -2,8 +2,10 @@ package com.etchapedia.book;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,12 +89,17 @@ public class GptRecommendationsService {
 	// 가장 최근에 저장됐던 gpt추천 책 10권 
 	public List<Book> getRecommendedBooks(Integer userIdx) {
 		List<Book> retList = new ArrayList<>();
+		Set<Integer> idxList = new HashSet<>();
 		List<GptRecommendations> recommendedList = gRepo.findAllByUser_UserIdxOrderByRecommendIdx(userIdx);
 		for(GptRecommendations g : recommendedList) {
 			for(DisplayContents d : dRepo.findAllByGpt_RecommendIdx(g.getRecommendIdx())) {
-				retList.add(d.getBook());
-				if(retList.size() == 10) return retList;
+				idxList.add(d.getBook().getBookIdx());
+				if(idxList.size() == 10) break;
 			}
+			if(idxList.size() == 10) break;
+		}
+		for(Integer idx : idxList) {
+			retList.add(bRepo.findById(idx).get());
 		}
 		return retList;
 	}

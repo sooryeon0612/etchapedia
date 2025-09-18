@@ -102,7 +102,7 @@ public class BookApiUtil {
 				String author = doc.path("authors").asText();
 				String isbn = doc.path("isbn13").asText();
 				
-				if(isbn.equals("")) continue;
+				if(isbn.equals("") || title.equals("")) continue;
 				
 				Book b = new Book();
 				b.setTitle(title);

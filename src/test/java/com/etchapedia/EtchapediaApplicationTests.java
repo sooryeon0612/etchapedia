@@ -162,9 +162,11 @@ class EtchapediaApplicationTests {
 	
 	@Test
 	void testGetHotTrend() throws JsonMappingException, JsonProcessingException {
-//		for(Book b : bSvc.getHotTrendBookList(LocalDate.now().minusDays(1).toString())) {
-//			System.out.println(b.getTitle());
-//		}
+//		for(Book b : hSvc.loadHotTrendBooks(LocalDate.now().minusDays(1).toString())) {
+//		for(Book b : util.loadHotTrendBookList(LocalDate.now().minusDays(1).toString())) {
+		for(Book b : hSvc.getHotTrendBooks()) {
+			System.out.println(b.getTitle() + " / " + b.getBookIdx());
+		}
 	}
 	
 	
@@ -201,17 +203,27 @@ class EtchapediaApplicationTests {
 	
 	@Test
 	void testGptBookFinal() throws JsonMappingException, JsonProcessingException {
-//		for(Book b : bSvc.getGptRecommendBooks(1)) {
-//			System.out.println(b.getTitle() + " / " + b.getAuthor() + " / " + b.getIsbn());
-//		}
+		for(Book b : gSvc.getRecommendedBooks(1)) {
+			System.out.println(b.getTitle());
+		}
+	}
+	
+	@Test
+	void testHotBooksFinal() throws JsonMappingException, JsonProcessingException {
+		for(Book b : hSvc.getHotTrendBooks()) {
+			System.out.println(b.getTitle());
+		}
 	}
 	
 	@Test
 	void testLocalDateSyso() {
 		LocalDate today = LocalDate.now();
-    	LocalDate yesterday = today.minusDays(1);
+    	LocalDate lastTrend = hSvc.getLastUpdateDate();
+    	LocalDate lastUpdate = gSvc.getLastUpdateDate(1);
     	System.out.println(today);
-    	System.out.println(yesterday);
+    	System.out.println(lastTrend);
+    	System.out.println(lastUpdate);
+    	System.out.println(today.equals(lastUpdate));
 	}
 
 

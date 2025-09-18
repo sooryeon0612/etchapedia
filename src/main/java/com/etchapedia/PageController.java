@@ -32,11 +32,11 @@ public class PageController {
     	LocalDate today = LocalDate.now();
     	LocalDate lastTrend = hSvc.getLastUpdateDate();
     	LocalDate lastUpdate = gSvc.getLastUpdateDate(1);
-    	if(lastUpdate != today) {
+    	if(!lastUpdate.equals(today)) {
     		List<Book> recommedList = gSvc.getGptRecommendBooks(1);
     		gSvc.logRecommendation(recommedList, 1);
     	}
-    	if(lastTrend != today) {
+    	if(!lastTrend.equals(today)) {
     		List<Book> trendList = hSvc.loadHotTrendBooks(today.minusDays(1).toString());
     		hSvc.logHotTrend(trendList);
     	}

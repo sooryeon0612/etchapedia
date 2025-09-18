@@ -2,8 +2,10 @@ package com.etchapedia.book;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,6 +76,7 @@ public class HotTrendService {
 						b.setTitle(title);
 					}
 				}
+				if(title.equals("")) continue;
 				bRepo.save(b);
 				retList.add(b);
 			}
@@ -84,8 +87,13 @@ public class HotTrendService {
 	// 가장 최근에 저장된 인기 급상승 10권 
 	public List<Book> getHotTrendBooks() {
 		List<Book> retList = new ArrayList<>();
+		Set<Integer> idxList = new HashSet<>();
 		for(DisplayContents d : dRepo.findTop10ByOrderByTrend_TrendIdxDesc()) {
-			retList.add(d.getBook());
+			idxList.add(d.getBook().getBookIdx());
+			if(idxList.size() == 10) break;
+		}
+		for(Integer idx : idxList) {
+			retList.add(bRepo.findById(idx).get());
 		}
 		return retList;
 	}
