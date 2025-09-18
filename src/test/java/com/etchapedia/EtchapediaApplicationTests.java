@@ -43,9 +43,18 @@ class EtchapediaApplicationTests {
 	@Autowired
 	private NaverApiClient naver;
 	
+	@Test
+	void testINSERTDUMMY() {
+		Users users = new Users();
+		users.setEmail("1234@1234");
+		users.setName("test");
+		users.setPassword(pwEncoder.encode("1234"));
+		users.setProfile(null);
+		uRepo.save(users);
+	}
 
 	@Test
-	void testInsertDummy() {
+	void testInsertUserDummy() {
 		Users users = new Users();
 		users.setEmail("1234@1234");
 		users.setName("test");
@@ -92,8 +101,8 @@ class EtchapediaApplicationTests {
 	
 	@Test
 	void testHotTrendBookList() throws JsonMappingException, JsonProcessingException {
-		List<Book> list = bSvc.getHotTrendBookList("2025-09-15");
-		for(Book b : list) System.out.println(b.getTitle());
+//		List<Book> list = hSvc.getHotTrendBookList("2025-09-15");
+//		for(Book b : list) System.out.println(b.getTitle());
 	}
 	
 	@Test
@@ -118,9 +127,9 @@ class EtchapediaApplicationTests {
 	
 	@Test
 	void testGetHotTrend() throws JsonMappingException, JsonProcessingException {
-		for(Book b : bSvc.getHotTrendBookList(LocalDate.now().minusDays(1).toString())) {
-			System.out.println(b.getTitle());
-		}
+//		for(Book b : bSvc.getHotTrendBookList(LocalDate.now().minusDays(1).toString())) {
+//			System.out.println(b.getTitle());
+//		}
 	}
 	
 	
