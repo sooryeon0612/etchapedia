@@ -8,21 +8,6 @@
 	    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	</head>
 	<body class="cart-page">
-		<header class="header">
-		    <div class="header-content">
-		        <h1 class="logo">
-		            <span class="watcha">ETCHA</span><span class="pedia">PEDIA</span>
-		        </h1>
-		        <div class="search-bar">
-		            <input type="text" placeholder="검색">
-		        </div>
-		        <div class="user-menu">
-		            <a th:href="@{/user/login_form}">로그인</a>
-		            <a th:href="@{/user/signup}">회원가입</a>
-		        </div>
-		    </div>
-		</header>
-	
 		<div class="main-container">
 		    <div class="page-header">
 				<h1 th:text="'장바구니 (' + ${#lists.size(cartItems)} + ')'">장바구니 (0)</h1>
