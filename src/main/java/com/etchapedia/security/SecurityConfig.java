@@ -26,19 +26,19 @@ public class SecurityConfig {
 		)
 		.formLogin(		// 로그인 페이지에 대한 설정을 시작.
 				(formLoginConfig) -> formLoginConfig
-				.loginPage("/user/login_form")		// 스프링 시큐리티에게 로그인페이지URL을 알려줌.
+				.loginPage("/user/login")		// 스프링 시큐리티에게 로그인페이지URL을 알려줌.
 												// ---> 그러면 만약에 인증이 필요한 요청에 인증X 사용자가 접근하면,
 												// 		/member/login 으로 리다이렉트 시켜줌.
 				.loginProcessingUrl("/user/login")
 				.usernameParameter("email")	// <form>에서 ID 파라미터의 이름 설정. ("username"이면 불필요)
 				.passwordParameter("password")	// <form>에서 PW 파라미터의 이름 설정. ("password"이면 불필요)
-				.defaultSuccessUrl("/user/home_login", true)		// 로그인 성공 시, redirect 할 URL.
+				.defaultSuccessUrl("/home", true)		// 로그인 성공 시, redirect 할 URL.
 		)
 		.logout(
 				(logoutConfig) -> logoutConfig
 				.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
 				.invalidateHttpSession(true)			// 세션무효화
-				.logoutSuccessUrl("/user/login_form")		// 로그아웃 성공 시, redirect할 URL.
+				.logoutSuccessUrl("/home")		// 로그아웃 성공 시, redirect할 URL.
 		);
 		return http.build();
 	}

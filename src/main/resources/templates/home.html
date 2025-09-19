@@ -16,9 +16,15 @@
 	            <div class="search-bar">
 	                <input type="text" placeholder="검색">
 	            </div>
-	            <div class="user-menu">
-	                <a th:href="@{/user/login_form}">로그인</a>
+	            <div sec:authorize="isAnonymous()" class="user-menu">
+	                <a th:href="@{/user/login}">로그인</a>
 	                <a th:href="@{/user/signup}">회원가입</a>
+	            </div>
+				<div sec:authorize="isAuthenticated()" class="user-menu">
+					<a th:href="@{/user/logout}">로그아웃</a>
+					<a th:href="@{/news}">소식</a>
+			        <img th:src="${#authentication.principal.profile}" alt="프로필" class="profile-img">
+			        <span sec:authentication="principal.name"></span>
 	            </div>
 	        </div>
 	    </header>

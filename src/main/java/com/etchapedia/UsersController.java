@@ -52,30 +52,10 @@ public class UsersController {
 	}
 	
     // 로그인 화면 (
-    @GetMapping("/login_form")
+    @GetMapping("/login")
 	public String login() {
 		return "login_form";
 	}
-    
-    @PostMapping("/login")
-    public String login(@RequestParam("email") String userEmail, @RequestParam("password") String userPw, 
-    					Model model, HttpSession session) {
-    	// 이메일과 비밀번호 검증
-    	boolean loginSuccess = uSvc.authenticate(userEmail, userPw);
-    	if(loginSuccess) {
-    		session.setAttribute("loggedInUserEmail", userEmail);
-    		return "redirect:/home_login";
-    	} else {
-    		model.addAttribute("loginError", true);
-    		return "login_form";
-    	}
-    }
-    
-    // 로그인 성공 시 홈화면으로 이동
-    @GetMapping("home_login")
-    public String homeLogin() {
-    	return "home_login";
-    }
     
     // 이메일 중복 여부 확인
     @GetMapping("/checkEmail")

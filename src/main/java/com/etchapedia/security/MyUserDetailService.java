@@ -7,8 +7,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -22,7 +20,7 @@ public class MyUserDetailService implements UserDetailsService {
 	private UsersRepository uRepo;
 
 	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+	public CustomUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		Optional<Users> om = uRepo.findByEmail(email);
 		if(om.isEmpty())
 			throw new UsernameNotFoundException("사용자를 찾을 수 없음.");
@@ -35,6 +33,6 @@ public class MyUserDetailService implements UserDetailsService {
 		else
 			authorities.add(new SimpleGrantedAuthority(UsersRole.USER.getValue()));
 		
-		return new User(m.getEmail(), m.getPassword(), authorities);
+		return new CustomUserDetails(m.getEmail(), m.getPassword(), true, true, true, true, authorities, m.getUserIdx(), m.getName(), m.getProfile());
 	}
 }

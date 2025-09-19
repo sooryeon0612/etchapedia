@@ -12,18 +12,17 @@
         </h1>
 		<h2 class="title">로그인</h2>
 	    <form th:action="@{/user/login}" th:method="post">
-			<h5 th:if="${param.error}">ID 또는 비밀번호를 확인해 주세요.</h5>
 			<div class="form-group">
 				<input type="email" placeholder="이메일" name="email">
 			</div>
 			<div class="form-group">
 				<input type="password" placeholder="비밀번호" name="password">
 			</div>
-			
+			<div class="error" th:if="${param.error}">ID 또는 비밀번호를 확인해 주세요.</div>
 			<button type="submit" class="login-btn">로그인</button>
 	    </form>
 	    <div class="link">
-			<a href="#">비밀번호를 잊어버리셨나요?</a><br/><br/>
+			<a href="#">비밀번호를 잊어버리셨나요?</a><br/>
 			계정이 없으신가요?<a th:href="@{/user/signup}">회원가입</a>
 		</div>
 	    <div class="or">OR</div>
