@@ -8,34 +8,20 @@
 </head>
 <body>
     <div layout:fragment="content">
-		<header class="header">
-	        <div class="header-content">
-	            <h1 class="logo">
-	                <span class="watcha">ETCHA</span><span class="pedia">PEDIA</span>
-	            </h1>
-	            <div class="search-bar">
-	                <input type="text" placeholder="검색">
-	            </div>
-	            <div class="user-menu">
-					<a th:href="@{#}">소식</a>
-	                <a th:href="@{/user/login}">로그인</a>
-	                <a th:href="@{/user/signup}">회원가입</a>
-	            </div>
-	        </div>
-	    </header>
-    <main class="main-content">
-        <h2 class="page-title">책</h2>
-        <div class="book-grid">
-            <div class="book-item" th:each="book : ${books}">
-                <div class="book-cover">
-                    <img th:src="${book.coverUrl}" alt="책 표지">
-                </div>
-                <div class="book-info">
-                    <h3 class="book-title" th:text="${book.title}"></h3>
-                    <p class="book-meta" th:text="|${book.year} · ${book.author}|"></p>
-                </div>
-            </div>
-        </div>
-    </main>
+		<main class="main-content">
+		    <h2 class="page-title">책</h2>
+		    <div class="book-grid">
+		        <div class="book-item" th:each="book : ${books}">
+		            <div class="book-cover">
+		                <img th:src="${book.coverUrl}" alt="책 표지">
+		            </div>
+		            <div class="book-info">
+		                <h3 class="book-title" th:text="${book.title}"></h3>
+		                <p class="book-meta" th:text="|${book.year} · ${book.author}|"></p>
+		            </div>
+		        </div>
+		    </div>
+		</main>
+	</div>
 </body>
 </html>
