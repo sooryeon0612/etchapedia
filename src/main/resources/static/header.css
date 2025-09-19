@@ -1,0 +1,69 @@
+@import url('https://cdn.jsdelivr.net/npm/spoqa-han-sans-neo@1.0.1/css/spoqa-han-sans-neo.min.css');
+/* 기본 스타일 */
+body {
+    font-family: 'Spoqa Han Sans Neo', 'Noto Sans KR', sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+/* 헤더 스타일 */
+.header {
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 15px 0;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 왓챠피디아 로고 스타일 */
+.logo {
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.watcha {
+    color: #ff2f6e;
+}
+
+.pedia {
+    color: #333;
+}
+
+/* 검색바 스타일 수정 */
+.search-bar {
+    width: 250px;
+    margin-left: auto;
+    margin-right: 40px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.user-menu a {
+    text-decoration: none;
+    color: #666;
+    margin-left: 15px;
+    font-size: 14px;
+}
+.profile-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+}

@@ -8,27 +8,6 @@
 </head>
 <body>
     <div layout:fragment="content">
-		<header class="header">
-	        <div class="header-content">
-	            <h1 class="logo">
-	                <span class="watcha">ETCHA</span><span class="pedia">PEDIA</span>
-	            </h1>
-	            <div class="search-bar">
-	                <input type="text" placeholder="검색">
-	            </div>
-	            <div sec:authorize="isAnonymous()" class="user-menu">
-	                <a th:href="@{/user/login}">로그인</a>
-	                <a th:href="@{/user/signup}">회원가입</a>
-	            </div>
-				<div sec:authorize="isAuthenticated()" class="user-menu">
-					<a th:href="@{/user/logout}">로그아웃</a>
-					<a th:href="@{/news}">소식</a>
-			        <img th:src="${#authentication.principal.profile}" alt="프로필" class="profile-img">
-			        <span sec:authentication="principal.name"></span>
-	            </div>
-	        </div>
-	    </header>
-
 		<main class="main-container">
 	        <section class="rank-section">
 	            <h2 class="section-title">인기순</h2>
