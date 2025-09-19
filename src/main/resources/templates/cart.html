@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+	<head>
+	    <meta charset="UTF-8">
+	    <title>장바구니</title>
+	    <link rel="stylesheet" href="cart.css">
+	    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+	    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	</head>
+	<body class="cart-page">
+		<header class="header">
+		    <div class="header-content">
+		        <h1 class="logo">
+		            <span class="watcha">ETCHA</span><span class="pedia">PEDIA</span>
+		        </h1>
+		        <div class="search-bar">
+		            <input type="text" placeholder="검색">
+		        </div>
+		        <div class="user-menu">
+		            <a th:href="@{/user/login_form}">로그인</a>
+		            <a th:href="@{/user/signup}">회원가입</a>
+		        </div>
+		    </div>
+		</header>
+	
+		<div class="main-container">
+		    <div class="page-header">
+				<h1 th:text="'장바구니 (' + ${#lists.size(cartItems)} + ')'">장바구니 (0)</h1>
+		        <div class="header-steps">
+		            <span class="active-step">1 장바구니</span>
+		            <span>2 주문/결제</span>
+		            <span>3 주문완료</span>
+		        </div>
+		    </div>
+		
+		    <div class="cart-content">
+		        <div class="cart-items-section">
+		            <div class="cart-items-header">
+		                <input type="checkbox" checked>
+		                <span>전체</span>
+		                <button>선택삭제</button>
+		            </div>
+		
+		            <div class="cart-item" th:each="item : ${cartItems}">
+		                <input type="checkbox" checked>
+		                <div class="item-info">
+		                    <img th:src="${item.imageUrl}" alt="상품 이미지">
+		                    <div class="item-details">
+		                        <span class="item-title" th:text="${item.name}">상품명</span>
+		                        <span class="original-price" th:text="${#numbers.formatDecimal(item.price,0,'COMMA')} + '원'">0원</span>
+		                    </div>
+		                </div>
+		                <div class="item-actions">
+		                    <div class="quantity-control">
+		                        <button class="decrease-btn">-</button>
+		                        <input type="text" th:value="${item.quantity}">
+		                        <button class="increase-btn">+</button>
+		                    </div>
+		                    <span class="delivery-info" th:text="${item.deliveryInfo}">배송비 정보</span>
+		                    <button class="remove-btn">x</button>
+		                </div>
+		            </div>
+		        </div>
+		
+		        <div class="order-summary-section">
+		            <div class="summary-box">
+		                <h2>결제예정금액</h2>
+		                <div class="summary-row">
+		                    <span>상품금액</span>
+		                    <span th:text="${#numbers.formatDecimal(totalPrice,0,'COMMA')} + '원'">0원</span>
+		                </div>
+		                <div class="summary-row">
+		                    <span>배송비</span>
+		                    <span class="free">+0원</span>
+		                </div>
+		                <div class="summary-total">
+		                    <span>결제예정금액</span>
+		                    <span class="total-price" th:text="${#numbers.formatDecimal(totalPrice,0,'COMMA')} + '원'">0원</span>
+		                </div>
+						<button id="order-btn" class="order-btn"
+						        th:text="'주문하기 (' + ${#lists.size(cartItems)} + ')'">주문하기 (0)</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	
+		<script type="text/javascript">
+		    // 카카오페이 결제 팝업창 연결
+		    $(function() {
+		        $("#order-btn").click(function(e) {
+					e.preventDefault(); // 기본 폼 제출 동작 방지
+
+		            // Thymeleaf 변수를 직접 사용하거나, 안전하게 할당
+		            const cartSummaryName = '[[${cartSummaryName}]]';
+		            const totalPrice = '[[${totalPrice}]]';
+
+		            if (!cartSummaryName || totalPrice <= 0) {
+		                alert("주문할 상품이 없거나 가격이 올바르지 않습니다.");
+		                return;
+		            }
+		
+		            $.ajax({
+		                type: 'POST',
+		                url: '/order/pay/ready',
+		                data: JSON.stringify({
+							name: cartSummaryName, 
+							totalPrice: totalPrice
+						}),
+		                contentType: 'application/json',
+		                success: function(response) {
+							console.log("결제준비 응답", response);
+		                    if (response.next_redirect_pc_url) {
+		                        // 팝업 대신 현재 페이지를 결제 페이지로 이동
+		                        window.location.href = response.next_redirect_pc_url;
+		                    } else {
+		                        alert("결제 페이지를 찾을 수 없습니다.");
+		                    }
+		                },
+		                error: function(xhr, status, error) {
+		                    console.error("결제 요청 실패: ", status, error);
+		                    alert("결제에 실패했습니다. 서버 오류입니다.");
+		                }
+		            });
+		        });
+		    });
+		</script>
+	</body>
+</html>

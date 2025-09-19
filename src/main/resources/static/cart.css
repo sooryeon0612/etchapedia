@@ -1,0 +1,279 @@
+/* Spoqa Han Sans Neo 폰트 불러오기 */
+@import url('https://cdn.jsdelivr.net/npm/spoqa-han-sans-neo@1.0.1/css/spoqa-han-sans-neo.min.css');
+
+/* 기본 스타일 */
+body {
+    font-family: 'Spoqa Han Sans Neo', 'Noto Sans KR', sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* 헤더 스타일 */
+.header {
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 15px 0;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 왓챠피디아 로고 스타일 */
+.logo {
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.watcha {
+    color: #ff2f6e;
+}
+
+.pedia {
+    color: #333;
+}
+
+/* 검색바 스타일 */
+.search-bar {
+    width: 250px;
+    margin-left: auto;
+    margin-right: 40px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.user-menu a {
+    text-decoration: none;
+    color: #666;
+    margin-left: 15px;
+    font-size: 14px;
+}
+
+/* 장바구니 페이지 전용 스타일 */
+.cart-page {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+/* 메인 컨테이너 */
+.cart-page .main-container {
+    width: 1100px;
+    margin: 20px auto;
+}
+
+/* 페이지 헤더 */
+.cart-page .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 20px;
+}
+
+.cart-page .page-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.cart-page .header-steps span {
+    margin-left: 10px;
+    color: #aaa;
+}
+
+.cart-page .header-steps .active-step {
+    font-weight: 700;
+    color: #000;
+}
+
+/* 장바구니 콘텐츠 레이아웃 */
+.cart-page .cart-content {
+    display: flex;
+    gap: 20px;
+}
+
+/* 장바구니 아이템 섹션 */
+.cart-page .cart-items-section {
+    flex: 2;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.cart-page .cart-items-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.cart-page .cart-items-header input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+}
+
+.cart-page .cart-items-header button {
+    background-color: #eee;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+/* 개별 아이템 스타일 */
+.cart-page .cart-item {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding: 20px 0;
+}
+
+.cart-page .item-info {
+    display: flex;
+    align-items: center;
+	margin-left: 15px;
+    gap: 15px;
+    flex: 1;
+}
+
+.cart-page .item-info img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.cart-page .item-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-page .item-title {
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+/* 원래 가격 스타일 (빨간색으로 변경) */
+.cart-page .original-price {
+    color: #d90000;
+    font-weight: 700;
+}
+
+/* 아이템 액션 */
+.cart-page .item-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.cart-page .quantity-control {
+    display: flex;
+    border: 1px solid #eee;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.cart-page .quantity-control button {
+    background-color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.cart-page .quantity-control input {
+    border: none;
+    width: 40px;
+    text-align: center;
+}
+
+.cart-page .remove-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #aaa;
+    cursor: pointer;
+}
+
+/* 주문 요약 섹션 */
+.cart-page .order-summary-section {
+    flex: 1;
+}
+
+.cart-page .summary-box {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.cart-page .summary-box h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+.cart-page .summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.cart-page .summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 18px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.cart-page .total-price {
+    font-size: 24px;
+    color: #d90000;
+}
+
+/* 주문 버튼 */
+.cart-page .order-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #5544a0;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.cart-page .order-btn:hover {
+    background-color: #433682;
+}
+
+/* 기타 스타일 */
+.cart-page .discount span:last-child {
+    color: #d90000;
+}
+
+.cart-page .free {
+    color: #008000;
+}

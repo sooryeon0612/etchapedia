@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout1}"> 
+<head>
+	<link rel="stylesheet" th:href="@{/reply.css}">
+    <title>댓글</title>
+</head>
+<body>
+    <div layout:fragment="content">
+		<header class="header">
+	        <div class="header-content">
+	            <h1 class="logo">
+	                <span class="watcha">ETCHA</span><span class="pedia">PEDIA</span>
+	            </h1>
+	            <div class="search-bar">
+	                <input type="text" placeholder="검색">
+	            </div>
+	            <div class="user-menu">
+					<a th:href="@{#}">소식</a>
+	                <a th:href="@{/user/login_form}">로그인</a>
+	                <a th:href="@{/user/signup}">회원가입</a>
+	            </div>
+	        </div>
+	    </header>
+
+    <div class="main-container">
+        <div class="review-box">
+            <div class="review-header">
+                <div class="user-info">
+                    <img src="https://via.placeholder.com/40" alt="Profile" class="profile-pic">
+                    <span class="user-name">세이지</span>
+                    <span class="review-time">3개월 전</span>
+                </div>
+                <div class="rating">
+                    <span>3.0</span> ★
+                </div>
+            </div>
+            <div class="review-content">
+                <div class="movie-info">
+                    <img src="https://shopping-phinf.pstatic.net/main_5382179/53821790771.20250401090009.jpg?type=w300" alt="Movie Poster" class="movie-poster">
+                    <div class="movie-text">
+                        <div class="movie-title">
+                            긴키지방의 어느 장소에 대하여
+                        </div>
+                        <div class="movie-release">
+                            공포 - 2025
+                        </div>
+                        <div class="movie-rating">
+                            평균 4.75
+                        </div>
+                    </div>
+                </div>
+                <div class="review-text">
+                    <p>편안하고 기분나쁜 특유 감성</p>
+                    <p>반복의 중요성...</p>
+                    <p>여자 좀 그런 기분이고 싶으라고, 그럼 그만해 왜</p>
+                </div>
+            </div>
+            <div class="review-footer">
+                <div class="social-actions">
+                    <span class="like-count">좋아요 10</span>
+                    <span class="comment-count">1</span>
+                </div>
+                <div class="action-buttons">
+                    <i class="fa fa-thumbs-up"></i>
+                    <i class="fa fa-share-alt"></i>
+                    <i class="fa fa-ellipsis-h"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="comment-section">
+            <div class="comment">
+                <div class="user-info">
+                    <img src="https://via.placeholder.com/30" alt="Profile" class="profile-pic">
+                    <span class="user-name">현오</span>
+                    <span class="review-time">2개월 전</span>
+                </div>
+                <div class="comment-text">
+                    <p>편안하고 기분나쁜 특유 감성... 공감하고갑니다</p>
+                </div>
+                <div class="comment-actions">
+                    <span>좋아요 1</span>
+                    <i class="fa fa-ellipsis-h"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

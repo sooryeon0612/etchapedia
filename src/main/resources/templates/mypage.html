@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout1}">
+<head>
+	<link rel="stylesheet" th:href="@{/mypage.css}">
+    <title>마이페이지</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<header class="header">
+	        <div class="header-content">
+	            <h1 class="logo">
+	                <span class="watcha">ETCHA</span><span class="pedia">PEDIA</span>
+	            </h1>
+	            <div class="search-bar">
+	                <input type="text" placeholder="검색">
+	            </div>
+	            <div class="user-menu">
+					<a th:href="@{#}">소식</a>
+	                <a th:href="@{/user/login_form}">로그인</a>
+	                <a th:href="@{/user/signup}">회원가입</a>
+	            </div>
+	        </div>
+	    </header>
+        <div class="profile-container">
+            <div class="profile-header">
+                <a th:href="@{/profile/edit}" class="profile-avatar-link">
+                    <div class="profile-avatar">
+                        <img th:src="@{/images/default_avatar.png}" alt="프로필 아바타">
+                    </div>
+                </a>
+                <div class="profile-info">
+                    <h1 th:if="${user != null}" th:text="${user.name}">이경미</h1>
+                    <p th:if="${user != null}" th:text="${user.email}">birthday53@naver.com</p>
+                    <div class="stats">
+                        <span class="stat-item">팔로잉 <strong th:if="${user != null}" th:text="${user.followingCount}">0</strong></span>
+                        <span class="stat-item">팔로워 <strong th:if="${user != null}" th:text="${user.followerCount}">1</strong></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <a th:href="@{/profile/edit}" class="action-btn">프로필 수정</a>
+                <a th:href="@{/profile/change-password}" class="action-btn">비밀번호 수정</a>
+                <a th:href="@{/logout}" class="action-btn">로그아웃</a>
+            </div>
+        </div>
+
+        <div class="likes-container">
+            <h3>좋아요</h3>
+            <ul class="likes-list">
+                <li class="like-item">
+                    <a th:href="@{/profile/likes/people}">
+                        <span>좋아한 인물 <span class="count" th:if="${likes != null}" th:text="${likes.personCount}">0</span></span>
+                        <span class="arrow">&gt;</span>
+                    </a>
+                </li>
+                <li class="like-item">
+                    <a th:href="@{/profile/likes/collections}">
+                        <span>좋아한 컬렉션 <span class="count" th:if="${likes != null}" th:text="${likes.collectionCount}">0</span></span>
+                        <span class="arrow">&gt;</span>
+                    </a>
+                </li>
+                <li class="like-item">
+                    <a th:href="@{/profile/likes/comments}">
+                        <span>좋아한 코멘트 <span class="count" th:if="${likes != null}" th:text="${likes.commentCount}">0</span></span>
+                        <span class="arrow">&gt;</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

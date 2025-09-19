@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout1}"> 
+<head>
+	<link rel="stylesheet" th:href="@{/detail_page.css}">
+    <title>책 상세화면</title>
+</head>
+<body>
+    <div layout:fragment="content">
+		<header class="header">
+	        <div class="header-content">
+	            <h1 class="logo">
+	                <span class="watcha">ETCHA</span><span class="pedia">PEDIA</span>
+	            </h1>
+	            <div class="search-bar">
+	                <input type="text" placeholder="검색">
+	            </div>
+	            <div class="user-menu">
+					<a th:href="@{#}">소식</a>
+	                <a th:href="@{/user/login_form}">로그인</a>
+	                <a th:href="@{/user/signup}">회원가입</a>
+	            </div>
+	        </div>
+	    </header>
+
+    <main class="main-content">
+        <div class="book-header-bg" th:style="'background-image: url(' + @{/images/header-bg.jpg} + ');'"></div>
+        
+        <div class="book-details-section">
+            <div class="book-details-inner">
+                <div class="book-cover-container">
+                    <img th:if="${book != null}" th:src="${book.coverUrl}" alt="책 표지" class="book-cover-main">
+                </div>
+                <div class="book-info-container">
+                   	<h1 th:if="${book != null}" th:text="${book.title}"></h1>
+                    <p class="book-author" th:if="${book != null}" th:text="${book.author}"></p>
+                    <div class="rating-actions">
+                        <div class="rating-stars">
+                            <span class="star">★</span>
+                        </div>
+                        <span class="rating-value" th:if="${book != null}" th:text="${book.rating}"></span>
+                        <div class="action-buttons">
+                            <button class="action-btn">평가하기</button>
+                            <button class="action-btn">장바구니</button>
+                        </div>
+                    </div>
+                    <div class="book-description">
+                        <p th:if="${book != null}"th:text="${book.description}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-inner">
+                <h3>저자/제작자</h3>
+                <div class="author-list">
+                    <div class="author-item">
+                        <img src="https://via.placeholder.com/50" alt="저자 이미지">
+                        <span th:if="${book != null}" th:text="${book.author}"></span>
+                    </div>
+                </div>
+				
+                <h3>코멘트</h3>
+                <div class="comments-grid">
+                    <div class="comment-item" th:if="${comment != null}" th:each="comment : ${comments}">
+                        <div class="comment-header">
+                            <img src="https://via.placeholder.com/30" alt="프로필 이미지">
+                            <span th:if="${comment != null}" th:text="${comment.user}"></span>
+                        </div>
+                        <p class="comment-text" th:if="${comment != null}" th:text="${comment.text}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

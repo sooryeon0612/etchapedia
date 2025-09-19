@@ -1,0 +1,226 @@
+@import url('https://cdn.jsdelivr.net/npm/spoqa-han-sans-neo@1.0.1/css/spoqa-han-sans-neo.min.css');
+/* 기본 스타일 */
+body {
+    font-family: 'Spoqa Han Sans Neo', 'Noto Sans KR', sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* 헤더 스타일 */
+.header {
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 15px 0;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 왓챠피디아 로고 스타일 */
+.logo {
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.watcha {
+    color: #ff2f6e;
+}
+
+.pedia {
+    color: #333;
+}
+
+/* 검색바 스타일 수정 */
+.search-bar {
+    width: 250px;
+    margin-left: auto;
+    margin-right: 40px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.user-menu a {
+    text-decoration: none;
+    color: #666;
+    margin-left: 15px;
+    font-size: 14px;
+}
+
+.profile-container,
+.likes-container {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* 프로필 상단 헤더 */
+.profile-header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 20px;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.profile-info p {
+    margin: 5px 0 10px;
+    font-size: 14px;
+    color: #888;
+}
+
+.stats {
+    display: flex;
+    gap: 15px;
+    font-size: 14px;
+}
+
+.stat-item strong {
+    font-weight: 700;
+    color: #333;
+}
+
+/* 프로필 수정 버튼 */
+.profile-actions {
+    margin-bottom: 20px;
+}
+
+.action-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #555;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.action-btn:hover {
+    background-color: #f5f5f5;
+}
+
+/* 평가, 코멘트, 컬렉션 통계 그리드 */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.stats-grid .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 0;
+    font-size: 14px;
+    color: #888;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.stats-grid .stat-item:hover {
+    background-color: #f9f9f9;
+}
+
+.stats-grid .stat-item strong {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+}
+
+/* 좋아요 섹션 */
+.likes-container h3 {
+    font-size: 18px;
+    font-weight: 600;
+    padding-bottom: 10px;
+    margin-bottom: 0;
+    border-bottom: 1px solid #eee;
+}
+
+.likes-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.like-item {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.like-item:last-child {
+    border-bottom: none;
+}
+
+.like-item a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    font-size: 16px;
+    color: #555;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.like-item a:hover {
+    color: #333;
+}
+
+.like-item .count {
+    font-weight: 600;
+    color: #333;
+    margin-left: 10px;
+}
+
+.like-item .arrow {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ccc;
+    transition: transform 0.2s;
+}
+
+.like-item a:hover .arrow {
+    transform: translateX(5px);
+}
