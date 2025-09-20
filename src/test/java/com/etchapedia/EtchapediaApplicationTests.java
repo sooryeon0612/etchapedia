@@ -14,17 +14,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.etchapedia.api.BookApiUtil;
 import com.etchapedia.api.NaverApiClient;
+import com.etchapedia.book.Book;
+import com.etchapedia.book.BookRepository;
+import com.etchapedia.book.BookService;
 import com.etchapedia.book.GptRecommendationsService;
 import com.etchapedia.book.HotTrendService;
-import com.etchapedia.home.Book;
-import com.etchapedia.home.BookRepository;
-import com.etchapedia.home.BookService;
 import com.etchapedia.home.Click;
 import com.etchapedia.home.ClickRepository;
 import com.etchapedia.user.Users;
 import com.etchapedia.user.UsersRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 class EtchapediaApplicationTests {
@@ -52,29 +54,29 @@ class EtchapediaApplicationTests {
 	@Test
 	void testINSERTDUMMY() throws JsonMappingException, JsonProcessingException {
 		// test 유저 저장 
-//		Users users = new Users();
-//		users.setEmail("1234@1234");
-//		users.setName("test");
-//		users.setPassword(pwEncoder.encode("1234"));
-//		users.setProfile(null);
-//		uRepo.save(users);
+		Users users = new Users();
+		users.setEmail("1234@1234");
+		users.setName("test");
+		users.setPassword(pwEncoder.encode("1234"));
+		users.setProfile(null);
+		uRepo.save(users);
 //		
 //		// 베이스 책들 저장 
-//		bSvc.saveBooks(1, 10);
-//		bSvc.saveBooks(2, 10);
-//		bSvc.saveBooks(3, 10);
-//		bSvc.saveBooks(4, 10);
-//		bSvc.saveBooks(5, 10);
+		bSvc.saveBooks(1, 10);
+		bSvc.saveBooks(2, 10);
+		bSvc.saveBooks(3, 10);
+		bSvc.saveBooks(4, 10);
+		bSvc.saveBooks(5, 10);
 //		
 //		// 클릭한 책 저장 
-//		Click c = new Click();
-//		c.setBook(bRepo.findById(1).get());
-//		c.setUser(uRepo.findById(1).get());
-//		cRepo.save(c);
-//		Click c2 = new Click();
-//		c2.setBook(bRepo.findById(2).get());
-//		c2.setUser(uRepo.findById(1).get());
-//		cRepo.save(c2);
+		Click c = new Click();
+		c.setBook(bRepo.findById(1).get());
+		c.setUser(uRepo.findById(1).get());
+		cRepo.save(c);
+		Click c2 = new Click();
+		c2.setBook(bRepo.findById(2).get());
+		c2.setUser(uRepo.findById(1).get());
+		cRepo.save(c2);
 		
 		// 지피티 추천 받기
 		List<Book> recommedList = gSvc.getGptRecommendBooks(1);
@@ -187,9 +189,13 @@ class EtchapediaApplicationTests {
 	}
 	
 	@Test
-	void testNaverApiByTitle() {
-		String result = naver.callNaverApiByTitle("사라진 밤");
-		System.out.println(result);
+	void testNaverApi() throws JsonMappingException, JsonProcessingException {
+//		String result = naver.callNaverApiByKeyword("최진영");
+//		System.out.println(result);
+		
+		for(Book b : util.findBooksByKeywordFromNaver("최진영")) {
+			System.out.println(b.getTitle());
+		}
 	}
 	
 	@Test
@@ -224,6 +230,20 @@ class EtchapediaApplicationTests {
     	System.out.println(lastTrend);
     	System.out.println(lastUpdate);
     	System.out.println(today.equals(lastUpdate));
+	}
+	
+	@Test
+	void testbRepoMethod() {
+		for(Book b : bRepo.findByAuthorContaining("게이고")) {
+			System.out.println(b.getTitle() + " / " + b.getAuthor());
+		}
+	}
+	
+	@Test
+	void testGetSearchBooks() {
+		for(Book b : bSvc.getSearchBooks("최진영")) {
+			System.out.println(b.getTitle());
+		}
 	}
 
 

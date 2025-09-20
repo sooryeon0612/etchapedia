@@ -1,4 +1,4 @@
-package com.etchapedia.home;
+package com.etchapedia.book;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,4 +12,6 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 	@Query(value="SELECT * FROM (SELECT * FROM book ORDER BY loan DESC) WHERE ROWNUM <= 10",
 			nativeQuery=true)
 	List<Book> findTop10ByOrderByLoanDesc();
+	List<Book> findByTitleContaining(String search);
+	List<Book> findByAuthorContaining(String search);
 }

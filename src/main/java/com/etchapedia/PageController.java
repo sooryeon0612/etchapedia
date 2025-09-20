@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.etchapedia.book.Book;
+import com.etchapedia.book.BookService;
 import com.etchapedia.book.HotTrendService;
-import com.etchapedia.home.Book;
-import com.etchapedia.home.BookService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
@@ -39,7 +40,8 @@ public class PageController {
     
     // 책 검색 화면 (book_search.html)
     @GetMapping("/book/search")
-    public String bookSearch() {
+    public String bookSearch(@RequestParam("query")String query, Model model) {
+    	model.addAttribute("list", bSvc.getSearchBooks(query));
     	return "book_search";
     }
     

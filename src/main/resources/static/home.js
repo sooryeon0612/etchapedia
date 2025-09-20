@@ -16,7 +16,6 @@ function loadRecommendBooks(userIdx) {
 	fetch("/ajax/load_recommend_books", init)
 	.then(response => response.json())
 	.then(data => {
-		console.log(data);
 		let str = "";
 		data.forEach(function(book, index) {
 			str = `	<div class="rank-item">
@@ -40,4 +39,11 @@ $(function() {
 	const userIdx = $(".user-menu").data("userIdx");
 	
 	if(userIdx != null) loadRecommendBooks(userIdx);
+	
+	$(".search-bar > input").keypress(function(e) {
+		if(e.keyCode == 13) {
+			const search = $(this).val();
+			location.href="/book/search?query=" + search;
+		}
+	})
 });

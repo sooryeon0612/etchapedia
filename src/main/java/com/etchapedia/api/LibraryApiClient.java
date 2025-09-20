@@ -59,5 +59,19 @@ public class LibraryApiClient {
                 .block();
     }
     
+    public String callSrchBooksListApi(String search) {
+    	return webClient.get()
+    			.uri(uriBuilder -> uriBuilder
+    					.path("/api/srchBooks")
+    					.queryParam("keyword", search)
+    					.queryParam("pageNo", 1)
+    					.queryParam("pageSize", 10)
+    					.queryParam("format", "json")
+                        .build())
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
+    
 
 }

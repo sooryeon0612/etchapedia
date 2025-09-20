@@ -7,8 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.etchapedia.home.Book;
-import com.etchapedia.home.BookRepository;
+import com.etchapedia.book.Book;
+import com.etchapedia.book.BookRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -35,7 +35,6 @@ public class BookApiUtil {
 		
 		JsonNode root = mapper.readTree(rawBooks);
 		JsonNode docs = root.path("response").path("docs");
-		int save = 0;
 		for(JsonNode item : docs) {
 			JsonNode book = item.path("doc");
 			String title = book.path("bookname").asText();
@@ -57,6 +56,46 @@ public class BookApiUtil {
 		}
 		return bookList;
     }
+	
+
+	// 정보나루 대출 급상승 도서 api 호출
+	public List<Book> loadHotTrendBookList(String searchDt) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		List<Book> bookList = new ArrayList<>();
+		String books = lib.callHotTrendApi(searchDt);
+		
+		JsonNode root = mapper.readTree(books);
+		JsonNode results = root.path("response").path("results");
+		for(JsonNode result : results) {
+			JsonNode docs = result.path("result").path("docs");
+			for(JsonNode doc : docs) {
+				doc = doc.path("doc");
+				String title = doc.path("bookname").asText();
+				String author = doc.path("authors").asText();
+				String isbn = doc.path("isbn13").asText();
+				
+				if(isbn.equals("") || title.equals("")) continue;
+				
+				Book b = new Book();
+				b.setTitle(title);
+				b.setAuthor(author);
+				b.setIsbn(isbn);
+				
+				bookList.add(b);
+			}
+		}
+		return bookList;
+	}
+
+	// 대출수 채운 뒤 book 객체 리턴 
+	public Book getLoanByIsbn(Book book) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		String rawInfo = lib.callSrchDtlListApi(book.getIsbn());
+		JsonNode root = mapper.readTree(rawInfo);
+		String loanStr = root.path("response").path("loanInfo").path(0).path("Total").path("loanCnt").asText();
+		book.setLoan(Integer.parseInt(loanStr.equals("") ? "0" : loanStr));
+		return book;
+	}
 	
 	// 네이버 api 호출 후 필요한 정보만 채운 뒤 book객체 리턴 
 	public Book getBookInfoFromNaver(Book book) throws JsonMappingException, JsonProcessingException {
@@ -86,43 +125,35 @@ public class BookApiUtil {
 		}
 	}
 	
-	// 정보나루 대출 급상승 도서 api 호출
-	public List<Book> loadHotTrendBookList(String searchDt) throws JsonMappingException, JsonProcessingException {
+	// 네이버에서 키워드로 책 검색
+	public List<Book> findBooksByKeywordFromNaver(String keyword) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
-		List<Book> bookList = new ArrayList<>();
-		String books = lib.callHotTrendApi(searchDt);
+		String result = naver.callNaverApiByKeyword(keyword);
+		JsonNode items = mapper.readTree(result).path("items");
+		List<Book> retList = new ArrayList<>();
 		
-		JsonNode root = mapper.readTree(books);
-		JsonNode results = root.path("response").path("results");
-		for(JsonNode result : results) {
-			JsonNode docs = result.path("result").path("docs");
-			for(JsonNode doc : docs) {
-				doc = doc.path("doc");
-				String title = doc.path("bookname").asText();
-				String author = doc.path("authors").asText();
-				String isbn = doc.path("isbn13").asText();
-				
-				if(isbn.equals("") || title.equals("")) continue;
-				
-				Book b = new Book();
-				b.setTitle(title);
-				b.setAuthor(author);
-				b.setIsbn(isbn);
-				
-				bookList.add(b);
-			}
+		if(items.size() == 0) return retList;
+		
+		for(JsonNode item : items) {
+			String description = item.path("description").asText();	
+			String pic = item.path("image").asText();
+			String price = item.path("discount").asText();
+			String author = item.path("author").asText();
+			String isbn = item.path("isbn").asText();
+			String title = item.path("title").asText();
+			
+			if(description.equals("") || price.equals("") || pic.equals("") || author.equals("") || isbn.equals("") || title.equals("")) continue;
+			
+			Book book = new Book();
+			book.setDescription(description);
+			book.setPic(pic);
+			book.setPrice(Integer.parseInt(price));
+			book.setAuthor(author);
+			book.setIsbn(isbn);
+			book.setTitle(title);
+			retList.add(book);
 		}
-		return bookList;
-	}
-	
-	// 대출수 채운 뒤 book 객체 리턴 
-	public Book getLoanByIsbn(Book book) throws JsonMappingException, JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
-		String rawInfo = lib.callSrchDtlListApi(book.getIsbn());
-		JsonNode root = mapper.readTree(rawInfo);
-		String loanStr = root.path("response").path("loanInfo").path(0).path("Total").path("loanCnt").asText();
-		book.setLoan(Integer.parseInt(loanStr.equals("") ? "0" : loanStr));
-		return book;
+		return retList;
 	}
 	
 	// gpt 추천 책 가져오기 
@@ -140,7 +171,7 @@ public class BookApiUtil {
 		return retList;
 	}
 	
-	// 제목으로 네이버에서 책 검색 
+	// 제목으로 네이버에서 책 한 권 검색 
 	public Book findBookByTitleFromNaver(Book book) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		

@@ -43,5 +43,17 @@ public class NaverApiClient {
             .bodyToMono(String.class)
             .block();
     }
+	
+	public String callNaverApiByKeyword(String keyword) {
+    	return webClient.get()
+            .uri(uriBuilder -> uriBuilder
+            		.path("/v1/search/book.json")
+            		.queryParam("query", keyword)
+            		.queryParam("sort", "sim")
+                    .build())
+            .retrieve()
+            .bodyToMono(String.class)
+            .block();
+    }
 
 }

@@ -1,5 +1,5 @@
 
-package com.etchapedia.home;
+package com.etchapedia.book;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

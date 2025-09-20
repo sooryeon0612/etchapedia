@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.etchapedia.home.Book;
+import com.etchapedia.book.Book;
 
 
 @Component

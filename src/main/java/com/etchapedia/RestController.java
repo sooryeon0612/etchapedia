@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.etchapedia.book.Book;
+import com.etchapedia.book.BookService;
 import com.etchapedia.book.GptRecommendationsService;
-import com.etchapedia.home.Book;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -20,6 +21,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class RestController {
 	@Autowired
 	private GptRecommendationsService gSvc;
+	@Autowired
+	private BookService bSvc;
 	
 	@PostMapping("load_recommend_books")
 	public List<Book> loadRecommendBook(@RequestBody String dataBody) throws JsonMappingException, JsonProcessingException {
@@ -32,5 +35,14 @@ public class RestController {
     		gSvc.logRecommendation(recommedList, userIdx);
     	}
     	return gSvc.getRecommendedBooks(1);
+	}
+	
+	@PostMapping("load_new_books")
+	public List<Book> loadNewBooks(@RequestBody String dataBody) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode root = mapper.readTree(dataBody);
+		String search = root.path("search").asText();
+		bSvc.saveNewBooksFromKeyword(search);
+		return bSvc.getSearchBooks(search);
 	}
 }

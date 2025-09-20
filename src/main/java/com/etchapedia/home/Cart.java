@@ -1,5 +1,6 @@
 package com.etchapedia.home;
 
+import com.etchapedia.book.Book;
 import com.etchapedia.user.Users;
 
 import jakarta.persistence.Entity;

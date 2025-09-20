@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.etchapedia.api.BookApiUtil;
-import com.etchapedia.home.Book;
-import com.etchapedia.home.BookRepository;
 import com.etchapedia.home.Click;
 import com.etchapedia.home.ClickRepository;
 import com.etchapedia.user.UsersRepository;
