@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.etchapedia.book.GptRecommendationsService;
 import com.etchapedia.book.HotTrendService;
 import com.etchapedia.home.Book;
 import com.etchapedia.home.BookService;
@@ -22,8 +21,6 @@ public class PageController {
 	@Autowired
 	private BookService bSvc;
 	@Autowired
-	private GptRecommendationsService gSvc;
-	@Autowired
 	private HotTrendService hSvc;
 
     // 홈 화면 (home.html)
@@ -31,18 +28,12 @@ public class PageController {
     public String home(Model model, HttpSession session) throws JsonMappingException, JsonProcessingException {
     	LocalDate today = LocalDate.now();
     	LocalDate lastTrend = hSvc.getLastUpdateDate();
-    	LocalDate lastUpdate = gSvc.getLastUpdateDate(1);
-    	if(!lastUpdate.equals(today)) {
-    		List<Book> recommedList = gSvc.getGptRecommendBooks(1);
-    		gSvc.logRecommendation(recommedList, 1);
-    	}
     	if(!lastTrend.equals(today)) {
     		List<Book> trendList = hSvc.loadHotTrendBooks(today.minusDays(1).toString());
     		hSvc.logHotTrend(trendList);
     	}
     	model.addAttribute("popular", bSvc.getPopularBooks());
     	model.addAttribute("trend", hSvc.getHotTrendBooks());
-    	model.addAttribute("recommend", gSvc.getRecommendedBooks(1));
         return "home";
     }
     

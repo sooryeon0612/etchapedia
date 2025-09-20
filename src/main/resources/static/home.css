@@ -84,3 +84,49 @@
     color: #ff6e2f;
     margin-top: 5px;
 }
+
+/* 블러/오버레이용 래퍼 */
+.rank-block { position: relative; }
+
+/* 리스트만 블러(제목은 유지) */
+.is-blurred {
+  filter: blur(6px);
+  pointer-events: none;   /* 클릭 막기 */
+  user-select: none;      /* 드래그 막기 */
+}
+
+/* 안내 카드 */
+.overlay-inner {
+  position: relative;
+  text-align: center;
+  padding: 24px 28px;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  max-width: 520px;
+  position: absolute;
+  bottom: -430px;
+  left: 800px;
+}
+
+.overlay-title {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* 로그인 버튼 */
+.btn-login {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: #ff2f6e;   /* 너의 watcha 포인트 색상 */
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform .05s ease, opacity .2s ease;
+}
+.btn-login:hover { opacity: .92; }
+.btn-login:active { transform: translateY(1px); }

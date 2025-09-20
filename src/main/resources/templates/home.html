@@ -6,50 +6,94 @@
 	<link rel="stylesheet" th:href="@{/home.css}">
     <title>홈화면</title>
 </head>
-<body>
-    <div layout:fragment="content">
-		<main class="main-container">
-	        <section class="rank-section">
-	            <h2 class="section-title">인기순</h2>
-	            <div class="rank-list">
-	                <div class="rank-item" th:each="book, stat : ${popular}">
-	                    <div class="rank-number">[[${stat.count}]]</div>
-	                    <img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
-	                    <div class="book-info">
-	                        <h3 class="book-title">[[${book.title}]]</h3>
-	                        <div class="author">[[${book.author}]]</div>
-	                    </div>
-	                </div>
-	            </div>
-	        </section>
+<div layout:fragment="content">
+	<main class="main-container">
+        <section class="rank-section">
+            <h2 class="section-title">인기순</h2>
+            <div class="rank-list">
+                <div class="rank-item" th:each="book, stat : ${popular}">
+                    <div class="rank-number">[[${stat.count}]]</div>
+                    <img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
+                    <div class="book-info">
+                        <h3 class="book-title">[[${book.title}]]</h3>
+                        <div class="author">[[${book.author}]]</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-	        <section class="rank-section">
-	            <h2 class="section-title">인기 급상승</h2>
-	            <div class="rank-list">
-	                <div class="rank-item" th:each="book, stat : ${trend}">
-	                    <div class="rank-number">[[${stat.count}]]</div>
-	                    <img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
-	                    <div class="book-info">
-	                        <h3 class="book-title">[[${book.title}]]</h3>
-	                        <div class="author">[[${book.author}]]</div>
-	                    </div>
-	                </div>
-	            </div>
-	        </section>
+        <section class="rank-section">
+            <h2 class="section-title">인기 급상승</h2>
+            <div class="rank-list">
+                <div class="rank-item" th:each="book, stat : ${trend}">
+                    <div class="rank-number">[[${stat.count}]]</div>
+                    <img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
+                    <div class="book-info">
+                        <h3 class="book-title">[[${book.title}]]</h3>
+                        <div class="author">[[${book.author}]]</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+		
+		<section class="rank-section">
+            <h2 class="section-title">AI추천 도서</h2>
 			
-			<section class="rank-section">
-	            <h2 class="section-title">AI추천 도서</h2>
-	            <div class="rank-list">
-	                <div class="rank-item" th:each="book, stat : ${recommend}">
-	                    <div class="rank-number">[[${stat.count}]]</div>
-	                    <img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
+			<!-- 로그인 O-->
+			<div sec:authorize="isAuthenticated()" class="rank-list recommend-list"></div>
+			
+			<!-- 로그인 X-->
+			<div sec:authorize="isAnonymous()">
+	            <div class="rank-list is-blurred">
+	                <div class="rank-item">
+	                    <div class="rank-number">1</div>
+	                    <img src="https://shopping-phinf.pstatic.net/main_3247329/32473290161.20230530083507.jpg" class="book-cover">
 	                    <div class="book-info">
-	                        <h3 class="book-title">[[${book.title}]]</h3>
-	                        <div class="author">[[${book.author}]]</div>
+	                        <h3 class="book-title">인간 실격</h3>
+	                        <div class="author">다자이 오사무</div>
 	                    </div>
 	                </div>
+					<div class="rank-item">
+	                    <div class="rank-number">2</div>
+	                    <img src="https://shopping-phinf.pstatic.net/main_4918352/49183523618.20240718072221.jpg" class="book-cover">
+	                    <div class="book-info">
+	                        <h3 class="book-title">여름의 끝</h3>
+	                        <div class="author">윌리엄 트레버</div>
+	                    </div>
+	                </div>
+					<div class="rank-item">
+					    <div class="rank-number">3</div>
+					    <img src="https://shopping-phinf.pstatic.net/main_3248125/32481257667.20221019131248.jpg" class="book-cover">
+					    <div class="book-info">
+					        <h3 class="book-title">아무도 아닌</h3>
+					        <div class="author">황정은</div>
+					    </div>
+					</div>
+					<div class="rank-item">
+					    <div class="rank-number">4</div>
+					    <img src="https://shopping-phinf.pstatic.net/main_3248237/32482377706.20230926085206.jpg" class="book-cover">
+					    <div class="book-info">
+					        <h3 class="book-title">사피엔스</h3>
+					        <div class="author">유발 하라리</div>
+					    </div>
+					</div>
+					<div class="rank-item">
+					    <div class="rank-number">5</div>
+					    <img src="https://shopping-phinf.pstatic.net/main_5528347/55283479358.20250617094547.jpg" class="book-cover">
+					    <div class="book-info">
+					        <h3 class="book-title">궤도</h3>
+					        <div class="author">지은이: 서맨사 하비 ;옮긴이: 송예슬</div>
+					    </div>
+					</div>
 	            </div>
-	        </section>
-	    </main>
-	</div>
+				<div class="overlay-inner">
+				    <p class="overlay-title">로그인 후 더 다양한 컨텐츠를 볼 수 있어요</p>
+				    <a class="btn-login" th:href="@{/user/login}">로그인 하기</a>
+				</div>
+			</div>
+			
+        </section>
+    </main>
+</div>
+
 </html>

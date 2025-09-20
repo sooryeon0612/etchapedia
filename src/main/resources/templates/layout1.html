@@ -3,6 +3,8 @@
 	<head>
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+		<meta name="_csrf" th:content="${_csrf.token}"/>
+		<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 		<title>ETCHAPEDIA_Test</title>
 		<link rel="stylesheet" type="text/css" th:href="@{/header.css}"/>
 	</head>
@@ -10,11 +12,6 @@
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 		<div th:replace="~{header :: headerFragment}"></div>
 		<th:block layout:fragment="content"></th:block>
-		<script>
-			$(docuemt).ready(function() {
-				
-			})
-			
-		</script>
+		<script th:src="@{/home.js}"></script>
 	</body>
 </html>

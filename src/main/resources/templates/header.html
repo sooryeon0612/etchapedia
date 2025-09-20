@@ -1,17 +1,17 @@
 <div th:fragment="headerFragment">
 	<header class="header">
         <div class="header-content">
-            <h1 class="logo">
+            <h1 class="logo"  onclick="location.href='/home'">
                 <span class="watcha">ETCHA</span><span class="pedia">PEDIA</span>
             </h1>
             <div class="search-bar">
-                <input type="text" placeholder="검색">
+                <input type="text" placeholder="책 제목, 저자 또는 궁금한 단어를 검색해보세요.">
             </div>
             <div sec:authorize="isAnonymous()" class="user-menu">
                 <a th:href="@{/user/login}">로그인</a>
                 <a th:href="@{/user/signup}">회원가입</a>
             </div>
-			<div sec:authorize="isAuthenticated()" class="user-menu">
+			<div sec:authorize="isAuthenticated()" th:data-user-idx="${#authentication.principal.userIdx}" class="user-menu">
 				<a th:href="@{/user/logout}">로그아웃</a>
 				<a th:href="@{/news}">소식</a>
 		        <img th:src="${#authentication.principal.profile}" alt="프로필" class="profile-img">
@@ -20,3 +20,8 @@
         </div>
     </header>
 </div>
+<script>
+	$(function() {
+		
+	})
+</script>
