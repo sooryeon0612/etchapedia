@@ -50,4 +50,20 @@ public class UsersService {
 		Users u = ou.get();
 		u.setName(name);
 	}
+	
+	// 비밀번호 일치 여부
+	public boolean checkUserByPw(Integer userIdx, String password) {
+		Optional<Users> ou = uRepo.findById(userIdx);
+		Users u = ou.get();
+		if(pwEncoder.matches(password, u.getPassword())) return true;
+		return false;
+	}
+	
+	// 비밀번호 변경 
+	@Transactional
+	public void changePw(Integer userIdx, String password) {
+		Optional<Users> ou = uRepo.findById(userIdx);
+		Users u = ou.get();
+		u.setPassword(pwEncoder.encode(password));	
+	}
 }

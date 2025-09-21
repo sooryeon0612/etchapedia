@@ -15,6 +15,16 @@ function exitEdit() {
 	$("#cancel-btn").css("display", "none");
 }
 
+function checkPw() {
+	const newPw = $("#new-password").val();
+	const confirmPw = $("#confirm-password").val();
+	
+	if(newPw == confirmPw) return true;
+	
+	$(".err-msg").text("비밀번호가 일치하지 않습니다.");
+	return false;
+}
+
 
 $(function () {
 	// 이름 수정 
@@ -24,26 +34,14 @@ $(function () {
 	$("#cancel-btn").click(function() {
 		exitEdit();
 	})
+	
+	// 비밀번호 변경 폼 
+	$("#pw-toggle-btn").click(function() {
+		$(".password-panel").toggleClass("open");
+	})
+	$("#pw-cancel-btn").click(function() {
+		$(".password-panel").removeClass("open");
+	})
+	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-  	const $panel = $('#passwordPanel');
-  	const $toggle = $('#pwToggleBtn');
-  	const $cancel = $('#pwCancelBtn');
-
-  	$toggle.on('click', function () {
-    	$panel.toggleClass('open');
-  	});
-
-  	$cancel.on('click', function () {
-    	$panel.removeClass('open');
-  	});
 });

@@ -23,10 +23,9 @@ import com.etchapedia.home.Click;
 import com.etchapedia.home.ClickRepository;
 import com.etchapedia.user.Users;
 import com.etchapedia.user.UsersRepository;
+import com.etchapedia.user.UsersService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 class EtchapediaApplicationTests {
@@ -36,6 +35,8 @@ class EtchapediaApplicationTests {
 	private ClickRepository cRepo;
 	@Autowired
 	private BookRepository bRepo;
+	@Autowired
+	private UsersService uSvc;
 	
 	@Autowired
 	private PasswordEncoder pwEncoder;
@@ -249,7 +250,11 @@ class EtchapediaApplicationTests {
 	@Test
 	void testWikiApi() throws JsonMappingException, JsonProcessingException {
 		System.out.println(util.getAnswerFromWiki("최진영"));
-		
+	}
+	
+	@Test
+	void testCheckUserByPw() {
+		System.out.println(uSvc.checkUserByPw(1, "1234"));
 	}
 
 

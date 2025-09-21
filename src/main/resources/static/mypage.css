@@ -76,11 +76,16 @@
 
 /* 비밀번호 패널 */
 .password-panel {
-  	overflow: hidden; max-height: 0; opacity: 0;
+  	overflow: hidden; 
+	max-height: 0; 
+	opacity: 0;
   	transition: max-height .35s ease, opacity .25s ease;
   	margin-top: 10px;
 }
-.password-panel.open { max-height: 520px; opacity: 1; }
+.password-panel.open { 
+	max-height: 520px; 
+	opacity: 1; 
+}
 
 .pw-title { font-size: 18px; font-weight: 700; margin: 18px 0 12px; }
 .pw-form { display: grid; grid-template-columns: 1fr; gap: 12px; padding-bottom: 12px; }
@@ -108,3 +113,7 @@
 
 /* 섹션 제목 */
 .hate-list h3 { font-size: 18px; font-weight: 600; padding-bottom: 10px; margin-bottom: 0; border-bottom: 1px solid #eee; }
+
+.err-msg {
+	color: red;
+}
