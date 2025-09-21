@@ -21,6 +21,9 @@ import com.etchapedia.book.GptRecommendationsService;
 import com.etchapedia.book.HotTrendService;
 import com.etchapedia.home.Click;
 import com.etchapedia.home.ClickRepository;
+import com.etchapedia.user.Hate;
+import com.etchapedia.user.HateRepository;
+import com.etchapedia.user.HateService;
 import com.etchapedia.user.Users;
 import com.etchapedia.user.UsersRepository;
 import com.etchapedia.user.UsersService;
@@ -37,6 +40,8 @@ class EtchapediaApplicationTests {
 	private BookRepository bRepo;
 	@Autowired
 	private UsersService uSvc;
+	@Autowired
+	private HateRepository hRepo;
 	
 	@Autowired
 	private PasswordEncoder pwEncoder;
@@ -48,6 +53,8 @@ class EtchapediaApplicationTests {
 	private HotTrendService hSvc;
 	@Autowired
 	private BookApiUtil util;
+	@Autowired
+	private HateService haSvc;
 	
 	@Autowired
 	private NaverApiClient naver;
@@ -55,38 +62,47 @@ class EtchapediaApplicationTests {
 	@Test
 	void testINSERTDUMMY() throws JsonMappingException, JsonProcessingException {
 		// test 유저 저장 
-		Users users = new Users();
-		users.setEmail("test@1234");
-		users.setName("test");
-		users.setPassword(pwEncoder.encode("1234"));
-		users.setProfile(null);
-		uRepo.save(users);
-//		
-//		// 베이스 책들 저장 
-		bSvc.saveBooks(1, 10);
-		bSvc.saveBooks(2, 10);
-		bSvc.saveBooks(3, 10);
-		bSvc.saveBooks(4, 10);
-		bSvc.saveBooks(5, 10);
+//		Users users = new Users();
+//		users.setEmail("test@1234");
+//		users.setName("test");
+//		users.setPassword(pwEncoder.encode("1234"));
+//		users.setProfile(null);
+//		uRepo.save(users);
+////		
+////		// 베이스 책들 저장 
+//		bSvc.saveBooks(1, 10);
+//		bSvc.saveBooks(2, 10);
+//		bSvc.saveBooks(3, 10);
+//		bSvc.saveBooks(4, 10);
+//		bSvc.saveBooks(5, 10);
 //		
 //		// 클릭한 책 저장 
-		Click c = new Click();
-		c.setBook(bRepo.findById(1).get());
-		c.setUser(uRepo.findById(1).get());
-		cRepo.save(c);
-		Click c2 = new Click();
-		c2.setBook(bRepo.findById(2).get());
-		c2.setUser(uRepo.findById(1).get());
-		cRepo.save(c2);
-		
-		// 지피티 추천 받기
-		List<Book> recommedList = gSvc.getGptRecommendBooks(1);
-		gSvc.logRecommendation(recommedList, 1);
-		
-		// 인기 급상승 받기
-		List<Book> trendList = hSvc.loadHotTrendBooks(LocalDate.now().minusDays(1).toString());
-		hSvc.logHotTrend(trendList);
-		
+//		Click c = new Click();
+//		c.setBook(bRepo.findById(1).get());
+//		c.setUser(uRepo.findById(1).get());
+//		cRepo.save(c);
+//		Click c2 = new Click();
+//		c2.setBook(bRepo.findById(2).get());
+//		c2.setUser(uRepo.findById(1).get());
+//		cRepo.save(c2);
+//		
+//		// 지피티 추천 받기
+//		List<Book> recommedList = gSvc.getGptRecommendBooks(1);
+//		gSvc.logRecommendation(recommedList, 1);
+//		
+//		// 인기 급상승 받기
+//		List<Book> trendList = hSvc.loadHotTrendBooks(LocalDate.now().minusDays(1).toString());
+//		hSvc.logHotTrend(trendList);
+//		
+		// 관심 없어요 저장
+		Hate h = new Hate();
+		h.setBook(bRepo.findById(3).get());
+		h.setUser(uRepo.findById(1).get());
+		hRepo.save(h);
+		Hate h2 = new Hate();
+		h2.setBook(bRepo.findById(4).get());
+		h2.setUser(uRepo.findById(1).get());
+		hRepo.save(h2);
 	}
 
 	@Test
@@ -255,6 +271,13 @@ class EtchapediaApplicationTests {
 	@Test
 	void testCheckUserByPw() {
 		System.out.println(uSvc.checkUserByPw(1, "1234"));
+	}
+	
+	@Test
+	void testHateList() {
+		for(Book b : haSvc.getHateBooks(1)) {
+			System.out.println(b.getTitle());
+		}
 	}
 
 

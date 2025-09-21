@@ -70,7 +70,7 @@
 	<section class="hate-list">
   		<h3>관심 없어요</h3>
 		<div class="books-grid">
-      		<div class="book-item" th:each="book : ${list}">
+      		<div class="book-item" th:each="book : ${hate}">
         		<div class="book-cover">
          			<img th:src="${book.pic}" alt="${book.title}">
         		</div>

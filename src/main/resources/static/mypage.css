@@ -112,7 +112,13 @@
 .book-meta { font-size: 12px; color: #777; }
 
 /* 섹션 제목 */
-.hate-list h3 { font-size: 18px; font-weight: 600; padding-bottom: 10px; margin-bottom: 0; border-bottom: 1px solid #eee; }
+.hate-list h3 { 
+	font-size: 18px; 
+	font-weight: 600; 
+	padding-bottom: 10px; 
+	margin-bottom: 15px; 
+	border-bottom: 1px solid #eee; 
+}
 
 .err-msg {
 	color: red;

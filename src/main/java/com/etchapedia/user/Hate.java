@@ -1,7 +1,6 @@
-package com.etchapedia.home;
+package com.etchapedia.user;
 
 import com.etchapedia.book.Book;
-import com.etchapedia.user.Users;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

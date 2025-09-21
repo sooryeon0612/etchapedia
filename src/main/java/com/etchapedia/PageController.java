@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.etchapedia.book.Book;
 import com.etchapedia.book.BookService;
 import com.etchapedia.book.HotTrendService;
+import com.etchapedia.security.CustomUserDetails;
+import com.etchapedia.user.HateService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
@@ -21,19 +24,21 @@ public class PageController {
 	@Autowired
 	private BookService bSvc;
 	@Autowired
-	private HotTrendService hSvc;
+	private HotTrendService tSvc;
+	@Autowired
+	private HateService hSvc;
 
     // 홈 화면 (home.html)
     @GetMapping("/home")
     public String home(Model model) throws JsonMappingException, JsonProcessingException {
     	LocalDate today = LocalDate.now();
-    	LocalDate lastTrend = hSvc.getLastUpdateDate();
+    	LocalDate lastTrend = tSvc.getLastUpdateDate();
     	if(!lastTrend.equals(today)) {
-    		List<Book> trendList = hSvc.loadHotTrendBooks(today.minusDays(1).toString());
-    		hSvc.logHotTrend(trendList);
+    		List<Book> trendList = tSvc.loadHotTrendBooks(today.minusDays(1).toString());
+    		tSvc.logHotTrend(trendList);
     	}
     	model.addAttribute("popular", bSvc.getPopularBooks());
-    	model.addAttribute("trend", hSvc.getHotTrendBooks());
+    	model.addAttribute("trend", tSvc.getHotTrendBooks());
         return "home";
     }
     
@@ -66,7 +71,9 @@ public class PageController {
     // 마이페이지 (mypage.html)
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/mypage")
-    public String mypage() {
+    public String mypage(@AuthenticationPrincipal CustomUserDetails userDetails,
+    					 Model model) {
+    	model.addAttribute("hate", hSvc.getHateBooks(userDetails.getUserIdx()));
     	return "mypage";
     }
     
