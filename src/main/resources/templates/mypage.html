@@ -12,43 +12,41 @@
             <div class="profile-header">
 				<a th:href="@{/profile/edit}" class="profile-avatar-link">
 				    <div class="profile-avatar">
-				      <img th:src="${#authentication.principal.profile}" alt="프로필 아바타">
+				    	<img th:src="${#authentication.principal.profile}" alt="프로필 아바타">
 				    </div>
 			  	</a>
 			 	<div class="profile-info-row">
 				    <!-- 이름 영역 -->
 			    	<form class="inline-name-form" th:action="@{/profile/name}" method="post">
 			      		<div class="name-block">
-				        <!-- 보기 모드 -->
-				        <h1 id="displayName" class="name-view">[[${#authentication.principal.name}]]</h1>
-
-				        <!-- 수정 모드 -->
-				        <input id="nameInput" class="name-edit" type="text" name="name"
-				               th:value="${user != null} ? ${user.name} : ''" maxlength="30" />
-
-				        <!-- 버튼들 -->
-				        <div class="name-actions">
-				          <button type="button" id="editBtn" class="btn ghost">수정</button>
-				          <button type="submit" id="saveBtn" class="btn primary">확인</button>
-				          <button type="button" id="cancelBtn" class="btn ghost">취소</button>
-				        </div>
-				      </div>
-
-				      <!-- 이메일/팔로우 -->
-				      <p class="email" th:if="${user != null}" th:text="${user.email}">birthday53@naver.com</p>
+				        	<!-- 보기 모드 -->
+					        <h1 id="displayName" class="name-view">[[${#authentication.principal.name}]]</h1>
+	
+					        <!-- 수정 모드 -->
+					        <input id="nameInput" class="name-edit" type="text" name="name"
+					               th:value="${user != null} ? ${user.name} : ''" maxlength="30" />
+	
+					        <!-- 버튼들 -->
+					        <div class="name-actions">
+					        	<button type="button" id="editBtn" class="btn ghost">수정</button>
+					          	<button type="submit" id="saveBtn" class="btn primary">확인</button>
+					          	<button type="button" id="cancelBtn" class="btn ghost">취소</button>
+					        </div>
+				      	</div>
+				     	<p class="email">[[${#authentication.principal.username}]]</p>
 				    </form>
 
 				    <!-- 우측 유틸 액션 (비밀번호 변경/로그아웃) -->
 				    <div class="utility-actions">
 				      <a th:href="@{/profile/change-password}" class="btn light">비밀번호 변경</a>
-				      <a th:href="@{/logout}" class="btn light">로그아웃</a>
+				      <a th:href="@{/user/logout}" class="btn light">로그아웃</a>
 				    </div>
 				  </div>
             </div>
         </div>
 
         <div class="likes-container">
-            <h3>좋아요</h3>
+            <h3>관심 없어요</h3>
 			<div class="books-grid">
 				<div class="book-item" th:each="book : ${list}">
 		            <div class="book-cover">
@@ -61,6 +59,7 @@
 		        </div>
 			</div>
         </div>
+		<script th:src="@{/mypage.js}"></script>
     </div>
 </body>
 </html>

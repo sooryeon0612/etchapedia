@@ -39,11 +39,4 @@ $(function() {
 	const userIdx = $(".user-menu").data("userIdx");
 	
 	if(userIdx != null) loadRecommendBooks(userIdx);
-	
-	$(".search-bar > input").keypress(function(e) {
-		if(e.keyCode == 13) {
-			const search = $(this).val();
-			location.href="/book/search?query=" + search;
-		}
-	})
 });
