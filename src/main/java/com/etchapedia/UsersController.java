@@ -4,7 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.etchapedia.security.CustomUserDetails;
+import com.etchapedia.security.MyUserDetailService;
 import com.etchapedia.user.UsersCreateForm;
 import com.etchapedia.user.UsersService;
 
@@ -23,6 +30,8 @@ import jakarta.validation.Valid;
 public class UsersController {
 	@Autowired
 	private UsersService uSvc;
+	@Autowired
+	private MyUserDetailService mSvc;
 	
 	// 회원가입
 	@GetMapping("/signup")
@@ -64,5 +73,22 @@ public class UsersController {
     	Map<String, Boolean> response = new HashMap<>();
     	response.put("isDuplicated", isDuplicated);
     	return response;
+    }
+    
+    @PostMapping("/name")
+    public String updateName(@AuthenticationPrincipal CustomUserDetails userDetails,
+    						 @RequestParam("name")String name) {
+    	Integer userIdx = userDetails.getUserIdx();
+    	uSvc.updateName(userIdx, name);
+    	CustomUserDetails updateUser = mSvc.loadUserByUsername(userDetails.getUsername());
+    	
+    	Authentication newAuth =
+                new UsernamePasswordAuthenticationToken(
+                		updateUser,
+                		updateUser.getPassword(),
+                		updateUser.getAuthorities()
+                );
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+    	return "redirect:/mypage";
     }
 }

@@ -3,63 +3,84 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout1}">
 <head>
-	<link rel="stylesheet" th:href="@{/mypage.css}">
-    <title>마이페이지</title>
+  	<link rel="stylesheet" th:href="@{/mypage.css}">
+  	<title>마이페이지</title>
 </head>
 <body>
 	<div layout:fragment="content">
-        <div class="profile-container">
-            <div class="profile-header">
-				<a th:href="@{/profile/edit}" class="profile-avatar-link">
-				    <div class="profile-avatar">
-				    	<img th:src="${#authentication.principal.profile}" alt="프로필 아바타">
-				    </div>
-			  	</a>
-			 	<div class="profile-info-row">
-				    <!-- 이름 영역 -->
-			    	<form class="inline-name-form" th:action="@{/profile/name}" method="post">
-			      		<div class="name-block">
-				        	<!-- 보기 모드 -->
-					        <h1 id="displayName" class="name-view">[[${#authentication.principal.name}]]</h1>
-	
-					        <!-- 수정 모드 -->
-					        <input id="nameInput" class="name-edit" type="text" name="name"
-					               th:value="${user != null} ? ${user.name} : ''" maxlength="30" />
-	
-					        <!-- 버튼들 -->
-					        <div class="name-actions">
-					        	<button type="button" id="editBtn" class="btn ghost">수정</button>
-					          	<button type="submit" id="saveBtn" class="btn primary">확인</button>
-					          	<button type="button" id="cancelBtn" class="btn ghost">취소</button>
-					        </div>
-				      	</div>
-				     	<p class="email">[[${#authentication.principal.username}]]</p>
-				    </form>
 
-				    <!-- 우측 유틸 액션 (비밀번호 변경/로그아웃) -->
-				    <div class="utility-actions">
-				      <a th:href="@{/profile/change-password}" class="btn light">비밀번호 변경</a>
-				      <a th:href="@{/user/logout}" class="btn light">로그아웃</a>
-				    </div>
-				  </div>
-            </div>
-        </div>
+  	<section class="profile-container">
+    	<header class="profile-header">
+      		<a th:href="@{/profile/edit}" class="profile-avatar-link">
+        		<div class="profile-avatar">
+          			<img th:src="${#authentication.principal.profile}" alt="프로필 아바타">
+       	 		</div>
+      		</a>
 
-        <div class="likes-container">
-            <h3>관심 없어요</h3>
-			<div class="books-grid">
-				<div class="book-item" th:each="book : ${list}">
-		            <div class="book-cover">
-		                <img th:src="${book.pic}" alt="${book.title}">
-		            </div>
-		            <div class="book-info">
-		                <h3 class="book-title">[[${book.title}]]</h3>
-		                <p class="book-meta">[[${book.author}]]</p>
-		            </div>
-		        </div>
-			</div>
+      		<div class="profile-info-row">
+        		<!-- 이름/이메일 -->
+        		<form class="inline-name-form" th:action="@{/user/name}" method="post">
+          			<div class="name-block">
+            			<h1 id="display-name" class="name-view">[[${#authentication.principal.name}]]</h1>
+            			<input id="name-input" class="name-edit" type="text" name="name" maxlength="15"/>
+            			<div class="name-actions">
+              				<button type="button" id="edit-btn" class="btn ghost">수정</button>
+              				<button type="submit" id="save-btn" class="btn primary">확인</button>
+          					<button type="button" id="cancel-btn" class="btn ghost">취소</button>
+           			 	</div>
+          			</div>
+          			<p class="email">[[${#authentication.principal.username}]]</p>
+        		</form>
+
+        		<!-- 우측 액션 -->
+        		<div class="utility-actions">
+          			<button type="button" id="pw-toggle-btn" class="btn light">비밀번호 변경</button>
+          			<a th:href="@{/user/logout}" class="btn light">로그아웃</a>
+        		</div>
+      		</div>
+    </header>
+
+    <!-- 비밀번호 변경 패널 -->
+    <section id="passwordPanel" class="password-panel">
+      <h3 class="pw-title">비밀번호 변경</h3>
+      <form th:action="@{/profile/change-password}" method="post" class="pw-form">
+        <div class="pw-row">
+          <label for="currentPassword">현재 비밀번호</label>
+          <input id="currentPassword" name="currentPassword" type="password" required autocomplete="current-password">
         </div>
-		<script th:src="@{/mypage.js}"></script>
+        <div class="pw-row">
+          <label for="newPassword">새 비밀번호</label>
+          <input id="newPassword" name="newPassword" type="password" required autocomplete="new-password">
+          <p class="pw-hint">8자 이상, 영문/숫자/특수문자 조합 권장</p>
+        </div>
+        <div class="pw-row">
+          <label for="confirmPassword">새 비밀번호 확인</label>
+          <input id="confirmPassword" name="confirmPassword" type="password" required autocomplete="new-password">
+        </div>
+        <div class="pw-actions">
+          <button type="submit" class="btn primary">변경하기</button>
+          <button type="button" id="pwCancelBtn" class="btn ghost">취소</button>
+        </div>
+      </form>
+    </section>
+  </section>
+
+  <section class="hate-list">
+    <h3>관심 없어요</h3>
+    <div class="books-grid">
+      <div class="book-item" th:each="book : ${list}">
+        <div class="book-cover">
+          <img th:src="${book.pic}" alt="${book.title}">
+        </div>
+        <div class="book-info">
+          <h3 class="book-title">[[${book.title}]]</h3>
+          <p class="book-meta">[[${book.author}]]</p>
+        </div>
+      </div>
     </div>
+  </section>
+
+  <script th:src="@{/mypage.js}"></script>
+</div>
 </body>
 </html>

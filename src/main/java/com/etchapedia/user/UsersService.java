@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UsersService {
@@ -40,5 +41,13 @@ public class UsersService {
 			}
 		}
 		return false;
+	}
+	
+	// 이름 변경
+	@Transactional
+	public void updateName(Integer userIdx, String name) {
+		Optional<Users> ou = uRepo.findById(userIdx);
+		Users u = ou.get();
+		u.setName(name);
 	}
 }

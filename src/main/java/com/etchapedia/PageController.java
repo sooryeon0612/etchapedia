@@ -16,8 +16,6 @@ import com.etchapedia.book.HotTrendService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import jakarta.servlet.http.HttpSession;
-
 @Controller
 public class PageController {
 	@Autowired
@@ -27,7 +25,7 @@ public class PageController {
 
     // 홈 화면 (home.html)
     @GetMapping("/home")
-    public String home(Model model, HttpSession session) throws JsonMappingException, JsonProcessingException {
+    public String home(Model model) throws JsonMappingException, JsonProcessingException {
     	LocalDate today = LocalDate.now();
     	LocalDate lastTrend = hSvc.getLastUpdateDate();
     	if(!lastTrend.equals(today)) {
