@@ -40,8 +40,9 @@ public class PageController {
     
     // 책 검색 화면 (book_search.html)
     @GetMapping("/book/search")
-    public String bookSearch(@RequestParam("query")String query, Model model) {
+    public String bookSearch(@RequestParam("query")String query, Model model) throws JsonMappingException, JsonProcessingException {
     	model.addAttribute("list", bSvc.getSearchBooks(query));
+    	model.addAttribute("dictionary", bSvc.searchDictionary(query));
     	return "book_search";
     }
     

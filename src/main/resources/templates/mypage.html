@@ -10,50 +10,56 @@
 	<div layout:fragment="content">
         <div class="profile-container">
             <div class="profile-header">
-                <a th:href="@{/profile/edit}" class="profile-avatar-link">
-                    <div class="profile-avatar">
-                        <img th:src="@{/images/default_avatar.png}" alt="프로필 아바타">
-                    </div>
-                </a>
-                <div class="profile-info">
-                    <h1 th:if="${user != null}" th:text="${user.name}">이경미</h1>
-                    <p th:if="${user != null}" th:text="${user.email}">birthday53@naver.com</p>
-                    <div class="stats">
-                        <span class="stat-item">팔로잉 <strong th:if="${user != null}" th:text="${user.followingCount}">0</strong></span>
-                        <span class="stat-item">팔로워 <strong th:if="${user != null}" th:text="${user.followerCount}">1</strong></span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="profile-actions">
-                <a th:href="@{/profile/edit}" class="action-btn">프로필 수정</a>
-                <a th:href="@{/profile/change-password}" class="action-btn">비밀번호 수정</a>
-                <a th:href="@{/logout}" class="action-btn">로그아웃</a>
+				<a th:href="@{/profile/edit}" class="profile-avatar-link">
+				    <div class="profile-avatar">
+				      <img th:src="${#authentication.principal.profile}" alt="프로필 아바타">
+				    </div>
+			  	</a>
+			 	<div class="profile-info-row">
+				    <!-- 이름 영역 -->
+			    	<form class="inline-name-form" th:action="@{/profile/name}" method="post">
+			      		<div class="name-block">
+				        <!-- 보기 모드 -->
+				        <h1 id="displayName" class="name-view">[[${#authentication.principal.name}]]</h1>
+
+				        <!-- 수정 모드 -->
+				        <input id="nameInput" class="name-edit" type="text" name="name"
+				               th:value="${user != null} ? ${user.name} : ''" maxlength="30" />
+
+				        <!-- 버튼들 -->
+				        <div class="name-actions">
+				          <button type="button" id="editBtn" class="btn ghost">수정</button>
+				          <button type="submit" id="saveBtn" class="btn primary">확인</button>
+				          <button type="button" id="cancelBtn" class="btn ghost">취소</button>
+				        </div>
+				      </div>
+
+				      <!-- 이메일/팔로우 -->
+				      <p class="email" th:if="${user != null}" th:text="${user.email}">birthday53@naver.com</p>
+				    </form>
+
+				    <!-- 우측 유틸 액션 (비밀번호 변경/로그아웃) -->
+				    <div class="utility-actions">
+				      <a th:href="@{/profile/change-password}" class="btn light">비밀번호 변경</a>
+				      <a th:href="@{/logout}" class="btn light">로그아웃</a>
+				    </div>
+				  </div>
             </div>
         </div>
 
         <div class="likes-container">
             <h3>좋아요</h3>
-            <ul class="likes-list">
-                <li class="like-item">
-                    <a th:href="@{/profile/likes/people}">
-                        <span>좋아한 인물 <span class="count" th:if="${likes != null}" th:text="${likes.personCount}">0</span></span>
-                        <span class="arrow">&gt;</span>
-                    </a>
-                </li>
-                <li class="like-item">
-                    <a th:href="@{/profile/likes/collections}">
-                        <span>좋아한 컬렉션 <span class="count" th:if="${likes != null}" th:text="${likes.collectionCount}">0</span></span>
-                        <span class="arrow">&gt;</span>
-                    </a>
-                </li>
-                <li class="like-item">
-                    <a th:href="@{/profile/likes/comments}">
-                        <span>좋아한 코멘트 <span class="count" th:if="${likes != null}" th:text="${likes.commentCount}">0</span></span>
-                        <span class="arrow">&gt;</span>
-                    </a>
-                </li>
-            </ul>
+			<div class="books-grid">
+				<div class="book-item" th:each="book : ${list}">
+		            <div class="book-cover">
+		                <img th:src="${book.pic}" alt="${book.title}">
+		            </div>
+		            <div class="book-info">
+		                <h3 class="book-title">[[${book.title}]]</h3>
+		                <p class="book-meta">[[${book.author}]]</p>
+		            </div>
+		        </div>
+			</div>
         </div>
     </div>
 </body>

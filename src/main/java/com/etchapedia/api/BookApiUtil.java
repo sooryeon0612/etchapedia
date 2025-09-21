@@ -22,6 +22,8 @@ public class BookApiUtil {
 	private NaverApiClient naver;
 	@Autowired
 	private ChatGptApiClient gpt;
+	@Autowired
+	private WikiApiClient wiki;
 	
 	@Autowired
 	private BookRepository bRepo;
@@ -201,6 +203,15 @@ public class BookApiUtil {
 			book.setIsbn(isbn);
 			return book;
 		}
+	}
+	
+	// 위키 api로 질문에 답하기
+	public String getAnswerFromWiki(String question) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		String responseBody = wiki.callWikiApi(question);
+		JsonNode root = mapper.readTree(responseBody);
+		JsonNode answerNode = root.path("return_object").path("WiKiInfo").path("AnswerInfo").path(0).path("answer");
+		return answerNode.asText();
 	}
 	
 	

@@ -79,6 +79,10 @@ public class BookService {
 		return b;
 	}
 	
+	public String searchDictionary(String search) throws JsonMappingException, JsonProcessingException {
+		return util.getAnswerFromWiki(search);
+	}
+	
 	
 
 }

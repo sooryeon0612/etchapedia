@@ -66,7 +66,5 @@ public class ChatGptApiClient {
 	            .retrieve()
 	            .bodyToMono(String.class)
 	            .block();
-		
-//		return system + seed + user;
     }
 }

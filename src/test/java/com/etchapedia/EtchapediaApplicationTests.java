@@ -55,7 +55,7 @@ class EtchapediaApplicationTests {
 	void testINSERTDUMMY() throws JsonMappingException, JsonProcessingException {
 		// test 유저 저장 
 		Users users = new Users();
-		users.setEmail("1234@1234");
+		users.setEmail("test@1234");
 		users.setName("test");
 		users.setPassword(pwEncoder.encode("1234"));
 		users.setProfile(null);
@@ -244,6 +244,12 @@ class EtchapediaApplicationTests {
 		for(Book b : bSvc.getSearchBooks("최진영")) {
 			System.out.println(b.getTitle());
 		}
+	}
+	
+	@Test
+	void testWikiApi() throws JsonMappingException, JsonProcessingException {
+		System.out.println(util.getAnswerFromWiki("최진영"));
+		
 	}
 
 

@@ -24,7 +24,7 @@ public class Cart {
 	@ManyToOne
 	@JoinColumn(name="user_idx")
 	private Users user;
-	
+	private Integer quantity;
 	
 	
 	@Id
