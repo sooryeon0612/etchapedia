@@ -96,7 +96,8 @@ body {
     display: flex;
     align-items: center;
     margin-top: 15px;
-    margin-left: 1050px;
+    /* 버튼 위치를 조정하려면 이 값을 수정하세요 */
+    margin-left: 920px;
 }
 
 .action-buttons {
@@ -105,7 +106,11 @@ body {
 	gap: 10px;
 }
 
-.cart-button-with-border {
+/* 모든 액션 버튼들의 공통 스타일 */
+.comment-button-with-border,
+.cart-button-with-border,
+.checkout-button-with-border,
+.disinterest-button-with-border {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -115,19 +120,27 @@ body {
     background-color: transparent;
     cursor: pointer;
     box-shadow: none;
-	margin-left: -30px;
-	
 	position: relative;
+    text-decoration: none; /* a 태그 밑줄 제거 */
 }
 
-.cart-button-with-border i {
+/* 모든 액션 버튼의 아이콘 스타일 */
+.comment-button-with-border i,
+.cart-button-with-border i,
+.checkout-button-with-border i,
+.disinterest-button-with-border i {
     font-size: 24px;
     color: white;
 }
 
-.cart-button-with-border:hover {
+/* 모든 액션 버튼의 호버 효과 */
+.comment-button-with-border:hover,
+.cart-button-with-border:hover,
+.checkout-button-with-border:hover,
+.disinterest-button-with-border:hover {
 	color: #f0f0f0;
 }
+
 
 .cart-count {
 	position: absolute;
@@ -141,25 +154,6 @@ body {
 	font-weight: bold;
 	min-width: 10px;
 	text-align: center;
-}
-
-.checkout-button-with-border {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    box-shadow: none;
-	
-	position: relative;
-}
-
-.checkout-button-with-border i {
-	font-size: 1.5rem;
-	color: white;
 }
 
 /* 저자/댓글 */
@@ -263,7 +257,7 @@ body {
     pointer-events: none;
 }
 
-/* 블러된 콘텐츠 위에 겹쳐질 오버레이 (블러 효과 적용되지 않음) */
+/* 블러된 콘텐츠 위에 겹쳐질 오버레이 */
 .overlay {
     position: absolute;
     top: 0;

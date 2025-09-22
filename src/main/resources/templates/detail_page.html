@@ -14,29 +14,31 @@
 <div layout:fragment="content">
     <main class="main-content">
         
-        <!-- 책 상단 배경 -->
         <div class="book-header-bg">
             <div class="background-filter"></div>
             <div class="header-text-container">
                 <h1 th:if="${book != null}" th:text="${book.title}"></h1>
-                <div class="author-and-cart">
+				<div class="author-and-cart">
 					<h4 th:if="${book != null}" th:text="${book.author.replace(';',', ')}"></h4>
 					<div class="rating-actions">
 						<div class="action-buttons">
-						    <button class="cart-button-with-border" th:onclick="'addToCart(' + ${book.bookIdx} + ')'">
+							<button class="disinterest-button-with-border">
+								<i class="fa-regular fa-thumbs-down fa-flip-horizontal"></i> </button>
+							<a href="#comments-section" class="comment-button-with-border">
+								<i class="fas fa-comment"></i>
+							</a>
+							<button class="cart-button-with-border" th:onclick="'addToCart(' + ${book.bookIdx} + ')'">
 						        <i class="fas fa-shopping-cart"></i>
-								<span id="cart-item-count" class="cart-count">0</span>
 						    </button>
 							<button type="button" class="checkout-button-with-border" th:onclick="'addAndCheckout(' + ${book.bookIdx} + ')'">
 						        <i class="fas fa-credit-card"></i>
 						    </button>
 						</div>
 					</div>
-                </div>
+				</div>	
             </div>
         </div>
         
-        <!-- 책 상세 정보 -->
         <div class="book-details-section">
             <div class="book-details-inner">
                 <div class="book-cover-container">
@@ -50,59 +52,55 @@
             </div>
         </div>
 
-        <!-- 저자 / 댓글 -->
         <div class="content-section">
-        <div class="content-inner">
-            <h3>저자/제작자</h3>
-            <div class="author-list">
-				<div class="author-item">
-				    <span th:if="${book != null}" th:text="${book.author.replace(';',', ')}"></span>
+            <div class="content-inner">
+                <h3>저자/제작자</h3>
+                <div class="author-list">
+					<div class="author-item">
+					    <span th:if="${book != null}" th:text="${book.author.replace(';',', ')}"></span>
+					</div>
+                </div>
+				<h3 id="comments-section">코멘트</h3>
+				<div sec:authorize="isAuthenticated()">
+				    <div class="comments-grid">
+				        <div class="comment-item" th:each="comment : ${comments}">
+				            <div class="comment-header">
+				                <img src="https://via.placeholder.com/30" alt="프로필 이미지" class="profile-pic">
+				                <span class="user-name" th:text="${comment.user.name}"></span>
+				            </div>
+				            <p class="comment-content" th:text="${comment.content}"></p>
+				            <div class="comment-actions">
+				                <div class="action-buttons">
+				                    <button class="like-btn"><i class="fa-regular fa-thumbs-up"></i>좋아요</button>
+				                    <button class="reply-btn" onclick="goToReplyPage()"><i class="fa-regular fa-comment"></i>댓글</button>
+				                </div>
+				            </div>
+				        </div>
+				    </div>
 				</div>
-            </div>
-			<h3>코멘트</h3>
-			<!-- 로그인 상태 -->
-			<div sec:authorize="isAuthenticated()" onclick="goToReplyPage()" style="cursor: pointer;">
-			    <div class="comments-grid">
-			        <div class="comment-item" th:each="comment : ${comments}">
-			            <div class="comment-header">
-			                <img src="https://via.placeholder.com/30" alt="프로필 이미지" class="profile-pic">
-			                <span class="user-name" th:text="${comment.user.name}"></span>
-			            </div>
-			            <p class="comment-content" th:text="${comment.content}"></p>
-			            <div class="comment-actions">
-			                <div class="action-buttons">
-			                    <button class="like-btn"><i class="fa-regular fa-thumbs-up">좋아요</i></button>
-			                    <button class="reply-btn" onclick="goToReplyPage()">
-									<i class="fa-regular fa-comment">댓글</i>
-								</button>
-			                </div>
-			            </div>
-			        </div>
-			    </div>
-			</div>
-			<!-- 로그아웃 상태 -->
-			<div sec:authorize="isAnonymous()" class="comments-section-wrapper">
-			    <div class="comments-grid blur-target">
-			        <div class="comment-item">
-			            <div class="comment-header">
-			                <img src="https://via.placeholder.com/30" alt="프로필 이미지" class="profile-pic">
-			                <span class="user-name">****</span>
-			            </div>
-			            <p class="comment-content">코멘트 내용을 보려면 로그인해주세요.</p>
-			            <div class="comment-actions">
-			                <div class="action-buttons">
-			                    <button class="like-btn"><i class="fa-regular fa-thumbs-up">좋아요</i></button>
-			                    <button class="reply-btn"><i class="fa-regular fa-comment">댓글</i></button>
-			                </div>
-			            </div>
-			        </div>
-			    </div>
-			    
-				<div class="overlay">
-				    <h3>로그인 후 이용 가능</h3>
-				    <a th:href="@{/user/login_form}" class="login-button">로그인하기</a>
+
+				<div sec:authorize="isAnonymous()" class="comments-section-wrapper">
+				    <div class="comments-grid blur-target">
+				        <div class="comment-item">
+				            <div class="comment-header">
+				                <img src="https://via.placeholder.com/30" alt="프로필 이미지" class="profile-pic">
+				                <span class="user-name">****</span>
+				            </div>
+				            <p class="comment-content">코멘트 내용을 보려면 로그인해주세요.</p>
+				            <div class="comment-actions">
+				                <div class="action-buttons">
+				                    <button class="like-btn"><i class="fa-regular fa-thumbs-up"></i>좋아요</button>
+				                    <button class="reply-btn"><i class="fa-regular fa-comment"></i>댓글</button>
+				                </div>
+				            </div>
+				        </div>
+				    </div>
+				    
+					<div class="overlay">
+					    <h3>로그인 후 이용 가능</h3>
+					    <a th:href="@{/user/login}" class="login-button">로그인하기</a>
+					</div>
 				</div>
-			</div>
         </div>
     </main>
 </div>
@@ -160,6 +158,6 @@
 	
 	// 댓글 버튼 클릭 시
 	function goToReplyPage() {
-		window.location.href = '/reply.html';
+		window.location.href = '/reply';
 	}
 </script>
