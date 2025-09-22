@@ -58,7 +58,7 @@ public class UsersController {
 		String name = userCreateForm.getUserName();
 		String pw = userCreateForm.getUserPw();
 		uSvc.create(name, email, pw);
-		return "redirect:/user/login_form";
+		return "redirect:/user/login";
 	}
 	
     // 로그인 화면 (
