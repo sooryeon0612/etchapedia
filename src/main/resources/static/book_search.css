@@ -1,5 +1,9 @@
 @import url('https://cdn.jsdelivr.net/npm/spoqa-han-sans-neo@1.0.1/css/spoqa-han-sans-neo.min.css');
 
+body {
+	background-color: #fff !important;
+}
+
 .main-content {
     max-width: 1200px;
     margin: 20px auto;
@@ -9,6 +13,14 @@
 .page-title {
     font-size: 24px;
     margin-bottom: 10px;
+}
+
+.loading-box {
+	padding: 0 430px;
+}
+
+.loading-text {
+	margin-left: -20px;
 }
 
 .book-grid {

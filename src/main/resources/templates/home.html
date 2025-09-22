@@ -43,7 +43,13 @@
 		<section class="rank-section">
             <h2 class="section-title">AI추천 도서</h2>			
 			<!-- 로그인 O-->
-			<div sec:authorize="isAuthenticated()" class="rank-list recommend-list"></div>
+			<div sec:authorize="isAuthenticated()" class="rank-list recommend-list">
+				<div class="loading-box">
+					<div class="dot-loader"></div>
+					<div class="loading-text">클릭한 책을 기반으로 AI가 추천 중...</div>
+				</div>
+				
+			</div>
 			
 			<!-- 로그인 X-->
 			<div sec:authorize="isAnonymous()">

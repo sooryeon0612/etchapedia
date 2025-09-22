@@ -16,7 +16,7 @@ function loadNewBooks(search) {
 	fetch("/ajax/load_new_books", init)
 	.then(response => response.json())
 	.then(data => {
-		console.log(data);
+		$(".loading-box").remove();
 		let str = "";
 		data.forEach(function(book) {
 			str = `	<div class="book-item">
@@ -42,5 +42,5 @@ $(function() {
 	
 	if($(".book-grid").text().trim().length === 0) {
 		loadNewBooks(search);
-	}
+	} else $(".loading-box").remove();
 })

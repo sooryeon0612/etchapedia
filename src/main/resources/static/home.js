@@ -16,6 +16,7 @@ function loadRecommendBooks(userIdx) {
 	fetch("/ajax/load_recommend_books", init)
 	.then(response => response.json())
 	.then(data => {
+		$(".loading-box").remove();
 		let str = "";
 		data.forEach(function(book, index) {
 			str = `	<div class="rank-item">

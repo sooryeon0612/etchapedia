@@ -12,6 +12,10 @@
 		    <h2 class="page-title">사전 검색</h2>
 			<div class="dictionary">[[${dictionary}]]</div>
 		    <h2 class="page-title">책</h2>
+			<div class="loading-box">
+				<img src="/images/loading-bar.gif"/>
+				<h3 class="loading-text">API 호출 중입니다. 잠시만 기다려 주세요.</h3>
+			</div>
 		    <div class="book-grid">
 		        <div class="book-item" th:each="book : ${list}">
 		            <div class="book-cover">
@@ -22,10 +26,6 @@
 		                <p class="book-meta">[[${book.author}]]</p>
 		            </div>
 		        </div>
-				<div class="loading-bar">
-					<img src="/images/loading-bar.gif"/>
-					<h3>API 호출 중입니다. 잠시만 기다려 주세요.</h3>
-				</div>
 		    </div>
 		</main>
 		<script th:src="@{/book_search.js}"></script>
