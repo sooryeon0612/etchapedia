@@ -24,7 +24,7 @@ public class Cart {
 	@JoinColumn(name="user_idx")
 	private Users user;
 	
-	
+	private Integer quantity;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="cart")

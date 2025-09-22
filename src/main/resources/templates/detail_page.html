@@ -1,63 +1,165 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout1}"> 
+      layout:decorate="~{layout1}">
 <head>
-	<link rel="stylesheet" th:href="@{/detail_page.css}">
     <title>책 상세화면</title>
+    <link rel="stylesheet" th:href="@{/detail_page.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+	
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
-    <div layout:fragment="content">
+<div layout:fragment="content">
     <main class="main-content">
-        <div class="book-header-bg" th:style="'background-image: url(' + @{/images/header-bg.jpg} + ');'"></div>
         
+        <!-- 책 상단 배경 -->
+        <div class="book-header-bg">
+            <div class="background-filter"></div>
+            <div class="header-text-container">
+                <h1 th:if="${book != null}" th:text="${book.title}"></h1>
+                <div class="author-and-cart">
+					<h4 th:if="${book != null}" th:text="${book.author.replace(';',', ')}"></h4>
+					<div class="rating-actions">
+						<div class="action-buttons">
+						    <button class="cart-button-with-border" th:onclick="'addToCart(' + ${book.bookIdx} + ')'">
+						        <i class="fas fa-shopping-cart"></i>
+								<span id="cart-item-count" class="cart-count">0</span>
+						    </button>
+							<button type="button" class="checkout-button-with-border" th:onclick="'addAndCheckout(' + ${book.bookIdx} + ')'">
+						        <i class="fas fa-credit-card"></i>
+						    </button>
+						</div>
+					</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 책 상세 정보 -->
         <div class="book-details-section">
             <div class="book-details-inner">
                 <div class="book-cover-container">
-                    <img th:if="${book != null}" th:src="${book.coverUrl}" alt="책 표지" class="book-cover-main">
+                    <img th:if="${book != null}" th:src="${book.pic}" alt="책 표지" class="book-cover-main">
                 </div>
                 <div class="book-info-container">
-                   	<h1 th:if="${book != null}" th:text="${book.title}"></h1>
-                    <p class="book-author" th:if="${book != null}" th:text="${book.author}"></p>
-                    <div class="rating-actions">
-                        <div class="rating-stars">
-                            <span class="star">★</span>
-                        </div>
-                        <span class="rating-value" th:if="${book != null}" th:text="${book.rating}"></span>
-                        <div class="action-buttons">
-                            <button class="action-btn">평가하기</button>
-                            <button class="action-btn">장바구니</button>
-                        </div>
-                    </div>
                     <div class="book-description">
-                        <p th:if="${book != null}"th:text="${book.description}"></p>
+                        <p th:if="${book != null}" th:text="${book.description}" style="margin-top: 80px;"></p>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- 저자 / 댓글 -->
         <div class="content-section">
-            <div class="content-inner">
-                <h3>저자/제작자</h3>
-                <div class="author-list">
-                    <div class="author-item">
-                        <img src="https://via.placeholder.com/50" alt="저자 이미지">
-                        <span th:if="${book != null}" th:text="${book.author}"></span>
-                    </div>
-                </div>
-				
-                <h3>코멘트</h3>
-                <div class="comments-grid">
-                    <div class="comment-item" th:if="${comment != null}" th:each="comment : ${comments}">
-                        <div class="comment-header">
-                            <img src="https://via.placeholder.com/30" alt="프로필 이미지">
-                            <span th:if="${comment != null}" th:text="${comment.user}"></span>
-                        </div>
-                        <p class="comment-text" th:if="${comment != null}" th:text="${comment.text}"></p>
-                    </div>
-                </div>
+        <div class="content-inner">
+            <h3>저자/제작자</h3>
+            <div class="author-list">
+				<div class="author-item">
+				    <span th:if="${book != null}" th:text="${book.author.replace(';',', ')}"></span>
+				</div>
             </div>
+			<h3>코멘트</h3>
+			<!-- 로그인 상태 -->
+			<div sec:authorize="isAuthenticated()" onclick="goToReplyPage()" style="cursor: pointer;">
+			    <div class="comments-grid">
+			        <div class="comment-item" th:each="comment : ${comments}">
+			            <div class="comment-header">
+			                <img src="https://via.placeholder.com/30" alt="프로필 이미지" class="profile-pic">
+			                <span class="user-name" th:text="${comment.user.name}"></span>
+			            </div>
+			            <p class="comment-content" th:text="${comment.content}"></p>
+			            <div class="comment-actions">
+			                <div class="action-buttons">
+			                    <button class="like-btn"><i class="fa-regular fa-thumbs-up">좋아요</i></button>
+			                    <button class="reply-btn" onclick="goToReplyPage()">
+									<i class="fa-regular fa-comment">댓글</i>
+								</button>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			<!-- 로그아웃 상태 -->
+			<div sec:authorize="isAnonymous()" class="comments-section-wrapper">
+			    <div class="comments-grid blur-target">
+			        <div class="comment-item">
+			            <div class="comment-header">
+			                <img src="https://via.placeholder.com/30" alt="프로필 이미지" class="profile-pic">
+			                <span class="user-name">****</span>
+			            </div>
+			            <p class="comment-content">코멘트 내용을 보려면 로그인해주세요.</p>
+			            <div class="comment-actions">
+			                <div class="action-buttons">
+			                    <button class="like-btn"><i class="fa-regular fa-thumbs-up">좋아요</i></button>
+			                    <button class="reply-btn"><i class="fa-regular fa-comment">댓글</i></button>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+			    
+				<div class="overlay">
+				    <h3>로그인 후 이용 가능</h3>
+				    <a th:href="@{/user/login_form}" class="login-button">로그인하기</a>
+				</div>
+			</div>
         </div>
     </main>
+</div>
 </body>
 </html>
+<script>
+	// 장바구니 버튼 클릭 시
+	function addToCart(bookId) {
+	    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+	    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+	    const cartCountElement = document.getElementById('cart-item-count');
+
+	    fetch('/cart/add', {
+	        method: 'POST',
+	        headers: {
+	            'Content-Type': 'application/json',
+	            [csrfHeader]: csrfToken
+	        }, 
+	        body: JSON.stringify({ bookIdx: bookId })
+	    })
+	    .then(response => {
+	        if (!response.ok) {
+	            throw new Error('Network response was not ok');
+	        }
+	        return response.json();
+	    })
+	    .then(data => {
+	        if (data.success) {
+	            alert('장바구니에 담았습니다!');
+	            
+	            // 장바구니 아이템 개수 업데이트
+	            if (cartCountElement) {
+	                let currentCount = parseInt(cartCountElement.textContent) || 0;
+	                cartCountElement.textContent = currentCount + 1;
+	            }
+
+	        } else {
+	            alert('장바구니 담기에 실패했습니다: ' + data.message);
+	        }
+	    })
+	    .catch(error => {
+	        console.error('Error:', error);
+	        alert('장바구니 담기 중 오류가 발생했습니다.');
+	    });
+	}
+	
+	// 결제하기 버튼 클릭 시
+	function addAndCheckout(bookId) {
+	    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+	    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+        alert('결제 페이지로 이동합니다!');
+        window.location.href = '/cart';
+	}
+	
+	// 댓글 버튼 클릭 시
+	function goToReplyPage() {
+		window.location.href = '/reply.html';
+	}
+</script>

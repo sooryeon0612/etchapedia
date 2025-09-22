@@ -1,5 +1,6 @@
 package com.etchapedia.comment;
 
+import com.etchapedia.home.Book;
 import com.etchapedia.user.Users;
 
 import jakarta.persistence.Entity;
@@ -26,4 +27,9 @@ public class Comments {
 	private Users user;
 	
 	private String content;
+	
+	@ManyToOne
+	@JoinColumn(name="book_idx")
+	private Book book;
+	
 }

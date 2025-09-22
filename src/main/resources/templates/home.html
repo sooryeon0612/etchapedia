@@ -13,12 +13,14 @@
 	            <h2 class="section-title">인기순</h2>
 	            <div class="rank-list">
 	                <div class="rank-item" th:each="book, stat : ${popular}">
-	                    <div class="rank-number">[[${stat.count}]]</div>
-	                    <img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
-	                    <div class="book-info">
-	                        <h3 class="book-title">[[${book.title}]]</h3>
-	                        <div class="author">[[${book.author}]]</div>
-	                    </div>
+		                    <div class="rank-number">[[${stat.count}]]</div>
+							<a th:href="@{/detail/page(id=${book.bookIdx})}">
+			                    <img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
+							</a>	
+	    	                <div class="book-info">
+	        	                <h3 class="book-title">[[${book.title}]]</h3>
+	            	            <div class="author">[[${book.author}]]</div>
+	                	    </div>
 	                </div>
 	            </div>
 	        </section>
@@ -27,12 +29,14 @@
 	            <h2 class="section-title">인기 급상승</h2>
 	            <div class="rank-list">
 	                <div class="rank-item" th:each="book, stat : ${trend}">
-	                    <div class="rank-number">[[${stat.count}]]</div>
-	                    <img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
-	                    <div class="book-info">
-	                        <h3 class="book-title">[[${book.title}]]</h3>
-	                        <div class="author">[[${book.author}]]</div>
-	                    </div>
+	                    	<div class="rank-number">[[${stat.count}]]</div>
+							<a th:href="@{/detail/page(id=${book.bookIdx})}">
+		                    	<img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
+							</a>	
+	                    	<div class="book-info">
+	                        	<h3 class="book-title">[[${book.title}]]</h3>
+	                        	<div class="author">[[${book.author}]]</div>
+	                    	</div>
 	                </div>
 	            </div>
 	        </section>
@@ -41,12 +45,14 @@
 	            <h2 class="section-title">AI추천 도서</h2>
 	            <div class="rank-list">
 	                <div class="rank-item" th:each="book, stat : ${recommend}">
-	                    <div class="rank-number">[[${stat.count}]]</div>
-	                    <img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
-	                    <div class="book-info">
-	                        <h3 class="book-title">[[${book.title}]]</h3>
-	                        <div class="author">[[${book.author}]]</div>
-	                    </div>
+	                    	<div class="rank-number">[[${stat.count}]]</div>
+							<a th:href="@{/detail/page(id=${book.bookIdx})}">
+		                    	<img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
+							</a>	
+	                    	<div class="book-info">
+	                        	<h3 class="book-title">[[${book.title}]]</h3>
+	                        	<div class="author">[[${book.author}]]</div>
+	                    	</div>
 	                </div>
 	            </div>
 	        </section>

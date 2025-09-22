@@ -52,12 +52,6 @@ public class PageController {
     	return "book_search";
     }
     
-    // 책 상세 화면 (detail_page.html)
-    @GetMapping("/detail/page")
-    public String detailPage() {
-    	return "detail_page";
-    }
-    
     // 책 상세 화면 - 코멘트 (reply.html)
     @GetMapping("/reply")
     public String reply() {
@@ -75,17 +69,4 @@ public class PageController {
     public String mypage() {
     	return "mypage";
     }
-    
-    // 장바구니 (cart.html)
-    @GetMapping("/cart")
-    public String cart() {
-    	return "cart";
-    }
-    
-    // test 장바구니 (cart2.html) css 수정중
-    @GetMapping("/cart2")
-    public String cart2() {
-    	return "cart2";
-    }
-   
 }

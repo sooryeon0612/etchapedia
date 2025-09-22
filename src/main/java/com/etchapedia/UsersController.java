@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.etchapedia.user.UsersCreateForm;
 import com.etchapedia.user.UsersService;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -52,7 +51,7 @@ public class UsersController {
 	}
 	
     // 로그인 화면 (
-    @GetMapping("/login")
+    @GetMapping("/login_form")
 	public String login() {
 		return "login_form";
 	}
