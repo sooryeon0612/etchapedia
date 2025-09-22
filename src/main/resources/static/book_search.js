@@ -21,7 +21,9 @@ function loadNewBooks(search) {
 		data.forEach(function(book) {
 			str = `	<div class="book-item">
 					    <div class="book-cover">
-					        <img src="${book.pic}" alt="${book.title}">
+							<a th:href="@{/detail/page(id=${book.bookIdx})}">
+					        	<img src="${book.pic}" alt="${book.title}">
+							</a>
 					    </div>
 					    <div class="book-info">
 					        <h3 class="book-title">${book.title}</h3>

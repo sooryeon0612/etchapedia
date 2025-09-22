@@ -19,7 +19,9 @@
 		    <div class="book-grid">
 		        <div class="book-item" th:each="book : ${list}">
 		            <div class="book-cover">
-		                <img th:src="${book.pic}" alt="${book.title}">
+						<a th:href="@{/detail/page(id=${book.bookIdx})}">
+		                	<img th:src="${book.pic}" alt="${book.title}">
+						</a>
 		            </div>
 		            <div class="book-info">
 		                <h3 class="book-title">[[${book.title}]]</h3>
