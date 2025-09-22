@@ -32,21 +32,23 @@ public class UsersService {
 		return u;
 	}
 	
+	// 이메일로 사용자 객체 찾기
+	public Optional<Users> findByEmail(String email) {
+		return uRepo.findByEmail(email);
+	}
+	
 	// 중복여부 체크.
 	public boolean isDuplicated(String email) {
-		Optional<Users> ou = uRepo.findByEmail(email);
-		return ou.isPresent();
+		return findByEmail(email).isPresent();
 	}
 	
 	// 사용자 찾기
 	public boolean authenticate(String email, String pw) {
-		Optional<Users> userOpt = uRepo.findByEmail(email);
+		Optional<Users> userOpt = findByEmail(email);
 		
 		if(userOpt.isPresent()) {
 			Users user = userOpt.get();
-			if(user.getPassword().equals(pw)) {
-				return true;
-			}
+			return pwEncoder.matches(pw, user.getPassword());
 		}
 		return false;
 	}

@@ -253,7 +253,7 @@ body {
 
 /* 주문 버튼 */
 .cart-page .order-btn {
-    width: 100%;
+    width: 70%;
     padding: 15px;
     background-color: #5544a0;
     color: #fff;

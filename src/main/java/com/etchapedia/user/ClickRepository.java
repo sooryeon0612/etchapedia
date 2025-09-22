@@ -1,4 +1,4 @@
-package com.etchapedia.home;
+package com.etchapedia.user;
 
 import java.util.List;
 

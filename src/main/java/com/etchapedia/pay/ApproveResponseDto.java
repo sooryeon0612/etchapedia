@@ -1,4 +1,4 @@
-package com.etchapedia.kakaopayapi;
+package com.etchapedia.pay;
 // 결제 승인 요청에 대한 응답 데이터 객체
 import lombok.Getter;
 import lombok.Setter;

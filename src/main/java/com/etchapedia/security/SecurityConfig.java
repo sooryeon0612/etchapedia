@@ -24,6 +24,7 @@ public class SecurityConfig {
 				.requestMatchers(new AntPathRequestMatcher("/**"))	// 어떤 요청 경로에 대해 규칙을 적용
 				.permitAll()		// 해당 경로에 대한 접근을 모든 사용자에게 허용.
 		)
+		.csrf(csrf -> csrf.ignoringRequestMatchers(new AntPathRequestMatcher("/cart/add")))
 		.formLogin(		// 로그인 페이지에 대한 설정을 시작.
 				(formLoginConfig) -> formLoginConfig
 				.loginPage("/user/login")		// 스프링 시큐리티에게 로그인페이지URL을 알려줌.
@@ -52,4 +53,6 @@ public class SecurityConfig {
 	AuthenticationManager getAuthenticationManager(AuthenticationConfiguration authConfig) throws Exception {
 		return authConfig.getAuthenticationManager();
 	}
+	
+	
 }

@@ -1,4 +1,4 @@
-package com.etchapedia.kakaopayapi;
+package com.etchapedia.pay;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

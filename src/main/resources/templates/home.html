@@ -13,7 +13,9 @@
             <div class="rank-list">
                 <div class="rank-item" th:each="book, stat : ${popular}">
                     <div class="rank-number">[[${stat.count}]]</div>
-                    <img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
+					<a th:href="@{/detail/page(id=${book.bookIdx})}">
+	                    <img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
+					</a>
                     <div class="book-info">
                         <h3 class="book-title">[[${book.title}]]</h3>
                         <div class="author">[[${book.author}]]</div>
@@ -27,7 +29,9 @@
             <div class="rank-list">
                 <div class="rank-item" th:each="book, stat : ${trend}">
                     <div class="rank-number">[[${stat.count}]]</div>
-                    <img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
+					<a th:href="@{/detail/page(id=${book.bookIdx})}">
+	                	<img th:src="${book.pic}" th:alt="${book.title}" class="book-cover">
+					</a>
                     <div class="book-info">
                         <h3 class="book-title">[[${book.title}]]</h3>
                         <div class="author">[[${book.author}]]</div>
@@ -37,8 +41,7 @@
         </section>
 		
 		<section class="rank-section">
-            <h2 class="section-title">AI추천 도서</h2>
-			
+            <h2 class="section-title">AI추천 도서</h2>			
 			<!-- 로그인 O-->
 			<div sec:authorize="isAuthenticated()" class="rank-list recommend-list"></div>
 			

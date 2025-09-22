@@ -1,7 +1,6 @@
-package com.etchapedia.home;
+package com.etchapedia.user;
 
 import com.etchapedia.book.Book;
-import com.etchapedia.user.Users;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Cart {
+public class Click {
 	@ManyToOne
 	@JoinColumn(name="book_idx")
 	private Book book;
@@ -24,11 +23,11 @@ public class Cart {
 	@ManyToOne
 	@JoinColumn(name="user_idx")
 	private Users user;
-	private Integer quantity;
 	
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="cart")
-	@SequenceGenerator(name="cart", sequenceName="seq_cart_idx", allocationSize=1)
-	private Integer cartIdx;
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="click")
+	@SequenceGenerator(name="click", sequenceName="seq_click_idx", allocationSize=1)
+	private Integer clickIdx;
+
 }

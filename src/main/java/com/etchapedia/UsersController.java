@@ -62,7 +62,7 @@ public class UsersController {
 	}
 	
     // 로그인 화면 (
-    @GetMapping("/login")
+    @GetMapping("/login_form")
 	public String login() {
 		return "login_form";
 	}

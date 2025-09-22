@@ -1,7 +1,5 @@
-package com.etchapedia.home;
+package com.etchapedia.comment;
 
-import com.etchapedia.comment.Comments;
-import com.etchapedia.comment.Reply;
 import com.etchapedia.user.Users;
 
 import jakarta.persistence.Entity;

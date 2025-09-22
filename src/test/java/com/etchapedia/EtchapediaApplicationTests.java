@@ -19,8 +19,14 @@ import com.etchapedia.book.BookRepository;
 import com.etchapedia.book.BookService;
 import com.etchapedia.book.GptRecommendationsService;
 import com.etchapedia.book.HotTrendService;
-import com.etchapedia.home.Click;
-import com.etchapedia.home.ClickRepository;
+import com.etchapedia.comment.Comments;
+import com.etchapedia.comment.CommentsRepository;
+import com.etchapedia.comment.Likes;
+import com.etchapedia.comment.LikesRepository;
+import com.etchapedia.comment.Reply;
+import com.etchapedia.comment.ReplyRepository;
+import com.etchapedia.user.Click;
+import com.etchapedia.user.ClickRepository;
 import com.etchapedia.user.Hate;
 import com.etchapedia.user.HateRepository;
 import com.etchapedia.user.HateService;
@@ -58,6 +64,51 @@ class EtchapediaApplicationTests {
 	
 	@Autowired
 	private NaverApiClient naver;
+	
+	@Autowired
+	private CommentsRepository cmRepo;
+	@Autowired
+	private LikesRepository lRepo;
+	@Autowired
+	private ReplyRepository rRepo;
+	
+	@Test
+	void testInsertCommentDummy() {
+	    // 1. 테스트용 사용자 생성 및 저장
+	    Users user1 = new Users();
+	    user1.setName("테스트");
+	    user1.setEmail("test@naver.com");
+	    // 사용자의 비밀번호도 설정해주는 것이 좋습니다.
+	    // user1.setPassword(pwEncoder.encode("password"));
+	    uRepo.save(user1);
+
+	    // 2. 이미 존재하는 책 가져오기
+	    // 데이터베이스에 bookIdx가 1과 2인 책이 있다고 가정합니다.
+	    Book book1 = bRepo.findById(1)
+	                      .orElseThrow(() -> new RuntimeException("책 ID 1을 찾을 수 없습니다."));
+
+	    // 3. 코멘트 생성 및 저장
+	    Comments comment1 = new Comments();
+	    comment1.setUser(user1);
+	    comment1.setBook(book1);
+	    comment1.setContent("소리 지르면서 읽었어요.");
+	    cmRepo.save(comment1);
+
+	    // 4. 좋아요(Likes) 생성 및 저장
+	    Likes like1 = new Likes();
+	    like1.setComment(comment1);
+	    like1.setUser(user1);
+	    lRepo.save(like1);
+
+	    // 5. 답글(Replies) 생성 및 저장
+	    Reply reply1 = new Reply();
+	    reply1.setComment(comment1);
+	    reply1.setUser(user1);
+	    reply1.setReply("한번 더 읽기 위한 저장!");
+	    rRepo.save(reply1);
+
+	    System.out.println("댓글, 좋아요, 답글 더미 데이터가 성공적으로 삽입되었습니다.");
+	}
 	
 	@Test
 	void testINSERTDUMMY() throws JsonMappingException, JsonProcessingException {

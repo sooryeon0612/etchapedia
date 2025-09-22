@@ -129,4 +129,18 @@
   transition: transform .05s ease, opacity .2s ease;
 }
 .btn-login:hover { opacity: .92; }
-.btn-login:active { transform: translateY(1px); }
+.btn-login:active { 
+	transform: translateY(1px); 
+}
+.dot-loader {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #555;
+  animation: pulse 1s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(0.7); opacity: 0.5; }
+  50%      { transform: scale(1.3); opacity: 1; }
+}
