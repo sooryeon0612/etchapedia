@@ -33,6 +33,11 @@
 	height: 100%; 
 	object-fit: cover; 
 }
+#img-file {
+	display: none;
+	width: 80px;
+	height: 80px;
+}
 .profile-info-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
 .inline-name-form { flex: 1; }
 

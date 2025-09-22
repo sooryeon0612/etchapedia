@@ -43,5 +43,22 @@ $(function () {
 		$(".password-panel").removeClass("open");
 	})
 	
+	// 파일 미리보기
+	$("#img-file").on("change", function(e) {
+		$("#profile-form").submit();
+		
+		/*const file = e.target.files[0];
+		
+		if(file) {
+			const reader = new FileReader();
+			reader.onload = function(done) {
+				$(".profile-avatar img").attr("src", done.target.result);
+			}
+			reader.readAsDataURL(file);
+			
+		}*/
+		
+	})
+	
 
 });

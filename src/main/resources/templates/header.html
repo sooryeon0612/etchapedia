@@ -14,9 +14,7 @@
 			<div sec:authorize="isAuthenticated()" th:data-user-idx="${#authentication.principal.userIdx}" class="user-menu">
 				<a th:href="@{/news}">소식</a>
 				<span onclick="location.href='/mypage'">
-			        <!--<img th:src="${#authentication.principal.profile}" alt="프로필" class="profile-img">
-					예시로 그냥 아무 프로필! -->
-			        <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSSKF8htVnODGtVjRJLQVfKniLWFNbANd5EWd3g6LGfDQKHlpA0Ldn9j1wjEjSq5U8TS4oDV8sClH1P67tVCtCNFYRiVxXiF8EyZBc_uI8O" alt="프로필" class="profile-img">
+			        <img th:src="@{'/upload/' + ${#authentication.principal.profile}}" alt="프로필" class="profile-img">
 			        <span sec:authentication="principal.name"></span>
 				</span>
             </div>

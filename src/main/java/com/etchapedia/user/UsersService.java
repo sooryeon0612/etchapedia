@@ -1,11 +1,16 @@
 package com.etchapedia.user;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UsersService {
@@ -13,6 +18,9 @@ public class UsersService {
 	private UsersRepository uRepo;
 	@Autowired
 	private PasswordEncoder pwEncoder;
+	
+	@Value("${file.upload-dir}")
+    private String myDir;
 	
 	// 회원가입.
 	public Users create(String name, String email, String pw) {
@@ -66,4 +74,26 @@ public class UsersService {
 		Users u = ou.get();
 		u.setPassword(pwEncoder.encode(password));	
 	}
+	
+	// 프로필 이미지 저장 
+	@Transactional
+	public void saveProfile(MultipartFile img, Integer userIdx) throws IllegalStateException, IOException {
+		String originFilename = img.getOriginalFilename();
+        String fileExtension = originFilename.substring(originFilename.lastIndexOf("."));
+        String saveFileName = UUID.randomUUID().toString() + fileExtension;
+        
+        File uploadDir = new File(myDir);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+        File dest = new File(uploadDir, saveFileName);
+        
+        img.transferTo(dest);
+		Optional<Users> ou = uRepo.findById(userIdx);
+		if(ou.isPresent()) {
+			Users u = ou.get();
+			u.setProfile(saveFileName);
+		}
+	}
+	
 }

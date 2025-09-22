@@ -1,7 +1,9 @@
 package com.etchapedia;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.etchapedia.security.CustomUserDetails;
 import com.etchapedia.security.MyUserDetailService;
@@ -101,5 +104,22 @@ public class UsersController {
     	if(!uSvc.checkUserByPw(userIdx, curPw)) return "redirect:/mypage?error";
     	uSvc.changePw(userIdx, newPw);
     	return "redirect:/user/logout";
+    }
+    
+    // 프로필 사진 변경
+    @PostMapping("/profile")
+    public String changeProfile(@AuthenticationPrincipal CustomUserDetails userDetails,
+    							@RequestParam("file")MultipartFile img) throws IllegalStateException, IOException {
+    	Integer userIdx = userDetails.getUserIdx();
+    	uSvc.saveProfile(img, userIdx);
+    	CustomUserDetails updateUser = mSvc.loadUserByUsername(userDetails.getUsername());
+    	Authentication newAuth =
+                new UsernamePasswordAuthenticationToken(
+                		updateUser,
+                		updateUser.getPassword(),
+                		updateUser.getAuthorities()
+                );
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+    	return "redirect:/mypage";
     }
 }

@@ -11,11 +11,12 @@
 
   	<section class="profile-container">
     	<header class="profile-header">
-      		<a th:href="@{/profile/edit}" class="profile-avatar-link">
-        		<div class="profile-avatar">
-          			<img th:src="${#authentication.principal.profile}" alt="프로필 아바타">
-       	 		</div>
-      		</a>
+      		<form th:action="@{/user/profile}" method="post" enctype="multipart/form-data" id="profile-form">
+				<div class="profile-avatar">
+	        		<input type="file" accept=".jpg, .png" id="img-file" name="file"/>
+					<label for="img-file"><img th:src="@{'/upload/' + ${#authentication.principal.profile}}"/></label>
+				</div>
+      		</form>
 
       		<div class="profile-info-row">
         		<!-- 이름/이메일 -->
