@@ -6,8 +6,8 @@
     <title>책 상세화면</title>
     <link rel="stylesheet" th:href="@{/detail_page.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-	
-	<meta name="_csrf" th:content="${_csrf.token}"/>
+   
+   <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
@@ -18,24 +18,24 @@
             <div class="background-filter"></div>
             <div class="header-text-container">
                 <h1 th:if="${book != null}" th:text="${book.title}"></h1>
-				<div class="author-and-cart">
-					<h4 th:if="${book != null}" th:text="${book.author.replace(';',', ')}"></h4>
-					<div class="rating-actions">
-						<div class="action-buttons">
-							<button class="disinterest-button-with-border">
-								<i class="fa-regular fa-thumbs-down fa-flip-horizontal"></i> </button>
-							<a href="#comments-section" class="comment-button-with-border">
-								<i class="fas fa-comment"></i>
-							</a>
-							<button class="cart-button-with-border" th:onclick="'addToCart(' + ${book.bookIdx} + ')'">
-						        <i class="fas fa-shopping-cart"></i>
-						    </button>
-							<button type="button" class="checkout-button-with-border" th:onclick="'addAndCheckout(' + ${book.bookIdx} + ')'">
-						        <i class="fas fa-credit-card"></i>
-						    </button>
-						</div>
-					</div>
-				</div>	
+            <div class="author-and-cart">
+               <h4 th:if="${book != null}" th:text="${book.author.replace(';',', ')}"></h4>
+               <div class="rating-actions">
+                  <div class="action-buttons">
+                     <button class="disinterest-button-with-border">
+                        <i class="fa-regular fa-thumbs-down fa-flip-horizontal"></i> </button>
+                     <a href="javascript:void(0);" class="comment-button-with-border" onclick="showCommentPopup()">
+                        <i class="fas fa-comment"></i>
+                     </a>
+                     <button class="cart-button-with-border" th:onclick="'addToCart(' + ${book.bookIdx} + ')'">
+                          <i class="fas fa-shopping-cart"></i>
+                      </button>
+                     <button type="button" class="checkout-button-with-border" th:onclick="'addAndCheckout(' + ${book.bookIdx} + ')'">
+                          <i class="fas fa-credit-card"></i>
+                      </button>
+                  </div>
+               </div>
+            </div>   
             </div>
         </div>
         
@@ -56,129 +56,122 @@
             <div class="content-inner">
                 <h3>저자/제작자</h3>
                 <div class="author-list">
-					<div class="author-item">
-					    <span th:if="${book != null}" th:text="${book.author.replace(';',', ')}"></span>
-					</div>
+               <div class="author-item">
+                   <span th:if="${book != null}" th:text="${book.author.replace(';',', ')}"></span>
+               </div>
                 </div>
-				<h3 id="comments-section">코멘트</h3>
-				<div sec:authorize="isAuthenticated()">
-				    <div class="comments-grid">
-				        <div class="comment-item" th:each="comment : ${comments}">
-				            <div class="comment-header">
-				                <img src="https://via.placeholder.com/30" alt="프로필 이미지" class="profile-pic">
-				                <span class="user-name" th:text="${comment.user.name}"></span>
-				            </div>
-				            <p class="comment-content" th:text="${comment.content}"></p>
-				            <div class="comment-actions">
-				                <div class="action-buttons">
-				                    <button class="like-btn"><i class="fa-regular fa-thumbs-up"></i>좋아요</button>
-				                    <button class="reply-btn" onclick="goToReplyPage()"><i class="fa-regular fa-comment"></i>댓글</button>
-				                </div>
-				            </div>
-				        </div>
-				    </div>
-				</div>
+            <h3 id="comments-section">코멘트</h3>
+            
+            <!-- 로그인 시 -->
+            <div sec:authorize="isAuthenticated()">
+                <div class="comments-grid">
+                    <div class="comment-item" th:each="comment : ${comments}" th:data-comment-idx="${comment.commentIdx}">
+                        <div class="comment-header">
+                            <img src="https://via.placeholder.com/30" alt="프로필 이미지" class="profile-pic">
+                            <span class="user-name" th:text="${comment.user.name}"></span>
+                        </div>
+                        <p class="comment-content" th:text="${comment.content}"></p>
+                        <div class="comment-actions">
+                            <div class="action-buttons">
+                                <button class="like-btn"><i class="fa-regular fa-thumbs-up"></i>좋아요</button>
+                                <button class="reply-btn" onclick="goToReplyPage(this)"><i class="fa-regular fa-comment"></i>댓글</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-			<h3>코멘트</h3>
-			<!-- 로그인 상태 -->
-			<div sec:authorize="isAuthenticated()" onclick="goToReplyPage()" style="cursor: pointer;">
-			    <div class="comments-grid">
-			        <div class="comment-item" th:each="comment : ${comments}">
-			            <div class="comment-header">
-			                <img src="https://via.placeholder.com/30" alt="프로필 이미지" class="profile-pic">
-			                <span class="user-name" th:text="${comment.user.name}"></span>
-			            </div>
-			            <p class="comment-content" th:text="${comment.content}"></p>
-			            <div class="comment-actions">
-			                <div class="action-buttons">
-			                    <button class="like-btn"><i class="fa-regular fa-thumbs-up">좋아요</i></button>
-			                    <button class="reply-btn" onclick="goToReplyPage()">
-									<i class="fa-regular fa-comment">댓글</i>
-								</button>
-			                </div>
-			            </div>
-			        </div>
-			    </div>
-			</div>
-			<!-- 로그아웃 상태 -->
-			<div sec:authorize="isAnonymous()" class="comments-section-wrapper">
-			    <div class="comments-grid blur-target">
-			        <div class="comment-item">
-			            <div class="comment-header">
-			                <img src="https://via.placeholder.com/30" alt="프로필 이미지" class="profile-pic">
-			                <span class="user-name">****</span>
-			            </div>
-			            <p class="comment-content">코멘트 내용을 보려면 로그인해주세요.</p>
-			            <div class="comment-actions">
-			                <div class="action-buttons">
-			                    <button class="like-btn"><i class="fa-regular fa-thumbs-up">좋아요</i></button>
-			                    <button class="reply-btn"><i class="fa-regular fa-comment">댓글</i></button>
-			                </div>
-			            </div>
-			        </div>
-			    </div>
-			    
-				<div class="overlay">
-				    <h3>로그인 후 이용 가능</h3>
-				    <a th:href="@{/user/login}" class="login-button">로그인하기</a>
-				</div>
+            
+            <!-- 로그아웃 시 -->
+            <div sec:authorize="isAnonymous()" class="comments-section-wrapper">
+                <div class="comments-grid blur-target">
+                    <div class="comment-item">
+                        <div class="comment-header">
+                            <img src="https://via.placeholder.com/30" alt="프로필 이미지" class="profile-pic">
+                            <span class="user-name">****</span>
+                        </div>
+                        <p class="comment-content">코멘트 내용을 보려면 로그인해주세요.</p>
+                        <div class="comment-actions">
+                            <div class="action-buttons">
+                                <button class="like-btn"><i class="fa-regular fa-thumbs-up"></i>좋아요</button>
+                                <button class="reply-btn"><i class="fa-regular fa-comment"></i>댓글</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+               <div class="overlay">
+                   <h3>로그인 후 이용 가능</h3>
+                   <a th:href="@{/user/login}" class="login-button">로그인하기</a>
+               </div>
+            </div>
         </div>
     </main>
 </div>
 </body>
 </html>
 <script>
-	// 장바구니 버튼 클릭 시
-	function addToCart(bookId) {
-	    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-	    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-	    const cartCountElement = document.getElementById('cart-item-count');
+   // 장바구니 버튼 클릭 시
+   function addToCart(bookId) {
+       const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+       const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+       const cartCountElement = document.getElementById('cart-item-count');
 
-	    fetch('/cart/add', {
-	        method: 'POST',
-	        headers: {
-	            'Content-Type': 'application/json',
-	            [csrfHeader]: csrfToken
-	        }, 
-	        body: JSON.stringify({ bookIdx: bookId })
-	    })
-	    .then(response => {
-	        if (!response.ok) {
-	            throw new Error('Network response was not ok');
-	        }
-	        return response.json();
-	    })
-	    .then(data => {
-	        if (data.success) {
-	            alert('장바구니에 담았습니다!');
-	            
-	            // 장바구니 아이템 개수 업데이트
-	            if (cartCountElement) {
-	                let currentCount = parseInt(cartCountElement.textContent) || 0;
-	                cartCountElement.textContent = currentCount + 1;
-	            }
+       fetch('/cart/add', {
+           method: 'POST',
+           headers: {
+               'Content-Type': 'application/json',
+               [csrfHeader]: csrfToken
+           }, 
+           body: JSON.stringify({ bookIdx: bookId })
+       })
+       .then(response => {
+           if (!response.ok) {
+               throw new Error('Network response was not ok');
+           }
+           return response.json();
+       })
+       .then(data => {
+           if (data.success) {
+               alert('장바구니에 담았습니다!');
+               
+               // 장바구니 아이템 개수 업데이트
+               if (cartCountElement) {
+                   let currentCount = parseInt(cartCountElement.textContent) || 0;
+                   cartCountElement.textContent = currentCount + 1;
+               }
 
-	        } else {
-	            alert('장바구니 담기에 실패했습니다: ' + data.message);
-	        }
-	    })
-	    .catch(error => {
-	        console.error('Error:', error);
-	        alert('장바구니 담기 중 오류가 발생했습니다.');
-	    });
-	}
-	
-	// 결제하기 버튼 클릭 시
-	function addAndCheckout(bookId) {
-	    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-	    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+           } else {
+               alert('장바구니 담기에 실패했습니다: ' + data.message);
+           }
+       })
+       .catch(error => {
+           console.error('Error:', error);
+           alert('장바구니 담기 중 오류가 발생했습니다.');
+       });
+   }
+   
+   // 결제하기 버튼 클릭 시
+   function addAndCheckout(bookId) {
+       const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+       const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
         alert('결제 페이지로 이동합니다!');
         window.location.href = '/cart';
-	}
-	
-	// 댓글 버튼 클릭 시
-	function goToReplyPage() {
-		window.location.href = '/reply';
-	}
+   }
+   
+   // 댓글 버튼 클릭 시
+   	function goToReplyPage(invoke) {
+		const commentIdx = $(invoke).closest(".comment-item").data("comment-idx");
+      	window.location.href = '/reply?commentIdx=' + commentIdx;
+   	}
+   
+   // 팝업창 열기
+   function showCommentPopup() {
+      document.getElementById('comment-popup').style.display = 'flex';
+   }
+   
+   // 팝업창 닫기
+   function showCommentPopup() {
+      document.getElementById('comment-popup').style.display = 'none';
+   }
 </script>

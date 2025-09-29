@@ -25,6 +25,7 @@ import com.etchapedia.comment.Likes;
 import com.etchapedia.comment.LikesRepository;
 import com.etchapedia.comment.Reply;
 import com.etchapedia.comment.ReplyRepository;
+import com.etchapedia.comment.ReplyService;
 import com.etchapedia.user.Click;
 import com.etchapedia.user.ClickRepository;
 import com.etchapedia.user.Hate;
@@ -61,6 +62,8 @@ class EtchapediaApplicationTests {
 	private BookApiUtil util;
 	@Autowired
 	private HateService haSvc;
+	@Autowired
+	private ReplyService rSvc;
 	
 	@Autowired
 	private NaverApiClient naver;
@@ -330,6 +333,18 @@ class EtchapediaApplicationTests {
 			System.out.println(b.getTitle());
 		}
 	}
-
+	
+	@Test
+	void testInsertReplyDummy() {
+//		Reply r1 = new Reply();
+//		r1.setComment(cmRepo.findById(1).get());
+//		r1.setReply("감 먹을래?");
+//		r1.setUser(uRepo.findById(1).get());
+//		rRepo.save(r1);
+		Likes like1 = new Likes();
+	    like1.setReply(rRepo.findById(2).get());
+	    like1.setUser(uRepo.findById(1).get());
+	    lRepo.save(like1);
+	}
 
 }

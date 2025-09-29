@@ -1,215 +1,116 @@
 @import url('https://cdn.jsdelivr.net/npm/spoqa-han-sans-neo@1.0.1/css/spoqa-han-sans-neo.min.css');
-/* 기본 스타일 */
-body {
-    font-family: 'Spoqa Han Sans Neo', 'Noto Sans KR', sans-serif;
-    background-color: #f8f8f8;
-    margin: 0;
-    padding: 0;
-    color: #333;
+
+body { background:#fbfbfb; }
+
+.main-container{
+  max-width:1280px;
+  width:92%;
+  margin:30px auto;
+  font-family:'Spoqa Han Sans Neo',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
 }
 
-/* 헤더 스타일 */
-.header {
-    background-color: #fff;
-    border-bottom: 1px solid #e0e0e0;
-    padding: 15px 0;
+/* ===== comment (상단 카드) ===== */
+.comment-card{
+  background:#fff;
+  border-radius:12px;
+  padding:18px 24px;
+  border:1px solid #eee;
+  box-shadow:0 1px 0 rgba(0,0,0,0.02);
 }
 
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1320px;
-    margin: 0 auto;
-    padding: 0 20px;
+.comment-header{
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:10px;
 }
 
-/* 왓챠피디아 로고 스타일 */
-.logo {
-    font-family: 'Roboto', sans-serif;
-    font-size: 24px;
-    font-weight: 700;
-    margin: 0;
+.comment-user{ display:flex; align-items:center; gap:10px; }
+.avatar{ width:32px; height:32px; border-radius:50%; object-fit:cover; }
+.user-name{ font-weight:700; font-size:15px; }
+
+.comment-body{
+  background:#f5f5f5;
+  border-radius:8px;
+  padding:14px;
+  border:1px solid #eee;
 }
 
-.watcha {
-    color: #ff2f6e;
+.comment-summary{
+  display:flex; align-items:center; gap:14px; margin-bottom:10px;
+}
+.summary-thumb{
+  width:70px; height:110px; border-radius:8px; object-fit:cover; background:#fff;
+}
+.summary-text{ display:flex; flex-direction:column; gap:3px; }
+.summary-title{ font-weight:700; color:#333; }
+.summary-sub{ color:#7c828a; font-size:13px; }
+
+.comment-text p{ margin:0; color:#333; line-height:1.7; font-size:14px; }
+.comment-text p + p{ margin-top:4px; }
+
+.comment-footer{
+  display:flex; justify-content:space-between; align-items:center;
+  border-top:1px solid #efefef; padding-top:12px; margin-top:12px;
+}
+.social-actions{ display:flex; gap:20px; font-size:13px; color:#666; }
+.social-actions span{ display:flex; align-items:center; gap:6px; }
+.social-actions i{ font-size:18px; color:#999; }
+
+.thumbs i.active { 
+	color:#ff2f6e; 
 }
 
-.pedia {
-    color: #333;
+/* ===== reply (아래 달리는 댓글) ===== */
+.reply-list{
+  margin-top:12px;
+  background:#fff;
+  border-radius:12px;
+  border:1px solid #eee;
+  box-shadow:0 1px 0 rgba(0,0,0,0.02);
+  padding:12px 24px;
 }
 
-/* 검색바 스타일 수정 */
-.search-bar {
-    width: 250px;
-    margin-left: auto;
-    margin-right: 40px;
+.reply{ padding:10px 0; }
+.reply + .reply{ border-top:1px solid #efefef; }
+
+.reply-user{ display:flex; align-items:center; gap:8px; margin-bottom:5px; }
+.reply-user .avatar{ width:26px; height:26px; }
+
+.reply-text p{ margin:0; font-size:14px; color:#333; line-height:1.6; }
+
+.reply-actions{
+	display:flex; 
+  	justify-content:flex-start; 
+	gap:12px;
+  	color:#8a8f98; 
+	font-size:12px; 
+	margin-top:10px;
 }
 
-.search-bar input {
-    width: 100%;
-    padding: 8px 15px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    font-size: 14px;
+.reply-actions i { 
+	font-size: 16px; 
+	color: #999; 
+	margin-right: 5px;
 }
 
-.user-menu a {
-    text-decoration: none;
-    color: #666;
-    margin-left: 15px;
-    font-size: 14px;
+/* ===== reply input ===== */
+.reply-input{
+  display:flex; align-items:center; gap:10px;
+  margin-top:16px; padding-top:12px; border-top:1px solid #efefef;
+}
+.reply-input .avatar{ width:28px; height:28px; }
+
+.reply-input-field{
+  flex:1; border:1px solid #ddd; border-radius:20px;
+  padding:8px 14px; font-size:14px; background:#fafafa; outline:none;
+  transition:border-color .2s, box-shadow .2s, background .2s;
+}
+.reply-input-field:focus{
+  border-color:#ff2f6e; background:#fff;
+  box-shadow:0 0 0 2px rgba(255,47,110,.15);
 }
 
-.main-container {
-    width: 700px;
-    margin: 30px auto;
+.reply-submit{
+  background:none; border:none; color:#ff2f6e; font-weight:600;
+  cursor:pointer; font-size:14px; padding:4px 8px; transition:opacity .2s;
 }
-
-.review-box {
-    background-color: #ffffff;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.review-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.user-info {
-    display: flex;
-    align-items: center;
-}
-
-.profile-pic {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-
-.user-name {
-    font-weight: bold;
-    font-size: 15px;
-}
-
-.review-time {
-    color: #888;
-    font-size: 12px;
-    margin-left: 10px;
-}
-
-.rating {
-    font-size: 18px;
-    color: #ff2f6e;
-    font-weight: bold;
-}
-
-.review-content {
-    display: flex;
-    margin-bottom: 15px;
-}
-
-.movie-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 20px;
-    border: 1px solid #e0e0e0;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: #fafafa;
-}
-
-.movie-poster {
-    width: 80px;
-    height: 120px;
-    object-fit: cover;
-    margin-bottom: 10px;
-    border-radius: 4px;
-}
-
-.movie-text {
-    font-size: 12px;
-    color: #666;
-    text-align: center;
-}
-
-.movie-title {
-    font-weight: bold;
-    font-size: 13px;
-    color: #333;
-    margin-bottom: 5px;
-}
-
-.review-text {
-    flex-grow: 1;
-}
-
-.review-text p {
-    margin: 0;
-    color: #333;
-    line-height: 1.6;
-    font-size: 14px;
-}
-
-.review-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid #f0f0f0;
-    padding-top: 15px;
-}
-
-.social-actions {
-    color: #888;
-    font-size: 12px;
-}
-
-.comment-section {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.comment {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    padding: 10px 0;
-}
-
-.comment .user-info {
-    margin-bottom: 5px;
-}
-
-.comment .profile-pic {
-    width: 30px;
-    height: 30px;
-}
-
-.comment-text p {
-    margin: 0;
-    font-size: 13px;
-    color: #444;
-}
-
-.comment-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    color: #888;
-    font-size: 12px;
-    margin-top: 5px;
-}
-
-.comment-actions span {
-    margin-right: 15px;
-}
+.reply-submit:hover{ opacity:.7; }

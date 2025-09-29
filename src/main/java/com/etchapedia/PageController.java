@@ -9,11 +9,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.etchapedia.book.Book;
 import com.etchapedia.book.BookService;
 import com.etchapedia.book.HotTrendService;
+import com.etchapedia.comment.CommentsService;
+import com.etchapedia.comment.ReplyService;
 import com.etchapedia.security.CustomUserDetails;
 import com.etchapedia.user.HateService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -27,6 +30,10 @@ public class PageController {
 	private HotTrendService tSvc;
 	@Autowired
 	private HateService hSvc;
+	@Autowired
+	private ReplyService rSvc;
+	@Autowired
+	private CommentsService cSvc;
 
     // 홈 화면 (home.html)
     @GetMapping("/home")
@@ -51,10 +58,24 @@ public class PageController {
     }
     
     // 책 상세 화면 - 코멘트 (reply.html)
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/reply")
-    public String reply() {
+    public String reply(Model model, @RequestParam("commentIdx")Integer commentIdx,
+    					@AuthenticationPrincipal CustomUserDetails userDetails) {
+    	model.addAttribute("info", cSvc.getCommentsInfo(commentIdx, userDetails.getUserIdx()));
+    	model.addAttribute("replies", rSvc.getRepliesByCommentIdx(commentIdx));
     	return "reply";
     }
+    
+    // 코멘트에 댓글 달기
+    @PostMapping("/reply/add")
+    public String insertReply(@RequestParam("commentIdx")Integer commentIdx,
+    						  @RequestParam("userIdx")Integer userIdx,
+    						  @RequestParam("content")String content) {
+    	rSvc.insertReply(userIdx, commentIdx, content);
+    	return "redirect:/reply?commentIdx=" + commentIdx;
+    }
+    
     
     // 소식 화면 (news.html)
     @GetMapping("/news")
