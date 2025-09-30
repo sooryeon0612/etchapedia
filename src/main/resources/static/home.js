@@ -39,7 +39,6 @@ function loadRecommendBooks(userIdx) {
 
 
 $(function() {
-	const userIdx = $(".user-menu").data("userIdx");
-	
+	const userIdx = $(".user-menu").data("user-idx");
 	if(userIdx != null) loadRecommendBooks(userIdx);
 });

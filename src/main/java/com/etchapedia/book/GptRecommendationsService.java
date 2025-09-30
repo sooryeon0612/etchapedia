@@ -32,7 +32,9 @@ public class GptRecommendationsService {
 	
 	// 마지막 업데이트 날짜 
 	public LocalDate getLastUpdateDate(Integer userIdx) {
-		return gRepo.findTop1ByUser_UserIdxOrderByRecommendIdxDesc(userIdx).getUpdateDate();
+		GptRecommendations g = gRepo.findTop1ByUser_UserIdxOrderByRecommendIdxDesc(userIdx);
+		if(g != null) return g.getUpdateDate();
+		return LocalDate.now().minusDays(1);
 	}
 	
 	// 추천 받았던 내용 데베에 저장
