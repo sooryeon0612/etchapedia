@@ -29,6 +29,8 @@ public class RestController {
 	@Autowired
 	private LikesService lSvc;
 	
+	// 작업자 : 서수련
+	// 기능 : GPT 추천 도서 불러오기
 	@PostMapping("load_recommend_books")
 	public List<Book> loadRecommendBook(@RequestBody String dataBody) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -42,6 +44,8 @@ public class RestController {
     	return gSvc.getRecommendedBooks(1);
 	}
 	
+	// 작업자 : 서수련
+	// 기능 : 검색어로 새로운 책들 불러오기
 	@PostMapping("load_new_books")
 	public List<Book> loadNewBooks(@RequestBody String dataBody) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -51,6 +55,8 @@ public class RestController {
 		return bSvc.getSearchBooks(search);
 	}
 	
+	// 작업자 : 서수련
+	// 기능 : 특정 댓글의 좋아요 개수 불러오기
 	@PostMapping("load_reply_likes")
 	public Map<Integer, List<Likes>> loadReplyLikes(@RequestBody String dataBody) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -59,6 +65,8 @@ public class RestController {
     	return lSvc.getReplyLikesByCommentIdx(commentIdx);
 	}
 	
+	// 작업자 : 서수련
+	// 기능 : 코멘트에 좋아요 누르기
 	@PostMapping("insert_comment_like")
 	public void insertCommentLike(@RequestBody String dataBody) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -68,6 +76,8 @@ public class RestController {
 		lSvc.insertCommentLike(userIdx, commentIdx);
 	}
 	
+	// 작업자 : 서수련
+	// 기능 : 코멘트에 좋아요 취소하기
 	@PostMapping("delete_comment_like")
 	public void deleteCommentLike(@RequestBody String dataBody) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -77,6 +87,8 @@ public class RestController {
 		lSvc.deleteCommentLike(userIdx, commentIdx);
 	}
 	
+	// 작업자 : 서수련 
+	// 기능 : 댓글에 좋아요 누르기
 	@PostMapping("insert_reply_like")
 	public void insertReplyLike(@RequestBody String dataBody) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -86,6 +98,8 @@ public class RestController {
 		lSvc.insertReplyLike(userIdx, replyIdx);
 	}
 	
+	// 작업자 : 서수련
+	// 기능 : 댓글에 좋아요 취소하기
 	@PostMapping("delete_reply_like")
 	public void deleteReplyLike(@RequestBody String dataBody) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();

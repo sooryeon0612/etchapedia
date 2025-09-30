@@ -35,7 +35,8 @@ public class CartController {
 	@Autowired
 	private UsersRepository uRepo;
     
-    // 장바구니에 상품 추가
+	// 작업자 : 이경미 
+    // 기능 : 장바구니에 상품 추가
     @PostMapping("/cart/add")
     public ResponseEntity<Map<String, Object>> addToCart(@RequestBody Map<String, Integer> payload,
     													 @AuthenticationPrincipal UserDetails userDetails) {
@@ -72,7 +73,8 @@ public class CartController {
         }
     }
     
-    // 장바구니 수량 변경
+    // 작업자 : 
+    // 기능 : 장바구니 수량 변경
     @PostMapping("/cart/update-quantity")
     public ResponseEntity<Map<String, Object>> updateQuantity(@RequestBody Map<String, Object> payload,
                                                               @AuthenticationPrincipal UserDetails userDetails) {

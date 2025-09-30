@@ -3,7 +3,6 @@ package com.etchapedia;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,6 +34,7 @@ public class UsersController {
 	@Autowired
 	private MyUserDetailService mSvc;
 	
+	// 작업자 : 이경미
 	// 회원가입
 	@GetMapping("/signup")
 	public String signupForm(Model model) {
@@ -42,6 +42,7 @@ public class UsersController {
 		return "signup";
 	}
 	
+	// 작업자 : 이경미
 	// 회원가입
 	@PostMapping("/signup")
 	public String signup(@Valid UsersCreateForm userCreateForm, BindingResult br) {
@@ -61,12 +62,14 @@ public class UsersController {
 		return "redirect:/user/login";
 	}
 	
-    // 로그인 화면 (
+	// 작업자 : 서수련
+    // 기능 : 로그인 화면으로 이동
     @GetMapping("/login")
 	public String login() {
 		return "login_form";
 	}
     
+    // 작업자 : 이경미	
     // 이메일 중복 여부 확인
     @GetMapping("/checkEmail")
     @ResponseBody
@@ -77,7 +80,8 @@ public class UsersController {
     	return response;
     }
     
-    // 이름 변경
+    // 작업자 : 서수련
+    // 기능 : 사용자 이름 변경
     @PostMapping("/name")
     public String updateName(@AuthenticationPrincipal CustomUserDetails userDetails,
     						 @RequestParam("name")String name) {
@@ -95,7 +99,8 @@ public class UsersController {
     	return "redirect:/mypage";
     }
     
-    // 비밀번호 변경 
+    // 작업자 : 서수련 
+    // 기능 : 비밀번호 변경 
     @PostMapping("/password")
     public String updateName(@AuthenticationPrincipal CustomUserDetails userDetails,
     						 @RequestParam("new-password")String newPw,
@@ -106,7 +111,8 @@ public class UsersController {
     	return "redirect:/user/logout";
     }
     
-    // 프로필 사진 변경
+    // 작업자 : 서수련 
+    // 기능 : 프로필 사진 변경
     @PostMapping("/profile")
     public String changeProfile(@AuthenticationPrincipal CustomUserDetails userDetails,
     							@RequestParam("file")MultipartFile img) throws IllegalStateException, IOException {

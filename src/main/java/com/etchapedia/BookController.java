@@ -45,6 +45,8 @@ public class BookController {
 	@Autowired
     private ClickService clSvc;
 
+	// 작업자 : 
+	// 기능 : 
     @PostMapping("/book/disinterest")
     @ResponseBody
     public Map<String, Object> hateBook(@RequestBody Map<String, Object> payload,
@@ -69,8 +71,8 @@ public class BookController {
 
 
     
-    
-	// 책 상세 화면 - 코멘트
+    // 작업자 : 
+	// 기능 : 책 상세 화면 - 코멘트
     @GetMapping("/detail/page")
     public String showBookDetail(@RequestParam("id") Integer bookIdx, Model model,
                                  Principal principal,
@@ -98,8 +100,8 @@ public class BookController {
         return "detail_page";
     }
 
-    
-    // 책 상세 화면 - 코멘트 저장
+    // 작업자 : 
+    // 기능 : 책 상세 화면 - 코멘트 저장
     @PostMapping("/comments")
     @ResponseBody
     public Map<String, Object> saveComment(@RequestBody Comments comments,
