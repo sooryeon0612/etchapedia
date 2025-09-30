@@ -1,7 +1,6 @@
 package com.etchapedia;
 
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,12 +20,11 @@ import com.etchapedia.book.BookRepository;
 import com.etchapedia.book.ClickService;
 import com.etchapedia.comment.Comments;
 import com.etchapedia.comment.CommentsRepository;
-import com.etchapedia.comment.CommentsService;
 import com.etchapedia.pay.CartService;
+import com.etchapedia.security.CustomUserDetails;
 import com.etchapedia.user.HateService;
 import com.etchapedia.user.Users;
 import com.etchapedia.user.UsersRepository;
-import com.etchapedia.security.CustomUserDetails;
 
 @Controller
 public class BookController {
@@ -34,8 +32,6 @@ public class BookController {
     private BookRepository bRepo;
     @Autowired
     private CommentsRepository cmRepo;
-    @Autowired
-    private CommentsService cSvc;
     @Autowired
     private UsersRepository uRepo;
     @Autowired
@@ -45,8 +41,8 @@ public class BookController {
 	@Autowired
     private ClickService clSvc;
 
-	// 작업자 : 
-	// 기능 : 
+	// 작업자 : 이경미
+	// 기능 : 관심없어요 추가 / 삭제
     @PostMapping("/book/disinterest")
     @ResponseBody
     public Map<String, Object> hateBook(@RequestBody Map<String, Object> payload,
@@ -71,8 +67,8 @@ public class BookController {
 
 
     
-    // 작업자 : 
-	// 기능 : 책 상세 화면 - 코멘트
+    // 작업자 : 이경미
+	// 기능 : 특정 책에 달린 전체 정보 가져오기
     @GetMapping("/detail/page")
     public String showBookDetail(@RequestParam("id") Integer bookIdx, Model model,
                                  Principal principal,
@@ -98,32 +94,6 @@ public class BookController {
         	clSvc.saveClickedBook(bookIdx, userDetails.getUserIdx());
 
         return "detail_page";
-    }
-
-    // 작업자 : 
-    // 기능 : 책 상세 화면 - 코멘트 저장
-    @PostMapping("/comments")
-    @ResponseBody
-    public Map<String, Object> saveComment(@RequestBody Comments comments,
-                                           @AuthenticationPrincipal UserDetails user) {
-        Map<String, Object> result = new HashMap<>();
-        try {
-        	Users loginUser = uRepo.findByEmail(user.getUsername())
-                                      .orElseThrow(() -> new RuntimeException("User not found"));
-
-            // 작성자 세팅
-            comments.setUser(loginUser);
-
-            // 댓글 저장
-            Comments saved = cSvc.save(comments);
-
-            result.put("success", true);
-            result.put("comment", saved);
-        } catch (Exception e) {
-            result.put("success", false);
-            result.put("message", e.getMessage());
-        }
-        return result;
     }
 
 }

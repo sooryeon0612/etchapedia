@@ -73,7 +73,7 @@ public class CartController {
         }
     }
     
-    // 작업자 : 
+    // 작업자 : 이경미
     // 기능 : 장바구니 수량 변경
     @PostMapping("/cart/update-quantity")
     public ResponseEntity<Map<String, Object>> updateQuantity(@RequestBody Map<String, Object> payload,
@@ -104,7 +104,8 @@ public class CartController {
         }
     }
     
-    // 장바구니 (cart.html)
+    // 작업자 : 이경미
+    // 기능 : 장바구니 전체 정보 가져오기
     @GetMapping("/cart")
     public String showCart(Model model, @AuthenticationPrincipal UserDetails userDetails) {
     	// 1. 템플릿에 전달할 변수들을 기본값으로 초기화

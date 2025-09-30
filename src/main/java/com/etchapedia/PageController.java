@@ -69,6 +69,7 @@ public class PageController {
     	return "reply";
     }
     
+    
     // 소식 화면 (news.html)
     @GetMapping("/news")
     public String news() {

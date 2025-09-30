@@ -49,13 +49,11 @@ public class UsersController {
 		if(br.hasErrors()) {
 			return "signup";
 		}
-		
 		String email = userCreateForm.getUserEmail();
 		if(uSvc.isDuplicated(email)) {
 			br.rejectValue("userEmail", "duplicatedId중x", "이미 가입된 EMAIL임.");
 			return "signup";
 		}
-		
 		String name = userCreateForm.getUserName();
 		String pw = userCreateForm.getUserPw();
 		uSvc.create(name, email, pw);
