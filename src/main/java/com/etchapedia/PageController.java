@@ -57,7 +57,7 @@ public class PageController {
     	return "book_search";
     }
     
-    // 책 상세 화면 - 코멘트 (reply.html)
+    // 책 상세 화면 - 댓글 (reply.html)
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/reply")
     public String reply(Model model, @RequestParam("commentIdx")Integer commentIdx,

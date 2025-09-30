@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.etchapedia.api.BookApiUtil;
-import com.etchapedia.user.Click;
-import com.etchapedia.user.ClickRepository;
 import com.etchapedia.user.UsersRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
