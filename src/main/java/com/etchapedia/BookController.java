@@ -45,19 +45,20 @@ public class BookController {
 	@Autowired
     private ClickService clSvc;
 
-	// 관심없어요 추가/삭제
+	// 작업자 : 
+	// 기능 : 
     @PostMapping("/book/disinterest")
     @ResponseBody
     public Map<String, Object> hateBook(@RequestBody Map<String, Object> payload,
                                                  @AuthenticationPrincipal UserDetails user) {
-        Integer bookIdx = Integer.valueOf(payload.get("bookIdx").toString());
-        boolean hateIdx = Boolean.parseBoolean(payload.get("hateIdx").toString());
+        Integer bookIdx = Integer.valueOf(payload.get("bookId").toString());
+        boolean isHated = Boolean.parseBoolean(payload.get("isHated").toString());
 
         Users loginUser = uRepo.findByEmail(user.getUsername())
                                .orElseThrow(() -> new RuntimeException("User not found"));
 
         boolean newState;
-        if (hateIdx) {
+        if (isHated) {
             hSvc.addDisinterest(loginUser.getUserIdx(), bookIdx);
             newState = true;
         } else {
@@ -65,10 +66,13 @@ public class BookController {
             newState = false;
         }
 
-        return Map.of("bookIdx", bookIdx, "hateIdx", hateIdx);
+        return Map.of("bookIdx", bookIdx, "isHated", isHated);
     }
+
+
     
-	// 책 상세 화면 - 코멘트
+    // 작업자 : 
+	// 기능 : 책 상세 화면 - 코멘트
     @GetMapping("/detail/page")
     public String showBookDetail(@RequestParam("id") Integer bookIdx, Model model,
                                  Principal principal,
@@ -96,8 +100,8 @@ public class BookController {
         return "detail_page";
     }
 
-    
-    // 책 상세 화면 - 코멘트 저장
+    // 작업자 : 
+    // 기능 : 책 상세 화면 - 코멘트 저장
     @PostMapping("/comments")
     @ResponseBody
     public Map<String, Object> saveComment(@RequestBody Comments comments,

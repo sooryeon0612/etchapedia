@@ -9,7 +9,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.etchapedia.book.Book;
@@ -35,7 +34,8 @@ public class PageController {
 	@Autowired
 	private CommentsService cSvc;
 
-    // 홈 화면 (home.html)
+	// 작업자 : 서수련 
+    // 기능 : 홈 화면으로 이동
     @GetMapping("/home")
     public String home(Model model) throws JsonMappingException, JsonProcessingException {
     	LocalDate today = LocalDate.now();
@@ -49,7 +49,8 @@ public class PageController {
         return "home";
     }
     
-    // 책 검색 화면 (book_search.html)
+    // 작업자 : 서수련 
+    // 기능 : 책 검색 화면 이동
     @GetMapping("/book/search")
     public String bookSearch(@RequestParam("query")String query, Model model) throws JsonMappingException, JsonProcessingException {
     	model.addAttribute("list", bSvc.getSearchBooks(query));
@@ -57,7 +58,8 @@ public class PageController {
     	return "book_search";
     }
     
-    // 책 상세 화면 - 댓글 (reply.html)
+    // 작업자 : 서수련 	
+    // 기능 : 코멘트에 대한 댓글 화면으로 이동
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/reply")
     public String reply(Model model, @RequestParam("commentIdx")Integer commentIdx,
@@ -67,23 +69,14 @@ public class PageController {
     	return "reply";
     }
     
-    // 코멘트에 댓글 달기
-    @PostMapping("/reply/add")
-    public String insertReply(@RequestParam("commentIdx")Integer commentIdx,
-    						  @RequestParam("userIdx")Integer userIdx,
-    						  @RequestParam("content")String content) {
-    	rSvc.insertReply(userIdx, commentIdx, content);
-    	return "redirect:/reply?commentIdx=" + commentIdx;
-    }
-    
-    
     // 소식 화면 (news.html)
     @GetMapping("/news")
     public String news() {
     	return "news";
     }
     
-    // 마이페이지 (mypage.html)
+    // 작업자 : 서수련
+    // 기능 : 마이페이지로 화면 이동
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/mypage")
     public String mypage(@AuthenticationPrincipal CustomUserDetails userDetails,

@@ -22,13 +22,6 @@
 						<h4 th:if="${book != null}" th:text="${book.author.replace(';',', ')}"></h4>
 						<div class="rating-actions">
 						    <div class="action-buttons">
-						    	<!--<button type="button" class="disinterest">
-						      		<i class="fa-regular fa-thumbs-down fa-flip-horizontal"></i>
-						    	</button>-->
-								<!--<button type="button" id="disinterest-button" class="disinterest" 
-								        th:data-book-id="${book.bookIdx}" th:data-is-hated="${isHated}"> 
-									<i class="fa-regular fa-thumbs-down fa-flip-horizontal"></i>
-								</button>-->
 								<button type="button" 
 								        id="disinterest-button" 
 								        class="disinterest" 
@@ -121,7 +114,7 @@
 				</div>	
 	        </div>
 	    </main>
-		
+		<script th:src="@{/detail_page.js}"></script>
 		<!-- 코멘트 팝업창 -->
 		<div id="comment-popup" class="popup-overlay" style="display:none;">
 		    <div class="popup-content-box">
