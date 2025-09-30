@@ -11,153 +11,135 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
-<div layout:fragment="content">
-    <main class="main-content">
-        
-        <div class="book-header-bg">
-            <div class="background-filter"></div>
-            <div class="header-text-container">
-                <h1 th:if="${book != null}" th:text="${book.title}"></h1>
-				<div class="author-and-cart">
-					<h4 th:if="${book != null}" th:text="${book.author.replace(';',', ')}"></h4>
-					<div class="rating-actions">
-						<div class="action-buttons">
-							<button class="disinterest-button-with-border">
-								<i class="fa-regular fa-thumbs-down fa-flip-horizontal"></i> </button>
-							<a href="#comments-section" class="comment-button-with-border">
-								<i class="fas fa-comment"></i>
-							</a>
-							<button class="cart-button-with-border" th:onclick="'addToCart(' + ${book.bookIdx} + ')'">
-						        <i class="fas fa-shopping-cart"></i>
-						    </button>
-							<button type="button" class="checkout-button-with-border" th:onclick="'addAndCheckout(' + ${book.bookIdx} + ')'">
-						        <i class="fas fa-credit-card"></i>
-						    </button>
+	<div layout:fragment="content">
+	    <main class="main-content" th:if="${book != null}" th:data-book-id="${book.bookIdx}">
+	        
+	        <div class="book-header-bg">
+	            <div class="background-filter"></div>
+	            <div class="header-text-container">
+	                <h1 th:if="${book != null}" th:text="${book.title}"></h1>
+					<div class="author-and-cart">
+						<h4 th:if="${book != null}" th:text="${book.author.replace(';',', ')}"></h4>
+						<div class="rating-actions">
+						    <div class="action-buttons">
+						    	<!--<button type="button" class="disinterest">
+						      		<i class="fa-regular fa-thumbs-down fa-flip-horizontal"></i>
+						    	</button>-->
+								<!--<button type="button" id="disinterest-button" class="disinterest" 
+								        th:data-book-id="${book.bookIdx}" th:data-is-hated="${isHated}"> 
+									<i class="fa-regular fa-thumbs-down fa-flip-horizontal"></i>
+								</button>-->
+								<button type="button" 
+								        id="disinterest-button" 
+								        class="disinterest" 
+								        th:data-book-id="${book.bookIdx}" 
+								        th:data-is-hated="${isHated}"> 
+								    <i th:class="${isHated} ? 'fa-solid fa-thumbs-down fa-flip-horizontal' : 'fa-regular fa-thumbs-down fa-flip-horizontal'"></i>
+								</button>
+						    	<button type="button" class="comment-button-with-border" onclick="showCommentPopup()">
+						      		<i class="fas fa-comment"></i>
+						    	</button>
+						    	<button type="button" class="cart-button-with-border" 
+						            th:onclick="|addToCart(${book.bookIdx})|">
+						      		<i class="fas fa-shopping-cart"></i>
+									<span id="cart-item-count" class="cart-count" th:text="${cartCount}">0</span>
+						    	</button>
+						    	<button type="button" class="checkout-button-with-border" 
+						            th:onclick="|addAndCheckout(${book.bookIdx})|">
+						      		<i class="fas fa-credit-card"></i>
+						    	</button>
+							</div>
+						</div>
+					</div>	
+	            </div>
+	        </div>
+	        
+	        <div class="book-details-section">
+	            <div class="book-details-inner">
+	                <div class="book-cover-container">
+	                    <img th:if="${book != null}" th:src="${book.pic}" alt="책 표지" class="book-cover-main">
+	                </div>
+	                <div class="book-info-container">
+	                    <div class="book-description">
+	                        <p th:if="${book != null}" th:text="${book.description}" style="margin-top: 80px;"></p>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="content-section">
+	            <div class="content-inner">
+	                <h3>저자/제작자</h3>
+	                <div class="author-list">
+						<div class="author-item">
+						    <span th:if="${book != null}" th:text="${book.author.replace(';',', ')}"></span>
+						</div>
+	                </div>
+					<h3 id="comments-section">코멘트</h3>
+					<!-- 로그인 o -->
+					<div sec:authorize="isAuthenticated()">
+					    <div class="comments-grid">
+					        <div class="comment-item" th:each="comment : ${comments}">
+					            <div class="comment-header">
+					                <img src="https://via.placeholder.com/30" alt="프로필 이미지" class="profile-pic">
+					                <span class="user-name" th:text="${comment.user.name}"></span>
+					            </div>
+					            <p class="comment-content" th:text="${comment.content}"></p>
+					            <div class="comment-actions">
+					                <div class="action-buttons">
+					                    <button class="like-btn"><i class="fa-regular fa-thumbs-up"></i>좋아요</button>
+										<button class="reply-btn" 
+					                            th:onclick="|window.location.href='@{/reply(bookIdx=${book.bookIdx}, commentId=${comment.commentIdx})}'|">
+					                        <i class="fa-regular fa-comment"></i>댓글
+					                    </button>
+					                </div>
+					            </div>
+					        </div>
+					    </div>
+					</div>
+					<!-- 로그인 x -->
+					<div sec:authorize="isAnonymous()" class="comments-section-wrapper">
+					    <div class="comments-grid blur-target">
+					        <div class="comment-item">
+					            <div class="comment-header">
+					                <img src="https://via.placeholder.com/30" alt="프로필 이미지" class="profile-pic">
+					                <span class="user-name">****</span>
+					            </div>
+					            <p class="comment-content">코멘트 내용을 보려면 로그인해주세요.</p>
+					            <div class="comment-actions">
+					                <div class="action-buttons">
+					                    <button class="like-btn"><i class="fa-regular fa-thumbs-up"></i>좋아요</button>
+					                    <button class="reply-btn" onclick="showCommentPopup()"><i class="fa-regular fa-comment"></i>댓글</button>
+					                </div>
+					            </div>
+					        </div>
+					    </div>
+						<div class="overlay">
+						    <h3>로그인 후 이용 가능</h3>
+						    <a th:href="@{/user/login}" class="login-button">로그인하기</a>
 						</div>
 					</div>
 				</div>	
-            </div>
-        </div>
-        
-        <div class="book-details-section">
-            <div class="book-details-inner">
-                <div class="book-cover-container">
-                    <img th:if="${book != null}" th:src="${book.pic}" alt="책 표지" class="book-cover-main">
-                </div>
-                <div class="book-info-container">
-                    <div class="book-description">
-                        <p th:if="${book != null}" th:text="${book.description}" style="margin-top: 80px;"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <div class="content-inner">
-                <h3>저자/제작자</h3>
-                <div class="author-list">
-					<div class="author-item">
-					    <span th:if="${book != null}" th:text="${book.author.replace(';',', ')}"></span>
-					</div>
-                </div>
-				<h3 id="comments-section">코멘트</h3>
-				<div sec:authorize="isAuthenticated()">
-				    <div class="comments-grid">
-				        <div class="comment-item" th:each="comment : ${comments}">
-				            <div class="comment-header">
-				                <img src="https://via.placeholder.com/30" alt="프로필 이미지" class="profile-pic">
-				                <span class="user-name" th:text="${comment.user.name}"></span>
-				            </div>
-				            <p class="comment-content" th:text="${comment.content}"></p>
-				            <div class="comment-actions">
-				                <div class="action-buttons">
-				                    <button class="like-btn"><i class="fa-regular fa-thumbs-up"></i>좋아요</button>
-				                    <button class="reply-btn" onclick="goToReplyPage()"><i class="fa-regular fa-comment"></i>댓글</button>
-				                </div>
-				            </div>
-				        </div>
-				    </div>
-				</div>
-
-				<div sec:authorize="isAnonymous()" class="comments-section-wrapper">
-				    <div class="comments-grid blur-target">
-				        <div class="comment-item">
-				            <div class="comment-header">
-				                <img src="https://via.placeholder.com/30" alt="프로필 이미지" class="profile-pic">
-				                <span class="user-name">****</span>
-				            </div>
-				            <p class="comment-content">코멘트 내용을 보려면 로그인해주세요.</p>
-				            <div class="comment-actions">
-				                <div class="action-buttons">
-				                    <button class="like-btn"><i class="fa-regular fa-thumbs-up"></i>좋아요</button>
-				                    <button class="reply-btn"><i class="fa-regular fa-comment"></i>댓글</button>
-				                </div>
-				            </div>
-				        </div>
-				    </div>
-				    
-					<div class="overlay">
-					    <h3>로그인 후 이용 가능</h3>
-					    <a th:href="@{/user/login}" class="login-button">로그인하기</a>
-					</div>
-				</div>
-        </div>
-    </main>
-</div>
+	        </div>
+	    </main>
+		
+		<!-- 코멘트 팝업창 -->
+		<div id="comment-popup" class="popup-overlay" style="display:none;">
+		    <div class="popup-content-box">
+		        <div class="popup-header">
+		            <button class="close-btn" onclick="closeCommentPopup()"><i class="fas fa-times"></i></button>
+		        </div>
+		        <div class="popup-body">
+		            <p>이 작품에 대한 생각을 자유롭게 표현해주세요.</p>
+		            <div class="textarea-container">
+		                <textarea rows="10" placeholder="10,000자까지 입력 가능"></textarea>
+		                <div class="textarea-info">
+		                    <span class="char-count">0/10000</span>
+		                </div>
+		            </div>
+		            <button class="save-btn">저장</button>
+		        </div>
+		    </div>
+		</div>
+	</div>
 </body>
 </html>
-<script>
-	// 장바구니 버튼 클릭 시
-	function addToCart(bookId) {
-	    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-	    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-	    const cartCountElement = document.getElementById('cart-item-count');
-
-	    fetch('/cart/add', {
-	        method: 'POST',
-	        headers: {
-	            'Content-Type': 'application/json',
-	            [csrfHeader]: csrfToken
-	        }, 
-	        body: JSON.stringify({ bookIdx: bookId })
-	    })
-	    .then(response => {
-	        if (!response.ok) {
-	            throw new Error('Network response was not ok');
-	        }
-	        return response.json();
-	    })
-	    .then(data => {
-	        if (data.success) {
-	            alert('장바구니에 담았습니다!');
-	            
-	            // 장바구니 아이템 개수 업데이트
-	            if (cartCountElement) {
-	                let currentCount = parseInt(cartCountElement.textContent) || 0;
-	                cartCountElement.textContent = currentCount + 1;
-	            }
-
-	        } else {
-	            alert('장바구니 담기에 실패했습니다: ' + data.message);
-	        }
-	    })
-	    .catch(error => {
-	        console.error('Error:', error);
-	        alert('장바구니 담기 중 오류가 발생했습니다.');
-	    });
-	}
-	
-	// 결제하기 버튼 클릭 시
-	function addAndCheckout(bookId) {
-	    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-	    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
-        alert('결제 페이지로 이동합니다!');
-        window.location.href = '/cart';
-	}
-	
-	// 댓글 버튼 클릭 시
-	function goToReplyPage() {
-		window.location.href = '/reply';
-	}
-</script>
