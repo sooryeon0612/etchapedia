@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.etchapedia.book.Book;
 import com.etchapedia.book.BookRepository;
+import com.etchapedia.book.ClickService;
 import com.etchapedia.comment.Comments;
 import com.etchapedia.comment.CommentsRepository;
 import com.etchapedia.comment.CommentsService;
@@ -25,6 +26,7 @@ import com.etchapedia.pay.CartService;
 import com.etchapedia.user.HateService;
 import com.etchapedia.user.Users;
 import com.etchapedia.user.UsersRepository;
+import com.etchapedia.security.CustomUserDetails;
 
 @Controller
 public class BookController {
@@ -40,7 +42,8 @@ public class BookController {
     private CartService csSvc;
     @Autowired
     private HateService hSvc;
-    
+	@Autowired
+    private ClickService clSvc;
 
     @PostMapping("/book/disinterest")
     @ResponseBody
@@ -70,7 +73,8 @@ public class BookController {
 	// 책 상세 화면 - 코멘트
     @GetMapping("/detail/page")
     public String showBookDetail(@RequestParam("id") Integer bookIdx, Model model,
-                                 Principal principal) {
+                                 Principal principal,
+                                 @AuthenticationPrincipal CustomUserDetails userDetails) {
         Book book = bRepo.findById(bookIdx).orElse(null);
         model.addAttribute("book", book);
 
@@ -87,6 +91,9 @@ public class BookController {
             }
         }
         model.addAttribute("cartCount", cartCount);
+
+        if(userDetails != null)
+        	clSvc.saveClickedBook(bookIdx, userDetails.getUserIdx());
 
         return "detail_page";
     }
