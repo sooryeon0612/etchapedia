@@ -50,6 +50,48 @@ body {
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
+/* 모든 액션 버튼들의 공통 스타일 */
+.comment-button-with-border,
+.cart-button-with-border,
+.checkout-button-with-border,
+.disinterest {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    box-shadow: none;
+	position: relative;
+    text-decoration: none; /* a 태그 밑줄 제거 */
+}
+
+/* 모든 액션 버튼의 아이콘 스타일 */
+.comment-button-with-border i,
+.cart-button-with-border i,
+.checkout-button-with-border i,
+.disinterest i {
+    font-size: 24px;
+    color: white;
+}
+
+/* 모든 액션 버튼의 호버 효과 */
+.comment-button-with-border:hover,
+.cart-button-with-border:hover,
+.checkout-button-with-border:hover,
+.disinterest:hover {
+	color: #f0f0f0;
+}
+
+/* 싫어요 상태일 때의 스타일 */
+.hated .fa-thumbs-down {
+    /* 채워진 이미지로 변경 (solid 아이콘) */
+    font-weight: 900 !important; /* fa-regular -> fa-solid로 변경하는 효과 */
+    color: #FF4136; /* 밝은 빨간색 */
+}
+
 /* 상세 정보 섹션 */
 .book-details-section {
     background-color: #f8f8f8;
@@ -105,42 +147,6 @@ body {
 	align-items: center;
 	gap: 10px;
 }
-
-/* 모든 액션 버튼들의 공통 스타일 */
-.comment-button-with-border,
-.cart-button-with-border,
-.checkout-button-with-border,
-.disinterest-button-with-border {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    box-shadow: none;
-	position: relative;
-    text-decoration: none; /* a 태그 밑줄 제거 */
-}
-
-/* 모든 액션 버튼의 아이콘 스타일 */
-.comment-button-with-border i,
-.cart-button-with-border i,
-.checkout-button-with-border i,
-.disinterest-button-with-border i {
-    font-size: 24px;
-    color: white;
-}
-
-/* 모든 액션 버튼의 호버 효과 */
-.comment-button-with-border:hover,
-.cart-button-with-border:hover,
-.checkout-button-with-border:hover,
-.disinterest-button-with-border:hover {
-	color: #f0f0f0;
-}
-
 
 .cart-count {
 	position: absolute;
@@ -288,4 +294,136 @@ body {
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
+}
+
+#comment-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.popup-content-box {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 600px;
+    overflow: hidden;
+    animation: fadeInScale 0.3s forwards;
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    background-color: #fafafa;
+	margin-left: 540px;
+}
+
+.popup-header h4 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.popup-header .close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #888;
+    cursor: pointer;
+    padding: 0;
+}
+
+.popup-body {
+    padding: 20px;
+}
+
+.popup-body p {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #666;
+}
+
+.textarea-container {
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.textarea-container textarea {
+    width: 100%;
+    min-height: 200px;
+    border: none;
+    outline: none;
+    resize: none;
+    font-size: 1rem;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: transparent;
+}
+
+.textarea-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #999;
+}
+
+.spoiler-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #333;
+}
+
+.spoiler-toggle input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.save-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: #ff2e63;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.2s;
+}
+
+.save-btn:hover {
+    background-color: #e5295c;
+}
+
+/* 팝업 애니메이션 */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }

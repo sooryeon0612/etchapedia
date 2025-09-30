@@ -31,5 +31,7 @@ public class CommentsService {
 		return false;
 	}
 	
-	
+	public Comments save(Comments comment) {
+		return cRepo.save(comment);
+	}
 }
