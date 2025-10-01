@@ -3,81 +3,72 @@ package com.etchapedia.pay;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.etchapedia.book.Book;
 import com.etchapedia.user.Users;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class CartService {
-    @Autowired
-    private CartRepository cRepo;
-    
-    public CartService(CartRepository cartRepository) {
-        this.cRepo = cartRepository;
-    }
 
-//    public void addBookToCart(Book book, Users user) {
-//        // 장바구니 항목을 생성하고 책과 사용자 정보를 설정합니다.
-//        Cart cartItem = new Cart();
-//        cartItem.setBook(book);
-//        cartItem.setUser(user);
-//        
-//        // 데이터베이스에 장바구니 항목을 저장합니다.
-//        cRepo.save(cartItem);
-//    }
-    
+    private final CartRepository cRepo;
+
+    // 1️. 장바구니에 책 추가
+    @Transactional
     public void addBookToCart(Book book, Users user) {
-        // 1. 이미 장바구니에 해당 책이 있는지 확인
-        Optional<Cart> existingCartItem = cRepo.findByUserAndBook(user, book);
+        Optional<Cart> existingCartOpt = cRepo.findByUserAndBook(user, book);
 
-        if (existingCartItem.isPresent()) {
-            // 2. 이미 존재하면 수량만 증가
-            Cart cartItem = existingCartItem.get();
-            cartItem.setQuantity(cartItem.getQuantity() + 1);
-            cRepo.save(cartItem);
+        if (existingCartOpt.isPresent()) {
+            Cart existingCart = existingCartOpt.get();
+            existingCart.setQuantity(existingCart.getQuantity() + 1);
         } else {
-            // 3. 존재하지 않으면 새로운 상품 추가
-            Cart newCartItem = new Cart();
-            newCartItem.setBook(book);
-            newCartItem.setUser(user);
-            newCartItem.setQuantity(1); // 기본 수량은 1
-            cRepo.save(newCartItem);
+            Cart cart = new Cart();
+            cart.setUser(user);
+            cart.setBook(book);
+            cart.setQuantity(1);
+            cRepo.save(cart);
         }
     }
-    
-    public int getCartItemCount(Users user) {
-    	return cRepo.countByUser(user);
+
+    // 2️. 장바구니 목록 조회
+    public List<Cart> getCartItemsByUser(Users user) {
+        return cRepo.findByUser(user);
     }
 
-	public Long calculateTotalPrice(List<Cart> cartItems) {
-		Long totalPrice = 0L;
-        for (Cart item : cartItems) {
-            // 상품 가격 * 수량
-            totalPrice += (long) item.getBook().getPrice() * item.getQuantity();
-        }
-        return totalPrice;
-	}
+    // 3️. 장바구니 총액 계산
+    public long calculateTotalPrice(List<Cart> cartItems) {
+        return cartItems.stream()
+                        .mapToLong(item -> item.getBook().getPrice() * item.getQuantity())
+                        .sum();
+    }
 
-	public List<Cart> getCartItemsByUser(Users user) {
-		return cRepo.findByUser(user);
-	}
+    // 4️. 장바구니 수량 변경
+    @Transactional
+    public void updateCartItemQuantity(Users user, Book book, int change) {
+        Optional<Cart> cartOpt = cRepo.findByUserAndBook(user, book);
 
-	public void updateCartItemQuantity(Users user, Book book, int change) {
-        Optional<Cart> optionalCartItem = cRepo.findByUserAndBook(user, book);
-        if (optionalCartItem.isPresent()) {
-            Cart cartItem = optionalCartItem.get();
-            int newQuantity = cartItem.getQuantity() + change;
-
+        cartOpt.ifPresent(cart -> {
+            int newQuantity = cart.getQuantity() + change;
             if (newQuantity <= 0) {
-                // 수량이 0 이하면 장바구니에서 상품 제거
-                cRepo.delete(cartItem);
+                cRepo.delete(cart);
             } else {
-                // 수량 업데이트
-                cartItem.setQuantity(newQuantity);
-                cRepo.save(cartItem);
+                cart.setQuantity(newQuantity);
             }
-        }
+        });
     }
+
+    // 5️. 선택 삭제
+    @Transactional
+    public void deleteCartItem(Cart cart) {
+        cRepo.delete(cart);
+    }
+
+    
+	public int getCartItemCount(Users user) {
+		return cRepo.countByUser(user);
+	}
 }

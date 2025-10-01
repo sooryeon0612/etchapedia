@@ -1,192 +1,71 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout1}"> 
 <head>
-    <meta charset="UTF-8">
-	<meta name="_csrf" th:content="${_csrf.token}"/>
-	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <link rel="stylesheet" href="cart.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" th:href="@{/cart.css}">
     <title>장바구니</title>
 </head>
 <body class="cart-page">
-	<div class="main-container">
-	    <div class="page-header">
-			<h1 th:text="'장바구니 (' + ${#lists.size(cartItems)} + ')'">장바구니 (0)</h1>
-	        <div class="header-steps">
-	            <span class="active-step">1 장바구니</span>
-	            <span>2 주문/결제</span>
-	            <span>3 주문완료</span>
-	        </div>
-	    </div>
-	
-	    <div class="cart-content">
-	        <div class="cart-items-section">
-	            <div class="cart-items-header">
-	                <input type="checkbox" checked>
-	                <span>전체</span>
-	                <button>선택삭제</button>
-	            </div>
-	
-				<div class="cart-item" th:each="item : ${cartItems}" th:id="'item-' + ${item.book.bookIdx}">
-				    <input type="checkbox" checked>
-				    <div class="item-info">
-				        <img th:src="${item.book.pic}" alt="상품 이미지">
-				        <span class="item-title" th:text="${item.book.title}">상품명</span>
-				        <span class="original-price" th:text="${#numbers.formatInteger(item.book.price, 0, 'COMMA')} + '원'">0원</span>
-				        <div class="item-actions">
-				            <div class="quantity-control">
-				                <button class="decrease-btn" th:onclick="'decreaseQuantity(' + ${item.book.bookIdx} + ')'">-</button>
-				                <input type="text" th:value="${item.quantity}" name="quantity" class="quantity-input" readonly>
-				                <button class="increase-btn" th:onclick="'increaseQuantity(' + ${item.book.bookIdx} + ')'">+</button>
-				            </div>
-				        </div>
-				    </div>
-				</div>
-	
-		        <div class="order-summary-section">
-		            <div class="summary-box">
-		                <h2>결제예정금액</h2>
-		                <div class="summary-row">
-		                    <span>상품금액</span>
-		                    <span class="total-price" th:text="${#numbers.formatInteger(totalPrice,0,'COMMA')} + '원'">0원</span>
-		                </div>
-		                <div class="summary-total">
-		                    <span>결제예정금액</span>
-							<span class="total-price" th:text="${#numbers.formatInteger(totalPrice, 0, 'COMMA')} + '원'">0원</span>						
-							<button id="order-btn" class="order-btn" th:text="'주문하기 (' + ${#lists.size(cartItems)} + ')'">주문하기 (0)</button>
-		            	</div>
-		        	</div>
-		    	</div>
-			</div>	
-		</div>
-	</div>	
-
-	<script type="text/javascript">
-		// CSRF 토큰 변수 추가
-	    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-	    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
-		// 수량 증가 함수
-		function increaseQuantity(bookId) {
-		    const itemElement = document.getElementById('item-' + bookId);
-		    const quantityInput = itemElement.querySelector('.quantity-input');
+	<div layout:fragment="content">
+		<main class="main-container cart-page">
 			
-			fetch('/cart/update-quantity', {
-		        method: 'POST',
-		        headers: {
-		            'Content-Type': 'application/json',
-		            [csrfHeader]: csrfToken
-		        },
-		        body: JSON.stringify({ bookIdx: bookId, change: 1 })
-		    })
-		    .then(response => response.json())
-		    .then(data => {
-		        if (data.success) {
-		            let newQuantity = parseInt(quantityInput.value) + 1;
-		            quantityInput.value = newQuantity;
-		            updateTotalPrice();
-		        }
-		    });
-		}
-		
-		// 수량 감소 함수
-		function decreaseQuantity(bookId) {
-		    const itemElement = document.getElementById('item-' + bookId);
-		    const quantityInput = itemElement.querySelector('.quantity-input');
-		    
-		    fetch('/cart/update-quantity', {
-				method: 'POST',
-		        headers: { 
-		            'Content-Type': 'application/json',
-		            [csrfHeader]: csrfToken
-		        },
-		        body: JSON.stringify({ bookIdx: bookId, change: -1 })
-			})
-		    .then(response => response.json())
-		    .then(data => {
-		        if (data.success) {
-		            let newQuantity = parseInt(quantityInput.value) - 1;
-		            
-		            if (newQuantity <= 0) {
-		                itemElement.remove();
-		            } else {
-		                quantityInput.value = newQuantity;
-		            }
-		            updateTotalPrice();
-		        }
-		    });
-		}
-		
-		function updateTotalPrice() {
-		    let newTotalPrice = 0;
-		    
-		    document.querySelectorAll('.cart-item').forEach(item => {
-		        const quantity = parseInt(item.querySelector('.quantity-input').value);
-		        const priceText = item.querySelector('.original-price').textContent;
-		        const price = parseInt(priceText.replace(/,/g, '').replace('원', ''));
-		        newTotalPrice += quantity * price;
-		    });
+		    <div id="cart-data"
+		         data-items='[[${cartItemsJson}]]'
+		         data-total='[[${totalPrice}]]'>
+		    </div>
 
-		    document.querySelectorAll('.total-price').forEach(element => {
-		        element.textContent = newTotalPrice.toLocaleString() + '원';
-		    });
-		}
-		
-	    // 카카오페이 결제 팝업창 연결
-	    $(function() {
-			$("#order-btn").click(function(e) {
-			    e.preventDefault();
-
-			    const totalPriceText = $('.total-price').first().text();
-				const totalPrice = parseInt(totalPriceText.replace(/,/g, '').replace('원', ''));
-			    
-			    if (totalPrice <= 0) {
-			        alert("주문할 상품이 없거나 가격이 올바르지 않습니다.");
-			        return;
-			    }
-				
-				// 상품명과 수량 데이터 생성
-		        let cartSummaryName = '';
-		        let quantities = [];
-		        const cartItems = document.querySelectorAll('.cart-item');
-		        if (cartItems.length > 0) {
-		            // 첫 번째 상품명으로 요약
-		            const firstItemTitle = cartItems[0].querySelector('.item-title').textContent;
-		            cartSummaryName = (cartItems.length > 1) ? `${firstItemTitle} 외 ${cartItems.length - 1}건` : firstItemTitle;
-
-		            // 각 상품의 bookIdx와 수량(quantity)을 quantities 배열에 저장
-		            cartItems.forEach(item => {
-		                const bookIdx = item.id.replace('item-', '');
-		                const quantity = parseInt(item.querySelector('.quantity-input').value);
-		                quantities.push({ bookIdx: bookIdx, quantity: quantity });
-		            });
-		        }
-
-	            $.ajax({
-	                type: 'POST',
-	                url: '/order/pay/ready',
-	                data: JSON.stringify({
-						name: cartSummaryName, 
-						totalPrice: totalPrice,
-						quantities: quantities
-					}),
-	                contentType: 'application/json',
-	                success: function(response) {
-						console.log("결제준비 응답", response);
-	                    if (response.next_redirect_pc_url) {
-	                        window.location.href = response.next_redirect_pc_url;
-	                    } else {
-	                        alert("결제 페이지를 찾을 수 없습니다.");
-	                    }
-	                },
-	                error: function(xhr, status, error) {
-	                    console.error("결제 요청 실패: ", status, error);
-	                    alert("결제에 실패했습니다. 서버 오류입니다.");
-	                }
-	            });
-	        });
-	    });
-	</script>
+	    	<div class="page-header">
+				<h1 th:text="'장바구니 (' + ${#lists.size(cartItems)} + ')'">장바구니 (0)</h1>
+	        	<div class="header-steps">
+	            	<span class="active-step">1 장바구니</span>
+	            	<span>2 주문/결제</span>
+	            	<span>3 주문완료</span>
+	        	</div>
+	    	</div>
+	
+	    	<div class="cart-content">
+	        	<div class="cart-items-section">
+	            	<div class="cart-items-header">
+	                	<input type="checkbox" checked>
+	                	<span>전체</span>
+	                	<button>선택삭제</butto>
+	            	</div>
+	
+					<div class="cart-item" th:each="item : ${cartItems}" th:id="'item-' + ${item.book.bookIdx}">
+					    <input type="checkbox" checked>
+					    <div class="item-info">
+					        <img th:src="${item.book.pic}" alt="상품 이미지">
+					        <span class="item-title" th:text="${item.book.title}">상품명</span>
+					        <span class="original-price" th:text="${#numbers.formatInteger(item.book.price, 0, 'COMMA')} + '원'">0원</span>
+					        <div class="item-actions">
+					            <div class="quantity-control">
+					                <button class="decrease-btn" th:onclick="'decreaseQuantity(' + ${item.book.bookIdx} + ')'">-</button>
+					                <input type="text" th:value="${item.quantity}" name="quantity" class="quantity-input" readonly>
+					                <button class="increase-btn" th:onclick="'increaseQuantity(' + ${item.book.bookIdx} + ')'">+</button>
+					            </div>
+					        </div>
+					    </div>
+					</div>
+	
+			        <div class="order-summary-section">
+			            <div class="summary-box">
+			                <h2>결제예정금액</h2>
+			                <div class="summary-row">
+			                    <span>상품금액</span>
+			                    <span class="total-price" th:text="${#numbers.formatInteger(totalPrice,0,'COMMA')} + '원'">0원</span>
+			                </div>
+			                <div class="summary-total">
+			                    <span>결제예정금액</span>
+								<span class="total-price" th:text="${#numbers.formatInteger(totalPrice, 0, 'COMMA')} + '원'">0원</span>						
+								<button id="order-btn" class="order-btn" th:text="'주문하기 (' + ${#lists.size(cartItems)} + ')'">주문하기 (0)</button>
+			            	</div>
+			        	</div>
+			    	</div>
+				</div>	
+			</div>
+		</main>
+		<script th:inline="javascript" th:src="@{/cart.js}"></script>
+	</div>
 </body>
 </html>
