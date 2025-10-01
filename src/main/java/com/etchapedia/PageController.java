@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.etchapedia.api.KakaoAuthClient;
 import com.etchapedia.book.Book;
 import com.etchapedia.book.BookService;
 import com.etchapedia.book.HotTrendService;
@@ -33,7 +34,23 @@ public class PageController {
 	private ReplyService rSvc;
 	@Autowired
 	private CommentsService cSvc;
+	@Autowired
+	private KakaoAuthClient kakao;
 
+	// 작업자 : 서수련
+    // 기능 : 로그인 화면으로 이동
+    @GetMapping("/user/login")
+	public String login() {
+		return "login_form";
+	}
+    
+    // 작업자 : 서수련 
+    // 기능 : 카카오 로그인화면으로 이동
+    @GetMapping("/kakao")
+    public String kakaoLogin() {
+    	return "redirect:" + kakao.getKakaoAuthUrl();
+    }
+    
 	// 작업자 : 서수련 
     // 기능 : 홈 화면으로 이동
     @GetMapping("/home")
@@ -85,4 +102,5 @@ public class PageController {
     	model.addAttribute("hate", hSvc.getHateBooks(userDetails.getUserIdx()));
     	return "mypage";
     }
+    
 }

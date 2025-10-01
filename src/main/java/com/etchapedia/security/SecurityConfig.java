@@ -21,8 +21,8 @@ public class SecurityConfig {
 		http		// HttpSecurity객체 : Spring Security 의 설정 역할.
 		.authorizeHttpRequests(		// HTTP 요청에 대한 인가(Authorization) 설정을 시작.
 			(authorizeHttpRequests) -> authorizeHttpRequests
-				.requestMatchers(new AntPathRequestMatcher("/**"))	// 어떤 요청 경로에 대해 규칙을 적용
-				.permitAll()		// 해당 경로에 대한 접근을 모든 사용자에게 허용.
+				.requestMatchers(new AntPathRequestMatcher("/**")).permitAll()	// 어떤 요청 경로에 대해 규칙을 적용, 해당 경로에 대한 접근을 모든 사용자에게 허용.
+				.requestMatchers(new AntPathRequestMatcher("/user/login/kakao")).permitAll()		// 카카오 로그인에 대한 접근 모든 사용자에게 허용.
 		)
 		.csrf(csrf -> csrf.ignoringRequestMatchers(new AntPathRequestMatcher("/cart/add")))
 		.formLogin(		// 로그인 페이지에 대한 설정을 시작.

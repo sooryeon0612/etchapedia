@@ -3,6 +3,7 @@ package com.etchapedia;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,11 +20,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.etchapedia.api.KakaoAuthClient;
+import com.etchapedia.api.KakaoResourceClient;
 import com.etchapedia.security.CustomUserDetails;
 import com.etchapedia.security.MyUserDetailService;
+import com.etchapedia.user.Users;
 import com.etchapedia.user.UsersCreateForm;
 import com.etchapedia.user.UsersService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -33,6 +40,10 @@ public class UsersController {
 	private UsersService uSvc;
 	@Autowired
 	private MyUserDetailService mSvc;
+	@Autowired
+	private KakaoAuthClient kakaoA;
+	@Autowired
+	private KakaoResourceClient kakaoR;
 	
 	// 작업자 : 이경미
 	// 회원가입
@@ -58,13 +69,6 @@ public class UsersController {
 		String pw = userCreateForm.getUserPw();
 		uSvc.create(name, email, pw);
 		return "redirect:/user/login";
-	}
-	
-	// 작업자 : 서수련
-    // 기능 : 로그인 화면으로 이동
-    @GetMapping("/login")
-	public String login() {
-		return "login_form";
 	}
     
     // 작업자 : 이경미	
@@ -126,4 +130,32 @@ public class UsersController {
         SecurityContextHolder.getContext().setAuthentication(newAuth);
     	return "redirect:/mypage";
     }
+    
+    // 작업자 : 서수련 
+    // 기능 : 카카오 소셜 로그인
+    @GetMapping("/login/kakao")
+    public String getAuthCode(@RequestParam("code")String code, HttpSession session) throws JsonMappingException, JsonProcessingException {
+    	String accessToken = uSvc.getAccessToken(kakaoA.getRawAccessToken(code));
+    	String info = kakaoR.callKakaoResource(accessToken);
+    	Users rawUser = uSvc.getUserInfoFromKakao(info);
+    	Optional<Users> ou = uSvc.findByEmail(rawUser.getEmail());
+    	Users saveUser;
+    	if(ou.isEmpty()) { saveUser = uSvc.insertKakaoUser(rawUser); } 
+    	else { saveUser = ou.get(); }
+    	CustomUserDetails kakaoUser = mSvc.loadUserByUsername(saveUser.getEmail());
+    	Authentication newAuth =
+                new UsernamePasswordAuthenticationToken(
+                		kakaoUser,
+                		null,
+                		kakaoUser.getAuthorities()
+                );
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+        session.setAttribute(
+                "SPRING_SECURITY_CONTEXT", 
+                SecurityContextHolder.getContext()
+        );
+    	return "redirect:/home";
+    }
+    
+    
 }

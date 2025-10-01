@@ -12,6 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Service
 public class UsersService {
 	@Autowired
@@ -97,5 +102,34 @@ public class UsersService {
 			u.setProfile(saveFileName);
 		}
 	}
+	
+	// 작성자 : 서수련 
+	// 기능 : 카카오 accessToken 추출하기
+	public String getAccessToken(String dataBody) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode root = mapper.readTree(dataBody);
+		return root.path("access_token").asText();
+	}
+	
+	// 작성자 : 서수련 
+	// 기능 : 카카오 닉네임, 프로필, 이메일 얻기
+	public Users getUserInfoFromKakao(String dataBody) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode root = mapper.readTree(dataBody);
+		JsonNode properties = root.path("properties");
+		JsonNode email = root.path("kakao_account").path("email");
+		Users u = new Users();
+		u.setName(properties.path("nickname").asText());
+		u.setProfile(properties.path("profile_image").asText());
+		u.setEmail(email.asText());
+		return u;
+	}
+	
+	// 작성자 : 서수련 
+	// 기능 : 카카오 유저 회원가입
+	public Users insertKakaoUser(Users u) {
+		return uRepo.save(u);
+	}
+	
 	
 }
