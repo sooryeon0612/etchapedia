@@ -21,7 +21,7 @@ function loadRecommendBooks(userIdx) {
 		data.forEach(function(book, index) {
 			str = `	<div class="rank-item">
                     	<div class="rank-number">${index + 1}</div>
-						<a th:href="@{/detail/page(id=${book.bookIdx})}">
+						<a href="detail/page?id=${book.bookIdx}">
 	                    	<img src="${book.pic}" alt="${book.title}" class="book-cover">
 						</a>
 	                    <div class="book-info">
