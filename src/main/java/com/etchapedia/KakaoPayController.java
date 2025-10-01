@@ -3,6 +3,7 @@ package com.etchapedia;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +39,11 @@ public class KakaoPayController {
 	@Autowired
 	private OrderService oSvc;
 	
-	private static final String CID = "TC0ONETIME"; // 테스트 CID
-	private static final String ADMIN_KEY = "dc6568471d690076b880c6617c90e24b"; // 본인 REST API 키
+	@Value("${kakao.pay.cid}")
+    private String CID;
+
+    @Value("${kakao.pay.admin-key}")
+    private String ADMIN_KEY;
 
 	private String tid; // 결제 고유번호 저장 (실제로는 DB에 저장 권장)
 

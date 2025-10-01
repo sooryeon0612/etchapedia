@@ -99,8 +99,8 @@ input[type="email"], input[type="password"] {
   gap: 6px;
 }
 .kakao-btn img {
-  width: 20px;
-  height: 20px;
+  width: 300px;
+  height: 45px;
 }
 .error {
 	color: crimson;
