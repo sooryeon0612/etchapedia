@@ -71,9 +71,9 @@ public class KakaoPayController {
 	    params.add("quantity", String.valueOf(orderRequest.getQuantities().size()));
 	    params.add("total_amount", String.valueOf(orderRequest.getTotalPrice()));
 	    params.add("tax_free_amount", "0");
-	    params.add("approval_url", "http://localhost:9090/order/pay/success");
-	    params.add("cancel_url", "http://localhost:9090/order/pay/cancel");
-	    params.add("fail_url", "http://localhost:9090/order/pay/fail");
+	    params.add("approval_url", "http://43.200.215.21:9091/order/pay/success");
+	    params.add("cancel_url", "http://43.200.215.21:9091/order/pay/cancel");
+	    params.add("fail_url", "http://43.200.215.21:9091/order/pay/fail");
 
 	    HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
 
