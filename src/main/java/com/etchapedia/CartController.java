@@ -20,6 +20,7 @@ import com.etchapedia.book.Book;
 import com.etchapedia.book.BookRepository;
 import com.etchapedia.pay.Cart;
 import com.etchapedia.pay.CartService;
+import com.etchapedia.pay.OrderRequestDto;
 import com.etchapedia.user.Users;
 import com.etchapedia.user.UsersRepository;
 import com.etchapedia.user.UsersService;
@@ -133,12 +134,55 @@ public class CartController {
                 }
             }
         }
-
+        
         // 5. 모든 변수를 모델에 담아 템플릿으로 전달
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("cartSummaryName", cartSummaryName);
         
         return "cart";
+    }
+    
+    // 작업자 : 이경미
+    // 주문 버튼 클릭 시 카카오페이 준비 요청
+    @PostMapping("/cart/order")
+    public ResponseEntity<Map<String, Object>> orderCart(@AuthenticationPrincipal UserDetails userDetails) {
+        Map<String, Object> response = new HashMap<>();
+        if (userDetails == null) {
+            response.put("success", false);
+            response.put("message", "로그인이 필요합니다.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        Users user = uRepo.findByEmail(userDetails.getUsername()).orElse(null);
+        if (user == null) {
+            response.put("success", false);
+            response.put("message", "사용자를 찾을 수 없습니다.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        List<Cart> cartItems = cSvc.getCartItemsByUser(user);
+        if (cartItems.isEmpty()) {
+            response.put("success", false);
+            response.put("message", "장바구니가 비어있습니다.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        OrderRequestDto orderRequest = new OrderRequestDto();
+        orderRequest.setTotalPrice(cSvc.calculateTotalPrice(cartItems));
+        List<OrderRequestDto.ItemQuantity> quantities = new ArrayList<>();
+        for (Cart c : cartItems) {
+            OrderRequestDto.ItemQuantity iq = new OrderRequestDto.ItemQuantity();
+            iq.setBookIdx(c.getBook().getBookIdx());
+            iq.setQuantity(c.getQuantity());
+            quantities.add(iq);
+        }
+        orderRequest.setQuantities(quantities);
+        String firstItemName = cartItems.get(0).getBook().getTitle();
+        orderRequest.setName(cartItems.size() > 1 ? firstItemName + " 외 " + (cartItems.size()-1) + "건" : firstItemName);
+
+        response.put("success", true);
+        response.put("orderRequest", orderRequest);
+        return ResponseEntity.ok(response);
     }
 }

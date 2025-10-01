@@ -62,11 +62,14 @@
 		</div>
 	</div>	
 
-	<script type="text/javascript">
+	<script type="text/javascript" th:inline="javascript">
 		// CSRF 토큰 변수 추가
 	    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 	    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
+		const cartItems = /*[[${cartItemsJson}]]*/ [];
+		const totalPrice = /*[[${totalPrice}]]*/ 0;
+		
 		// 수량 증가 함수
 		function increaseQuantity(bookId) {
 		    const itemElement = document.getElementById('item-' + bookId);
@@ -133,60 +136,40 @@
 		    });
 		}
 		
-	    // 카카오페이 결제 팝업창 연결
-	    $(function() {
-			$("#order-btn").click(function(e) {
-			    e.preventDefault();
-
-			    const totalPriceText = $('.total-price').first().text();
-				const totalPrice = parseInt(totalPriceText.replace(/,/g, '').replace('원', ''));
-			    
-			    if (totalPrice <= 0) {
-			        alert("주문할 상품이 없거나 가격이 올바르지 않습니다.");
-			        return;
-			    }
-				
-				// 상품명과 수량 데이터 생성
-		        let cartSummaryName = '';
-		        let quantities = [];
-		        const cartItems = document.querySelectorAll('.cart-item');
-		        if (cartItems.length > 0) {
-		            // 첫 번째 상품명으로 요약
-		            const firstItemTitle = cartItems[0].querySelector('.item-title').textContent;
-		            cartSummaryName = (cartItems.length > 1) ? `${firstItemTitle} 외 ${cartItems.length - 1}건` : firstItemTitle;
-
-		            // 각 상품의 bookIdx와 수량(quantity)을 quantities 배열에 저장
-		            cartItems.forEach(item => {
-		                const bookIdx = item.id.replace('item-', '');
-		                const quantity = parseInt(item.querySelector('.quantity-input').value);
-		                quantities.push({ bookIdx: bookIdx, quantity: quantity });
-		            });
+		// 카카오페이 결제
+		$("#order-btn").click(function() {
+		    $.ajax({
+		        url: "/cart/order",
+		        type: "POST",
+		        success: function(res) {
+		            if (res.success) {
+		                // 카카오페이 준비 호출 (POST)
+		                $.ajax({
+		                    url: "/order/pay/ready",
+		                    type: "POST", 
+		                    contentType: "application/json",
+		                    data: JSON.stringify(res.orderRequest),
+		                    success: function(payRes) {
+		                        if (payRes.next_redirect_pc_url) {
+		                            window.location.href = payRes.next_redirect_pc_url;
+		                        } else {
+		                            alert("결제 준비 실패");
+		                        }
+		                    },
+		                    error: function(xhr) {
+		                        console.error("pay/ready error:", xhr.status, xhr.responseText);
+		                    }
+		                });
+		            } else {
+		                alert(res.message);
+		            }
+		        },
+		        error: function(xhr) {
+		            console.error("cart/order error:", xhr.status, xhr.responseText);
 		        }
+		    });
+		});
 
-	            $.ajax({
-	                type: 'POST',
-	                url: '/order/pay/ready',
-	                data: JSON.stringify({
-						name: cartSummaryName, 
-						totalPrice: totalPrice,
-						quantities: quantities
-					}),
-	                contentType: 'application/json',
-	                success: function(response) {
-						console.log("결제준비 응답", response);
-	                    if (response.next_redirect_pc_url) {
-	                        window.location.href = response.next_redirect_pc_url;
-	                    } else {
-	                        alert("결제 페이지를 찾을 수 없습니다.");
-	                    }
-	                },
-	                error: function(xhr, status, error) {
-	                    console.error("결제 요청 실패: ", status, error);
-	                    alert("결제에 실패했습니다. 서버 오류입니다.");
-	                }
-	            });
-	        });
-	    });
 	</script>
 </body>
 </html>
