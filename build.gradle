@@ -7,6 +7,9 @@ plugins {
 group = 'com.mystringboot'
 version = '0.0.1-SNAPSHOT'
 description = 'Demo project for Spring Boot'
+apply plugin: 'war'
+bootWar.enabled = true
+war.enabled = false
 
 java {
 	toolchain {
