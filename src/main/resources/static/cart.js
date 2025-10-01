@@ -2,9 +2,9 @@
 const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-// cartItems와 totalPrice는 HTML에서 data-* 속성으로 전달
-const cartItems = JSON.parse(document.getElementById('cart-data').dataset.items || '[]');
-let totalPrice = parseInt(document.getElementById('cart-data').dataset.total || '0', 10);
+const cartData = document.getElementById('cart-data');
+const cartItems = JSON.parse(cartData.dataset.items || '[]');
+let totalPrice = parseInt(cartData.dataset.total || '0', 10);
 
 // 수량 증가
 function increaseQuantity(bookId) {

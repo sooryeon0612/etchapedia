@@ -10,10 +10,9 @@
 	<div layout:fragment="content">
 		<main class="main-container cart-page">
 			
-		    <div id="cart-data"
-		         data-items='[[${cartItemsJson}]]'
-		         data-total='[[${totalPrice}]]'>
-		    </div>
+			<div id="cart-data"
+			     th:attr="data-items=${cartItemsJson}, data-total=${totalPrice}">
+			</div>
 
 	    	<div class="page-header">
 				<h1 th:text="'장바구니 (' + ${#lists.size(cartItems)} + ')'">장바구니 (0)</h1>
