@@ -3,6 +3,7 @@ package com.etchapedia.pay;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,8 +15,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CartService {
-
-    private final CartRepository cRepo;
+    @Autowired
+    private CartRepository cRepo;
 
     // 1️. 장바구니에 책 추가
     @Transactional
@@ -70,5 +71,11 @@ public class CartService {
     
 	public int getCartItemCount(Users user) {
 		return cRepo.countByUser(user);
+	}
+	
+	// 결제 후 장바구니 전체 삭제
+	@Transactional
+	public void clearCartByUser(Users user) {
+		cRepo.deleteByUser(user);
 	}
 }

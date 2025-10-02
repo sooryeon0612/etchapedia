@@ -22,6 +22,8 @@ import com.etchapedia.user.HateService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class PageController {
 	@Autowired
@@ -51,10 +53,10 @@ public class PageController {
     	return "redirect:" + kakao.getKakaoAuthUrl();
     }
     
-	// 작업자 : 서수련 
+	// 작업자 : 서수련, 이경미
     // 기능 : 홈 화면으로 이동
     @GetMapping("/home")
-    public String home(Model model) throws JsonMappingException, JsonProcessingException {
+    public String home(Model model, HttpSession session) throws JsonMappingException, JsonProcessingException {
     	LocalDate today = LocalDate.now();
     	LocalDate lastTrend = tSvc.getLastUpdateDate();
     	if(!lastTrend.equals(today)) {
@@ -63,6 +65,13 @@ public class PageController {
     	}
     	model.addAttribute("popular", bSvc.getPopularBooks());
     	model.addAttribute("trend", tSvc.getHotTrendBooks());
+    	
+    	// 카카오페이 결제 성공 시
+    	String msg = (String) session.getAttribute("pay_success_message");
+        if (msg != null) {
+            model.addAttribute("pay_success_message", msg);
+            session.removeAttribute("pay_success_message");
+        }
         return "home";
     }
     
@@ -86,7 +95,6 @@ public class PageController {
     	return "reply";
     }
     
-    
     // 소식 화면 (news.html)
     @GetMapping("/news")
     public String news() {
@@ -102,5 +110,4 @@ public class PageController {
     	model.addAttribute("hate", hSvc.getHateBooks(userDetails.getUserIdx()));
     	return "mypage";
     }
-    
 }

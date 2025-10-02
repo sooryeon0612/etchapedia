@@ -61,12 +61,9 @@ public class BookController {
             hSvc.removeDisinterest(loginUser.getUserIdx(), bookIdx);
             newState = false;
         }
-
         return Map.of("bookIdx", bookIdx, "isHated", isHated);
     }
 
-
-    
     // 작업자 : 이경미
 	// 기능 : 특정 책에 달린 전체 정보 가져오기
     @GetMapping("/detail/page")
@@ -95,5 +92,4 @@ public class BookController {
 
         return "detail_page";
     }
-
 }

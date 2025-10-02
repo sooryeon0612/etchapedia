@@ -10,6 +10,9 @@ public class UsersCreateForm {
 	@NotEmpty(message="사용자 이름은 필수항목입니다.")
 	private String userName;
 	
+	@NotEmpty(message="전화번호는 필수항목입니다.")
+	private String userPhone;
+	
 	@NotEmpty(message="이메일은 필수항목입니다.")
 	private String userEmail;
 	

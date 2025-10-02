@@ -104,6 +104,13 @@
         </section>
     </main>
 	<script th:src="@{/home.js}"></script>
+	<!-- 결제 성공 했을 때 alert -->
+	<script th:inline="javascript">
+	    const msg = [[${pay_success_message}]];
+	    if (msg) {
+	        alert(msg);
+	    }
+	</script>
 </div>
 
 </html>

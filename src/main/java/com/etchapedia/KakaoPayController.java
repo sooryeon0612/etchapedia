@@ -21,13 +21,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.etchapedia.book.BookRepository;
+import com.etchapedia.pay.CartService;
 import com.etchapedia.pay.OrderRequestDto;
 import com.etchapedia.pay.OrderService;
 import com.etchapedia.user.Users;
 import com.etchapedia.user.UsersRepository;
 
 import jakarta.servlet.http.HttpSession;
-//KakaoPayController.java
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -38,13 +39,17 @@ public class KakaoPayController {
 	private UsersRepository uRepo;
 	@Autowired
 	private OrderService oSvc;
+	@Autowired
+	private BookRepository bRepo;
+	@Autowired
+	private CartService cSvc;
 	
 	@Value("${kakao.pay.cid}")
     private String CID;
 
     @Value("${kakao.pay.admin-key}")
     private String ADMIN_KEY;
-
+    
 	private String tid; // 결제 고유번호 저장 (실제로는 DB에 저장 권장)
 
 	
@@ -89,7 +94,10 @@ public class KakaoPayController {
 	    // 세션에 저장
 	    session.setAttribute("KAKAO_TID", tid);
 	    session.setAttribute("ORDER_ID", params.getFirst("partner_order_id"));
-
+	    session.setAttribute("ORDER_REQUEST", orderRequest); // 주문 정보 저장
+	    session.setAttribute("USER_ID", user.getUserIdx().toString());
+	    
+	    System.out.println("ready : " + user.getUserIdx().toString());
 	    return result;
 	}
 
@@ -98,7 +106,8 @@ public class KakaoPayController {
     @GetMapping("/success")
     public String kakaoPaySuccess(@RequestParam("pg_token") String pgToken,
                                   HttpSession session,
-                                  RedirectAttributes redirectAttributes) {
+                                  RedirectAttributes redirectAttributes,
+                                  @AuthenticationPrincipal UserDetails userDetails) {
         try {
             RestTemplate restTemplate = new RestTemplate();
 
@@ -108,11 +117,14 @@ public class KakaoPayController {
 
             String tid = (String) session.getAttribute("KAKAO_TID");
             String orderId = (String) session.getAttribute("ORDER_ID");
-            String userId = session.getId();
+            String userId = (String)session.getAttribute("USER_ID");
 
+            System.out.println("success : " + userId);
             if (tid == null || orderId == null) {
+            	System.out.println("1");
+            	
                 redirectAttributes.addFlashAttribute("payResult", "결제 정보가 존재하지 않습니다.");
-                return "redirect:/order/pay/fail";
+                return "fail";
             }
 
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -133,14 +145,25 @@ public class KakaoPayController {
             Map<String, Object> body = response.getBody();
             redirectAttributes.addFlashAttribute("payResult", body);
 
+            System.out.println("알았어");
+            
+            Users user = uRepo.findByEmail(userDetails.getUsername()).orElseThrow();
+            
+            // 장바구니 비우기
+            cSvc.clearCartByUser(user);
+            
             // 결제 완료 후 세션 정리
             session.removeAttribute("KAKAO_TID");
             session.removeAttribute("ORDER_ID");
-
-            return "redirect:/order/pay/complete";
+            session.removeAttribute("ORDER_REQUEST");
+            session.setAttribute("pay_success_message", "결제가 완료되었습니다.");
+            
+            return "redirect:/home";
+            
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("payResult", "결제 승인 실패: " + e.getMessage());
-            return "redirect:/order/pay/fail";
+            System.out.println(e.getMessage());
+            return "fail";
         }
     }
     
@@ -148,20 +171,20 @@ public class KakaoPayController {
     // 결제 취소 화면
     @GetMapping("/cancel")
     public String kakaoPayCancel() {
-        return "order/pay/cancel";
+        return "cancel";
     }
 
     // 작업자 : 이경미
     // 결제 실패 화면
     @GetMapping("/fail")
     public String kakaoPayFail() {
-        return "order/pay/fail";
+        return "fail";
     }
 
     // 작업자 : 이경미
     // 결제 완료 화면
     @GetMapping("/complete")
     public String completePage() {
-        return "order/pay/complete";
+        return "home";
     }
 }

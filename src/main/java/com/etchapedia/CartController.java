@@ -49,8 +49,7 @@ public class CartController {
             Book book = bRepo.findById(bookIdx)
                                       .orElseThrow(() -> new IllegalArgumentException("해당하는 책을 찾을 수 없습니다."));
 
-            // 2. 현재 로그인된 사용자 정보를 가져옵니다.
-            // Spring Security를 통해 얻은 userDetails 객체에서 사용자 이름(username)을 가져옵니다.
+            // 2. 현재 로그인된 사용자 정보
             String email = userDetails.getUsername(); 
             Users user = uRepo.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
@@ -61,6 +60,7 @@ public class CartController {
             response.put("success", true);
             response.put("message", "책이 장바구니에 성공적으로 추가되었습니다.");
             return ResponseEntity.ok(response);
+            
         } catch (IllegalArgumentException e) {
             // 5. 책을 찾지 못했을 때 실패 응답
             response.put("success", false);
@@ -79,7 +79,7 @@ public class CartController {
     @PostMapping("/cart/update-quantity")
     public ResponseEntity<Map<String, Object>> updateQuantity(@RequestBody Map<String, Object> payload,
                                                               @AuthenticationPrincipal UserDetails userDetails) {
-        // 1. 요청 받은 bookId와 변경 값(change) 가져오기
+        // 1. 요청 받은 bookIdx와 변경 값 가져오기
         Integer bookIdx = (Integer) payload.get("bookIdx");
         Integer change = (Integer) payload.get("change"); // change는 1 또는 -1
 
@@ -112,7 +112,7 @@ public class CartController {
     	// 1. 템플릿에 전달할 변수들을 기본값으로 초기화
         List<Cart> cartItems = new ArrayList<>();
         Long totalPrice = 0L;
-        String cartSummaryName = "장바구니 상품"; // 기본값 설정
+        String cartSummaryName = "장바구니 상품";
 
         // 2. 사용자가 로그인했는지 확인
         if (userDetails != null) {
@@ -122,8 +122,7 @@ public class CartController {
             if (userOpt.isPresent()) {
                 Users user = userOpt.get();
                 
-                // 3. CartService를 통해 장바구니 목록과 총 금액을 가져옴
-                // 이 메서드는 직접 구현해야 함 (예시 코드)
+                // 3. CartService를 통해 장바구니 목록과 총 금액
                 cartItems = cSvc.getCartItemsByUser(user);
                 totalPrice = cSvc.calculateTotalPrice(cartItems);
 
