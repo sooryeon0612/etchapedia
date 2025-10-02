@@ -2,81 +2,68 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 	<link rel="stylesheet" th:href="@{/signup.css}">
     <title>회원가입</title>
 </head>
 <body>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <div class="signup-container">
         <h1 class="logo">
             <span class="watcha">ETCHA</span><span class="pedia">PEDIA</span>
         </h1>
         <h2 class="title">회원가입</h2>
 
-        <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
+        <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post" onsubmit="return $('#is-phone-verified').val() === 'true'">
             <div th:if="${#fields.hasErrors()}" class="error-messages">
                 <p th:each="error : ${#fields.allErrors()}" th:text="${error}"></p>
             </div>
 
             <div class="form-group">
-                <input type="text" th:field="*{userName}" placeholder="이름">
+                <input type="text" th:field="*{userName}" placeholder="닉네임" required>
             </div>
             <div class="form-group">
 				<div class="input-with-button">
-                	<input type="email" th:field="*{userEmail}" placeholder="이메일" id="userEmail">
-            		<button type="button" class="check_button" onclick="checkEmailDuplication()">중복 확인</button>
+                	<input type="email" th:field="*{userEmail}" placeholder="이메일" id="userEmail" required>
+            		<button type="button" class="check-button" onclick="checkEmailDuplication()">중복 확인</button>
 				</div>		
 			</div>
 			<div id="email_check_result"></div>
             <div class="form-group">
-                <input type="password" th:field="*{userPw}" placeholder="비밀번호">
+                <input type="password" th:field="*{userPw}" placeholder="비밀번호" required>
             </div>
-            
+			
+			<!-- 휴대폰 인증 블록 -->
+			<div class="form-group">
+				<div class="input-with-button">
+				    <input type="tel" id="phoneNumber" placeholder="휴대폰 번호('-' 없이)" pattern="[0-9]{10,11}" maxlength="11" />
+			    	<button type="button" id="sendSmsBtn" class="check-button" onclick="sendVerificationCode()"> 인증코드 발송 </button>
+			  	</div>
+			  	<div id="phone_help" class="help-text">예: 01012345678</div>
+			</div>
+			
+			<!-- 인증코드 입력 영역 (처음엔 숨김) -->
+			<div class="form-group" id="codeArea" style="display:none;">
+			  	<div class="input-with-button input-with-timer">
+			    	<input type="text"  id="smsCode" placeholder="인증코드 입력" maxlength="4" />
+			    	<span id="codeTimer" class="timer-badge">03:00</span>
+			    	<button type="button" id="verifyBtn" class="check-button" onclick="verifyCode()"> 인증 </button>
+			  	</div>
+			  	<div id="code-msg" class="help-text"></div>
+			</div>
+         
             <button class="signup-btn" type="submit">회원가입</button>
+			<input type="hidden" id="is-phone-verified" value="false">
         </form>
 
         <div class="separator">
             <p>이미 가입하셨나요? <a th:href="@{/user/login}" class="login-link">로그인</a></p>
             <p class="or">OR</p>
         </div>
-
-        <button class="kakao-btn">
-            <img th:src="@{/images/kakao_logo.png}" alt="카카오 로고">
-            카카오톡으로 간편 로그인
-        </button>
+        <button class="kakao-btn">카카오톡으로 간편 회원가입 </button>
     </div>
 </body>
+<script th:src="@{/signup.js}"></script>
 </html>
 
-<script>
-	// 이메일 중복여부 체크
-	function checkEmailDuplication() {
-	    const userEmail = document.getElementById('userEmail').value;
-	    const resultDiv = document.getElementById('email_check_result');
-	
-	    // 이메일이 비어있으면 경고 메시지 표시
-	    if (!userEmail) {
-	        resultDiv.innerText = '이메일을 입력해주세요.';
-	        resultDiv.style.color = 'red';
-	        return;
-	    }
-	
-	    fetch('/user/checkEmail?email=' + userEmail, {
-	        method: 'GET'
-	    })
-	    .then(response => response.json())
-	    .then(data => {
-	        if (data.isDuplicated) {
-	            resultDiv.innerText = '이미 사용 중인 이메일입니다.';
-	            resultDiv.style.color = 'red';
-	        } else {
-	            resultDiv.innerText = '사용 가능한 이메일입니다.';
-	            resultDiv.style.color = 'green';
-	        }
-	    })
-	    .catch(error => {
-	        console.error('Error:', error);
-	        resultDiv.innerText = '오류가 발생했습니다.';
-	        resultDiv.style.color = 'red';
-	    });
-	}
-</script>

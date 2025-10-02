@@ -16,6 +16,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.solapi.sdk.SolapiClient;
+import com.solapi.sdk.message.exception.SolapiMessageNotReceivedException;
+import com.solapi.sdk.message.model.Message;
+import com.solapi.sdk.message.service.DefaultMessageService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class UsersService {
@@ -26,6 +32,11 @@ public class UsersService {
 	
 	@Value("${file.upload-dir}")
     private String myDir;
+	@Value("${solapi.api-key}")
+	private String solapiKey;
+	@Value("${solapi.api-secret}")
+	private String solapiSecret;
+	
 	
 	// 회원가입.
 	public Users create(String name, String email, String pw) {
@@ -131,5 +142,24 @@ public class UsersService {
 		return uRepo.save(u);
 	}
 	
+	// 작성자 : 서수련
+	// 기능 : 메시지로 인증코드 보내기
+	public void sendVerificationCode(String phone, HttpSession session) {
+		int code = (int)(Math.random() * 9000) + 1000;
+		DefaultMessageService messageService =  SolapiClient.INSTANCE.createInstance(solapiKey, solapiSecret);
+		Message message = new Message();
+		message.setFrom("01040417042");
+		message.setTo(phone);
+		message.setText("ETCHAPEDIA 인증번호는 [" + code + "] 입니다.");
+		session.setAttribute("verificationCode", code);
+		try {
+			messageService.send(message);
+		} catch (SolapiMessageNotReceivedException exception) {
+			System.out.println(exception.getFailedMessageList());
+			System.out.println(exception.getMessage());
+		} catch (Exception exception) {
+			System.out.println(exception.getMessage());
+		}
+	}
 	
 }

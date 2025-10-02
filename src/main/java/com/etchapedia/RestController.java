@@ -14,10 +14,13 @@ import com.etchapedia.book.BookService;
 import com.etchapedia.book.GptRecommendationsService;
 import com.etchapedia.comment.Likes;
 import com.etchapedia.comment.LikesService;
+import com.etchapedia.user.UsersService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.servlet.http.HttpSession;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/ajax")
@@ -28,6 +31,8 @@ public class RestController {
 	private BookService bSvc;
 	@Autowired
 	private LikesService lSvc;
+	@Autowired
+	private UsersService uSvc;
 	
 	// 작업자 : 서수련
 	// 기능 : GPT 추천 도서 불러오기
@@ -107,5 +112,29 @@ public class RestController {
 		Integer userIdx = root.path("userIdx").asInt();
 		Integer replyIdx = root.path("replyIdx").asInt();
 		lSvc.deleteReplyLike(userIdx, replyIdx);
+	}
+	
+	// 작업자 : 서수련 --------
+	// 기능 : 회원가입 시 메시지로 인증코드 보내기
+	@PostMapping("send_verification_code")
+	public void sendVerificationCode(@RequestBody String dataBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode root = mapper.readTree(dataBody);
+		String phone = root.path("phoneNum").asText();
+		uSvc.sendVerificationCode(phone, session);
+	}
+	
+	// 작업자 : 서수련 ------
+	// 기능 : 입력받은 인증코드 확인
+	@PostMapping("/verify_code")
+	public boolean verifyCode(@RequestBody String dataBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode root = mapper.readTree(dataBody);
+		String smsCode = root.path("smsCode").asText();
+		String sessionCode = session.getAttribute("verificationCode").toString();
+		System.out.println("세션코드!>>>>>>" + sessionCode);
+		System.out.println("받은코드!>>>>>>" + smsCode);
+		if(smsCode.equals(sessionCode)) return true;
+		return false;
 	}
 }

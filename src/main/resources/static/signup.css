@@ -9,7 +9,7 @@ body {
 /* General Signup Container */
 .signup-container {
     width: 330px;
-	height: 450px;
+	height: 525px;
     margin: 25px;
 	margin-top: -15px;
     padding: 30px 20px;
@@ -145,15 +145,40 @@ body {
     font-weight: bold;
 }
 
-.kakao-btn img {
-    height: 20px;
-    width: 20px;
-}
-
 /* Error Messages */
 .error-messages {
     color: #ff2f6e;
     font-size: 14px;
     margin-bottom: 10px;
     text-align: left;
+}
+
+
+
+
+/* 전화번호/코드 안내 텍스트 */
+.help-text {
+  margin: 4px 6px 0;
+  font-size: 11px;
+  color: #888;
+  text-align: left;
+}
+
+/* 타이머가 인풋 '안'에 겹치도록 */
+.input-with-timer {
+  position: relative;
+}
+
+.timer-badge {
+  position: absolute;
+  right: 55px;            /* 인증 버튼과 겹치지 않게 */
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #ff2f6e;
+  background: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  pointer-events: none;
+  user-select: none;
 }

@@ -8,7 +8,7 @@ body {
 }
 .popup {
   width: 330px;
-  height: 470px;
+  height: 410px;
   margin: 25px;
   padding: 30px 20px;
   background-color: #ffffff;
@@ -84,24 +84,23 @@ input[type="email"], input[type="password"] {
   justify-content: center;
   margin-top: 8px;
 }
+
 .kakao-btn {
-  width: 100%;
-  padding: 10px;
-  background-color: #FFE812;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
+    width: 100%;
+    padding: 10px;
+    background-color: #ffe617;
+    color: #3c1e1e;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-weight: bold;
 }
-.kakao-btn img {
-  width: 300px;
-  height: 45px;
-}
+
 .error {
 	color: crimson;
 	font-size: 15px;
